@@ -1,0 +1,129 @@
+﻿@page "/weather"
+@inject HttpClient Http
+@using BlazorPortfolio.Models
+@using Microsoft.EntityFrameworkCore
+@using Radzen
+@using Radzen.Blazor
+
+<PageTitle>Weather</PageTitle>
+
+<style type="text/css">
+    .my-popup {
+        display: none;
+        position: absolute;
+        overflow: hidden;
+        height: 360px;
+        width: 600px;
+        border: var(--rz-panel-border);
+        background-color: var(--rz-panel-background-color);
+        box-shadow: var(--rz-panel-shadow);
+        border-radius: var(--rz-border-radius)
+    }
+</style>
+
+<div class="rz-p-12 rz-text-align-center">
+    <RadzenButton @ref=button Text="@(orderId != null ? "Selected order: " + orderId.ToString() : "Select order")" />
+</div>
+
+<RadzenStack Orientation="Orientation.Vertical" Gap="1rem" class="rz-h-100 rz-p-4; my-popup">
+    <RadzenTextBox id="search" Placeholder="Type to search..." @oninput=@(args => searchString = $"{args.Value}") Value="@searchString" />
+    <RadzenDataList @ref=dataList AllowVirtualization=true Data="@orders" Style="flex: 1; --rz-datalist-padding: 0.5rem 0; --rz-datalist-item-margin-inline: 0; overflow:auto;">
+        <Template Context="order">
+            <RadzenRow>
+                <RadzenColumn Size="8" class="rz-text-truncate">
+                    <RadzenBadge BadgeStyle="BadgeStyle.Light" Text=@($"{order.Id}") class="rz-me-1" />
+                    <b>@(order.Titre)</b>
+                </RadzenColumn>
+                <RadzenColumn Size="4" class="rz-text-align-end">
+                    <RadzenBadge BadgeStyle="BadgeStyle.Success" Text=@($"{String.Format(new System.Globalization.CultureInfo("en-US"), "{0:C}", order.Lieu)}") />
+                </RadzenColumn>
+            </RadzenRow>
+            <hr style="border: none; background-color: var(--rz-text-disabled-color); height: 1px; margin: 1rem 0;" />
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween" Gap="1rem">
+                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="1rem">
+                    <RadzenImage Path="@order.ImageEcole" Style="width: 80px; height: 80px; border-radius: 50%" AlternateText="@order.DescriptionCourte" />
+                    <RadzenStack Gap="0">
+                        <RadzenText TextStyle="TextStyle.H6" class="rz-mb-0">@order.Mention</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1">@order.CertificatUrl</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body2" class="rz-mb-0">@(order.CompetencesAcquises), @(order.CompetencesAcquises)</RadzenText>
+                    </RadzenStack>
+                </RadzenStack>
+                <RadzenButton Text="Select" Click="@(args => SelectOrder(order))" Visible=@(orderId != order.Id) />
+            </RadzenStack>
+        </Template>
+    </RadzenDataList>
+</RadzenStack>
+
+@code {
+    RadzenButton button;
+    RadzenDataList<Formations> dataList;
+    IEnumerable<Formations> orders;
+    int? orderId;
+    string searchString = "";
+
+    protected override void OnInitialized()
+    {
+        // Initialize with 'Formations' class
+        orders = new List<Formations>
+        {
+            new Formations // <<< Use 'Formations' here
+            {
+                Titre = "MASTER MIAGE parcours IA2",
+                Etablissement = "Université de Nice Côte d'Azur",
+                Lieu = "Sophia Antipolis, France",
+                AnneeDebut = 2023,
+                AnneeFin = 2025,
+                Mention = "En cours",
+                DescriptionCourte = "Master en Intelligence Artificielle Appliquée. Axé sur les techniques modernes d'apprentissage automatique et le développement d'applications intelligentes.",
+                CompetencesAcquises = new List<string> { "Deep Learning", "Machine Learning", "Traitement du langage naturel", "Développement full-stack (C#, .NET, Blazor, Angular)", "Cloud Computing (Azure, AWS)", "Méthodes Agiles" },
+                CertificatUrl = "https://example.com/master_ia2.pdf",
+                ImageEcole = "images/unice_logo.png"
+            },
+            new Formations // <<< Use 'Formations' here
+            {
+                Titre = "LICENCE MIAGE",
+                Etablissement = "Université de Nice Côte d'Azur",
+                Lieu = "Sophia Antipolis, France",
+                AnneeDebut = 2022,
+                AnneeFin = 2023,
+                Mention = "Assez Bien",
+                DescriptionCourte = "Licence en Méthodes Informatiques Appliquées à la Gestion des Entreprises. Acquisition des bases solides en informatique de gestion.",
+                CompetencesAcquises = new List<string> { "Gestion de projet IT", "Bases de données (SQL, NoSQL)", "Développement web (HTML, CSS, JavaScript, PHP)", "Systèmes d'information", "Programmation orientée objet (Java, C#)" },
+                CertificatUrl = "https://example.com/licence_miage.pdf",
+                ImageEcole = "images/unice_logo.png"
+            },
+            new Formations // <<< Use 'Formations' here
+            {
+                Titre = "DUT STID",
+                Etablissement = "IUT de Nice",
+                Lieu = "Sophia Antipolis, France",
+                AnneeDebut = 2020,
+                AnneeFin = 2022,
+                Mention = "Bien",
+                DescriptionCourte = "Diplôme Universitaire de Technologie en Statistiques et Informatique Décisionnelle. Formation axée sur l'analyse de données et la prise de décision.",
+                CompetencesAcquises = new List<string> { "Statistiques descriptives et inférentielles", "Modélisation prédictive", "Programmation R/Python pour l'analyse de données", "Business Intelligence (Power BI, Tableau)", "Exploration de données" },
+                CertificatUrl = "https://example.com/dut_stid.pdf",
+                ImageEcole = "images/iut_nice_logo.png"
+            },
+            new Formations // <<< Use 'Formations' here
+            {
+                Titre = "LICENCE 1 EN MATHS, PHYSIQUE et INFO",
+                Etablissement = "Université Cheikh Anta Diop de Dakar (UCAD)",
+                Lieu = "Dakar, Sénégal",
+                AnneeDebut = 2018,
+                AnneeFin = 2019,
+                Mention = "Validée",
+                DescriptionCourte = "Première année de licence en sciences fondamentales, jetant les bases pour les études informatiques et scientifiques.",
+                CompetencesAcquises = new List<string> { "Algèbre linéaire", "Analyse mathématique", "Mécanique du point", "Électricité", "Algorithmique et introduction à la programmation" },
+                CertificatUrl = "https://example.com/l1_ucad.pdf",
+                ImageEcole = "images/ucad_logo.png"
+            }
+        };
+    }
+
+    async Task SelectOrder(Formations order)
+    {
+        orderId = order.Id;
+        //await popup.CloseAsync();
+    }
+}

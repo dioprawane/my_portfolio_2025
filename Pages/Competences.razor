@@ -1,0 +1,487 @@
+﻿@page "/competences"
+
+@using BlazorPortfolio.Models
+@using Radzen
+@using Radzen.Blazor
+@inject Radzen.DialogService DialogService
+@inject IJSRuntime JSRuntime
+
+                       
+@if (isMobile == null)                  
+{
+    <p>Chargement des compétences...</p>
+}
+else if (isMobile == true)
+{
+    <RadzenStack Orientation="Orientation.Vertical" Gap="1rem" Class="rz-p-2 rz-shadow-4 rz-border-radius-2" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center">
+        <RadzenText TextStyle="TextStyle.H4" Class="rz-mb-2" TextAlignment="TextAlignment.Center">✨ Compétences</RadzenText>
+
+        <RadzenCard class="rz-p-2 rz-w-100" Variant="Variant.Outlined">
+
+            <RadzenCard class="rz-p-2 rz-mb-3" Variant="Variant.Flat">
+                <RadzenStack Orientation="Orientation.Vertical" Gap="0.2rem">
+                    <RadzenText TextStyle="TextStyle.Caption" Class="rz-text-secondary">
+                        <RadzenIcon Icon="star" Style="color: gold; font-size: 0.9em; vertical-align: middle;" /> Débutant (1 étoile)
+                    </RadzenText>
+                    <RadzenText TextStyle="TextStyle.Caption" Class="rz-text-secondary">
+                        <RadzenIcon Icon="star" Style="color: gold; font-size: 0.9em; vertical-align: middle;" />
+                        <RadzenIcon Icon="star" Style="color: gold; font-size: 0.9em; vertical-align: middle;" /> Fondamental (2 étoiles)
+                    </RadzenText>
+                    <RadzenText TextStyle="TextStyle.Caption" Class="rz-text-secondary">
+                        <RadzenIcon Icon="star" Style="color: gold; font-size: 0.9em; vertical-align: middle;" />
+                        <RadzenIcon Icon="star" Style="color: gold; font-size: 0.9em; vertical-align: middle;" />
+                        <RadzenIcon Icon="star" Style="color: gold; font-size: 0.9em; vertical-align: middle;" /> Intermédiaire (3 étoiles)
+                    </RadzenText>
+                    <RadzenText TextStyle="TextStyle.Caption" Class="rz-text-secondary">
+                        <RadzenIcon Icon="star" Style="color: gold; font-size: 0.9em; vertical-align: middle;" />
+                        <RadzenIcon Icon="star" Style="color: gold; font-size: 0.9em; vertical-align: middle;" />
+                        <RadzenIcon Icon="star" Style="color: gold; font-size: 0.9em; vertical-align: middle;" />
+                        <RadzenIcon Icon="star" Style="color: gold; font-size: 0.9em; vertical-align: middle;" /> Avancé (4 étoiles)
+                    </RadzenText>
+                    <RadzenText TextStyle="TextStyle.Caption" Class="rz-text-secondary">
+                        <RadzenIcon Icon="star" Style="color: gold; font-size: 0.9em; vertical-align: middle;" />
+                        <RadzenIcon Icon="star" Style="color: gold; font-size: 0.9em; vertical-align: middle;" />
+                        <RadzenIcon Icon="star" Style="color: gold; font-size: 0.9em; vertical-align: middle;" />
+                        <RadzenIcon Icon="star" Style="color: gold; font-size: 0.9em; vertical-align: middle;" />
+                        <RadzenIcon Icon="star" Style="color: gold; font-size: 0.9em; vertical-align: middle;" /> Expert (5 étoiles)
+                    </RadzenText>
+                </RadzenStack>
+            </RadzenCard>
+
+            <RadzenText TextStyle="TextStyle.Subtitle1" Class="rz-text-center rz-mb-2">Aperçu des Compétences</RadzenText>
+
+            <RadzenStack Orientation="Orientation.Horizontal" Wrap="FlexWrap.Wrap" Gap="1rem" JustifyContent="JustifyContent.Center">
+                <RadzenStack Orientation="Orientation.Vertical" Gap="0.2rem" AlignItems="AlignItems.Center">
+                    <RadzenText Text="Auto-cycle" TextStyle="TextStyle.Caption" />
+                    <RadzenSwitch @bind-Value="@auto" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "auto-cycle" }})" />
+                </RadzenStack>
+
+                <RadzenStack Orientation="Orientation.Vertical" Gap="0.2rem" AlignItems="AlignItems.Center">
+                    <RadzenText Text="Naviguer" TextStyle="TextStyle.Caption" />
+                    <RadzenStack Orientation="Orientation.Horizontal" Wrap="FlexWrap.Wrap" Gap="0.5rem" JustifyContent="JustifyContent.Center">
+                        <RadzenButton Text="@toggleText" Click="@Toggle"
+                                      ButtonStyle="ButtonStyle.Base" Variant="Variant.Outlined"
+                                      Size="ButtonSize.Small"
+                                      Style="padding: 0.3rem 0.6rem; font-size: 0.75rem;" />
+
+                        <RadzenButton Text="Première"
+                                      Click="@(args => carousel!.Navigate(0))"
+                                      ButtonStyle="ButtonStyle.Base" Variant="Variant.Outlined"
+                                      Size="ButtonSize.Small"
+                                      Disabled="@(selectedIndex == 0)"
+                                      Style="padding: 0.3rem 0.6rem; font-size: 0.75rem;" />
+
+                        <RadzenButton Text="Dernière"
+                                      Click="@(args => carousel!.Navigate(Competencies?.Count() - 1 ?? 0))"
+                                      ButtonStyle="ButtonStyle.Base" Variant="Variant.Outlined"
+                                      Size="ButtonSize.Small"
+                                      Disabled="@(selectedIndex == (Competencies?.Count() - 1 ?? 0))"
+                                      Style="padding: 0.3rem 0.6rem; font-size: 0.75rem;" />
+                    </RadzenStack>
+                </RadzenStack>
+            </RadzenStack>
+
+            <RadzenCarousel @ref=carousel @bind-SelectedIndex="@selectedIndex" Auto="@auto" Interval="@interval"
+                            PagerOverlay="true" ButtonShade="Shade.Light" ShowPager="true" ShowArrows="true"
+                            Style="height:200px; width: 100%;">
+                <Items>
+                    @if (Competencies != null && Competencies.Any())
+                    {
+                        @foreach (var competence in Competencies)
+                        {
+                            <RadzenCarouselItem>
+                                <RadzenCard Class="rz-w-95 rz-mx-auto rz-p-3 rz-shadow-2" Style="height: 180px; display: flex; flex-direction: column; justify-content: center; align-items: center; border-radius: 8px;">
+                                    <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Center" Gap="0.3rem">
+                                        @if (!string.IsNullOrEmpty(competence.Icon))
+                                        {
+                                            @if (competence.Icon.EndsWith(".png", StringComparison.OrdinalIgnoreCase) ||
+                                                 competence.Icon.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase) ||
+                                                 competence.Icon.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase) ||
+                                                 competence.Icon.EndsWith(".svg", StringComparison.OrdinalIgnoreCase))
+                                            {
+                                                <img src="@($"/images/{competence.Icon}")" alt="@competence.Name icon" style="width: 1.6em; height: 1.6em; object-fit: contain;" /> 
+                                            }
+                                            else
+                                            {
+                                                <RadzenIcon Icon="@competence.Icon" Style="font-size: 1.6em; color: var(--rz-text-secondary-color);" />
+                                            }
+                                        }
+                                        <RadzenText TextStyle="TextStyle.H6" Class="rz-mb-0 rz-text-center">@competence.Name</RadzenText> 
+                                        <RadzenText TextStyle="TextStyle.Caption" Class="rz-color-secondary rz-text-center">@competence.Category</RadzenText> 
+                                        <RadzenStack Orientation="Orientation.Horizontal" Gap="0.1rem" Class="rz-mt-1">
+                                            @for (int i = 0; i < competence.Level; i++)
+                                            {
+                                                <RadzenIcon Icon="star" Style="color: gold; font-size: 1.3em;" /> 
+                                            }
+                                            @for (int i = competence.Level; i < 5; i++)
+                                            {
+                                                <RadzenIcon Icon="star_border" Style="color: lightgray; font-size: 1.3em;" /> 
+                                            }
+                                        </RadzenStack>
+                                    </RadzenStack>
+                                </RadzenCard>
+                            </RadzenCarouselItem>
+                        }
+                    }
+                    else
+                    {
+                        <RadzenCarouselItem>
+                            <RadzenCard Class="rz-w-95 rz-mx-auto rz-p-3 rz-shadow-2" Style="height: 180px; display: flex; flex-direction: column; justify-content: center; align-items: center; border-radius: 8px;">
+                                <RadzenText TextStyle="TextStyle.Body2" Class="rz-text-center">Aucune compétence à afficher pour le moment.</RadzenText>
+                            </RadzenCard>
+                        </RadzenCarouselItem>
+                    }
+                </Items>
+            </RadzenCarousel>
+        </RadzenCard>
+
+        @* --- Section 2: Categorized list for Mobile --- *@
+        <RadzenCard class="rz-p-2 rz-mt-2 rz-w-100" Variant="Variant.Outlined"> 
+            <RadzenText TextStyle="TextStyle.H5" Class="rz-mb-3 rz-text-center">Compétences par Catégorie</RadzenText> 
+
+            @if (GroupedCompetences != null && GroupedCompetences.Any())
+            {
+                @foreach (var categoryGroup in GroupedCompetences)
+                {
+                    <RadzenText TextStyle="TextStyle.H6" Class="rz-mt-3 rz-mb-1">@categoryGroup.Key</RadzenText> 
+                    <RadzenStack Orientation="Orientation.Vertical" Gap="0.5rem">
+                        @if (categoryGroup.Any())
+                        {
+                            @foreach (var competence in categoryGroup)
+                            {
+                                <RadzenCard Class="rz-p-2 rz-shadow-1" Variant="Variant.Outlined"
+                                            Style="border-left: 3px solid var(--rz-primary-color); border-radius: 4px;"> 
+                                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.5rem" Style="width: 100%;"> 
+                                        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.2rem"> 
+                                            @if (!string.IsNullOrEmpty(competence.Icon))
+                                            {
+                                                @if (competence.Icon.EndsWith(".png", StringComparison.OrdinalIgnoreCase) ||
+                                                     competence.Icon.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase) ||
+                                                     competence.Icon.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase) ||
+                                                     competence.Icon.EndsWith(".svg", StringComparison.OrdinalIgnoreCase))
+                                                {
+                                                    <img src="@($"/images/{competence.Icon}")" alt="@competence.Name icon" style="width: 1.5em; height: 1.5em; object-fit: contain;" /> 
+                                                }
+                                                else
+                                                {
+                                                    <RadzenIcon Icon="@competence.Icon" Style="font-size: 1.5em; color: var(--rz-text-secondary-color);" /> 
+                                                }
+                                            }
+                                            <RadzenText TextStyle="TextStyle.Body2" Class="rz-text-bold">@competence.Name</RadzenText>
+                                        </RadzenStack>
+
+                                        <div style="flex-grow:1;"></div>
+
+                                        <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.End" Gap="0.1rem"> 
+                                            <RadzenText TextStyle="TextStyle.Caption" Class="rz-color-base rz-text-bold">@GetLevelDescription(competence.Level)</RadzenText> 
+                                            <RadzenStack Orientation="Orientation.Horizontal" Gap="0.1rem"> 
+                                                @for (int i = 0; i < competence.Level; i++)
+                                                {
+                                                    <RadzenIcon Icon="star" Style="color: gold; font-size: 1.2em;" /> 
+                                                }
+                                                @for (int i = competence.Level; i < 5; i++)
+                                                {
+                                                    <RadzenIcon Icon="star_border" Style="color: lightgray; font-size: 1.2em;" />
+                                                }
+                                            </RadzenStack>
+                                        </RadzenStack>
+                                    </RadzenStack>
+                                </RadzenCard>
+                            }
+                        }
+                    </RadzenStack>
+                }
+            }
+            else
+            {
+                <RadzenText Text="Aucune compétence à afficher." Class="rz-text-center" />
+            }
+        </RadzenCard>
+    </RadzenStack>
+}
+else
+{
+    <RadzenStack Orientation="Orientation.Vertical" Gap="2rem" Class="rz-p-4 rz-p-md-8">
+
+        <RadzenText TextStyle="TextStyle.H2" Class="rz-mb-4 rz-text-center">Compétences</RadzenText>
+
+        @* --- Section 1: RadzenCarousel for a dynamic overview --- *@
+        <RadzenCard class="rz-p-4" Variant="Variant.Outlined">
+
+            @* --- NEW: Legend for Skill Levels --- *@
+            <RadzenCard class="rz-p-3 rz-mb-4" Variant="Variant.Flat">
+                <RadzenText TextStyle="TextStyle.Subtitle2" Class="rz-mb-2">Légende des Niveaux de Compétence :</RadzenText>
+                <RadzenStack Orientation="Orientation.Horizontal" Wrap="FlexWrap.Wrap" Gap="1rem" JustifyContent="JustifyContent.Center">
+                    <RadzenText TextStyle="TextStyle.Body2" Class="rz-text-secondary">
+                        <RadzenIcon Icon="star" Style="color: gold; font-size: 1.1em; vertical-align: middle;" /> Débutant (1 étoile)
+                    </RadzenText>
+                    <RadzenText TextStyle="TextStyle.Body2" Class="rz-text-secondary">
+                        <RadzenIcon Icon="star" Style="color: gold; font-size: 1.1em; vertical-align: middle;" />
+                        <RadzenIcon Icon="star" Style="color: gold; font-size: 1.1em; vertical-align: middle;" /> Fondamental (2 étoiles)
+                    </RadzenText>
+                    <RadzenText TextStyle="TextStyle.Body2" Class="rz-text-secondary">
+                        <RadzenIcon Icon="star" Style="color: gold; font-size: 1.1em; vertical-align: middle;" />
+                        <RadzenIcon Icon="star" Style="color: gold; font-size: 1.1em; vertical-align: middle;" />
+                        <RadzenIcon Icon="star" Style="color: gold; font-size: 1.1em; vertical-align: middle;" /> Intermédiaire (3 étoiles)
+                    </RadzenText>
+                    <RadzenText TextStyle="TextStyle.Body2" Class="rz-text-secondary">
+                        <RadzenIcon Icon="star" Style="color: gold; font-size: 1.1em; vertical-align: middle;" />
+                        <RadzenIcon Icon="star" Style="color: gold; font-size: 1.1em; vertical-align: middle;" />
+                        <RadzenIcon Icon="star" Style="color: gold; font-size: 1.1em; vertical-align: middle;" />
+                        <RadzenIcon Icon="star" Style="color: gold; font-size: 1.1em; vertical-align: middle;" /> Avancé (4 étoiles)
+                    </RadzenText>
+                    <RadzenText TextStyle="TextStyle.Body2" Class="rz-text-secondary">
+                        <RadzenIcon Icon="star" Style="color: gold; font-size: 1.1em; vertical-align: middle;" />
+                        <RadzenIcon Icon="star" Style="color: gold; font-size: 1.1em; vertical-align: middle;" />
+                        <RadzenIcon Icon="star" Style="color: gold; font-size: 1.1em; vertical-align: middle;" />
+                        <RadzenIcon Icon="star" Style="color: gold; font-size: 1.1em; vertical-align: middle;" />
+                        <RadzenIcon Icon="star" Style="color: gold; font-size: 1.1em; vertical-align: middle;" /> Expert (5 étoiles)
+                    </RadzenText>
+                </RadzenStack>
+            </RadzenCard>
+
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" Wrap="FlexWrap.Wrap" Class="rz-mb-4">
+                <RadzenStack Orientation="Orientation.Vertical" Gap="8px">
+                    Auto-cycle
+                    <RadzenSwitch @bind-Value="@auto" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "auto-cycle" }})" />
+                </RadzenStack>
+                <RadzenStack Orientation="Orientation.Vertical" Gap="8px" Class="rz-ml-4">
+                    Navigate
+                    <RadzenStack Orientation="Orientation.Horizontal" Gap="16px">
+                        <RadzenToggleButton Text="@toggleText" Click="@Toggle" ButtonStyle="ButtonStyle.Base" Variant="Variant.Flat" Size="ButtonSize.Small" />
+                        <RadzenButton Text="Première" Click="@(args => carousel!.Navigate(0))" ButtonStyle="ButtonStyle.Base" Variant="Variant.Flat" Size="ButtonSize.Small" Disabled="@(selectedIndex == 0)" />
+                        <RadzenButton Text="Dernière" Click="@(args => carousel!.Navigate(Competencies?.Count() - 1 ?? 0))" ButtonStyle="ButtonStyle.Base" Variant="Variant.Flat" Size="ButtonSize.Small" Disabled="@(selectedIndex == (Competencies?.Count() - 1 ?? 0))" />
+                    </RadzenStack>
+                </RadzenStack>
+            </RadzenStack>
+
+            @* Improved RadzenCarousel design *@
+            <RadzenCarousel @ref=carousel @bind-SelectedIndex="@selectedIndex" Auto="@auto" Interval="@interval" PagerOverlay="true" ButtonShade="Shade.Light" ShowPager="true" ShowArrows="true" Style="height:280px; width: 100%;">
+                <Items>
+                    @if (Competencies != null && Competencies.Any())
+                    {
+                        @foreach (var competence in Competencies)
+                        {
+                            <RadzenCarouselItem>
+                                <RadzenCard Class="rz-w-90 rz-mx-auto rz-p-4 rz-shadow-2" Style="height: 250px; display: flex; flex-direction: column; justify-content: center; align-items: center; border-radius: 10px;">
+                                    <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Center" Gap="0.5rem">
+                                        @if (!string.IsNullOrEmpty(competence.Icon))
+                                        {
+                                            // Check if the icon is a file path (e.g., ends with .png, .jpg, .svg)
+                                            @if (competence.Icon.EndsWith(".png", StringComparison.OrdinalIgnoreCase) ||
+                                                                        competence.Icon.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase) ||
+                                                                        competence.Icon.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase) ||
+                                                                        competence.Icon.EndsWith(".svg", StringComparison.OrdinalIgnoreCase))
+                                            {
+                                                <img src="@($"/images/{competence.Icon}")" alt="@competence.Name icon" style="width: 1.5em; height: 1.5em; margin-right: 0.5rem;" />
+                                            }
+                                            else // Assume it's a Radzen/Material Icon
+                                            {
+                                                <RadzenIcon Icon="@competence.Icon"
+                                                            Style="font-size: 1.5em; color: var(--rz-text-secondary-color);" />
+                                            }
+                                        }
+                                        <RadzenText TextStyle="TextStyle.H5" Class="rz-mb-1 rz-text-center">@competence.Name</RadzenText>
+                                        <RadzenText TextStyle="TextStyle.Subtitle2" Class="rz-color-secondary rz-text-center">@competence.Category</RadzenText>
+                                        <RadzenStack Orientation="Orientation.Horizontal" Gap="0.2rem" Class="rz-mt-2">
+                                            @for (int i = 0; i < competence.Level; i++)
+                                            {
+                                                <RadzenIcon Icon="star" Style="color: gold;" />
+                                            }
+                                            @for (int i = competence.Level; i < 5; i++)
+                                            {
+                                                <RadzenIcon Icon="star_border" Style="color: lightgray;" />
+                                            }
+                                        </RadzenStack>
+                                    </RadzenStack>
+                                </RadzenCard>
+                            </RadzenCarouselItem>
+                        }
+                    }
+                    else
+                    {
+                        <RadzenCarouselItem>
+                            <RadzenCard Class="rz-w-90 rz-mx-auto rz-p-4 rz-shadow-2" Style="height: 250px; display: flex; flex-direction: column; justify-content: center; align-items: center; border-radius: 10px;">
+                                <RadzenText TextStyle="TextStyle.Body1" Class="rz-text-center">Aucune compétence à afficher pour le moment.</RadzenText>
+                            </RadzenCard>
+                        </RadzenCarouselItem>
+                    }
+                </Items>
+            </RadzenCarousel>
+        </RadzenCard>
+
+        @* --- Section 2: Categorized list using RadzenAccordion --- *@
+        <RadzenCard class="rz-p-4 rz-mt-4" Variant="Variant.Outlined">
+            <RadzenText TextStyle="TextStyle.H3" Class="rz-mb-4 rz-text-center">Compétences par Catégorie</RadzenText>
+
+            @if (GroupedCompetences != null && GroupedCompetences.Any())
+            {
+                @foreach (var categoryGroup in GroupedCompetences)
+                {
+                    <RadzenText TextStyle="TextStyle.H4" Class="rz-mt-4 rz-mb-2">@categoryGroup.Key</RadzenText>
+                    <RadzenStack Orientation="Orientation.Vertical" Gap="1rem">
+                        @if (categoryGroup.Any()) 
+                        {
+                            @foreach (var competence in categoryGroup)
+                            {
+                                <RadzenCard Class="rz-p-3 rz-shadow-1" Variant="Variant.Outlined"
+                                            Style="border-left: 4px solid var(--rz-primary-color); border-radius: 6px;">
+                                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="1rem">
+                                        @if (!string.IsNullOrEmpty(competence.Icon))
+                                        {
+                                            // Check if the icon is a file path (e.g., ends with .png, .jpg, .svg)
+                                            @if (competence.Icon.EndsWith(".png", StringComparison.OrdinalIgnoreCase) ||
+                                                                competence.Icon.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase) ||
+                                                                competence.Icon.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase) ||
+                                                                competence.Icon.EndsWith(".svg", StringComparison.OrdinalIgnoreCase))
+                                            {
+                                                <img src="@($"/images/{competence.Icon}")" alt="@competence.Name icon" style="width: 1.5em; height: 1.5em; margin-right: 0.5rem;" />
+                                            }
+                                            else // Assume it's a Radzen/Material Icon
+                                            {
+                                                <RadzenIcon Icon="@competence.Icon"
+                                                            Style="font-size: 1.5em; color: var(--rz-text-secondary-color);" />
+                                            }
+                                        }
+
+                                        <RadzenText TextStyle="TextStyle.Body1" Class="rz-text-bold">@competence.Name</RadzenText>
+                                        <div style="flex-grow:1;"></div>
+
+                                        <RadzenStack Orientation="Orientation.Horizontal" Gap="0.2rem">
+                                            @for (int i = 0; i < competence.Level; i++)
+                                            {
+                                                <RadzenIcon Icon="star" Style="color: gold;" />
+                                            }
+                                            @for (int i = competence.Level; i < 5; i++)
+                                            {
+                                                <RadzenIcon Icon="star_border" Style="color: lightgray;" />
+                                            }
+                                        </RadzenStack>
+                                    </RadzenStack>
+                                </RadzenCard>
+                            }
+                        }
+                    </RadzenStack>
+                }
+            }
+            else
+            {
+                <RadzenText Text="Aucune compétence à afficher." Class="rz-text-center" />
+            }
+        </RadzenCard>
+
+    </RadzenStack>
+}
+
+@code {
+    RadzenCarousel? carousel;
+
+    bool auto = true;
+    double interval = 4000;
+    string toggleText = "Stop";
+
+    bool started = true;
+    void Toggle()
+    {
+        if (started)
+        {
+            carousel!.Stop();
+            toggleText = "Start";
+        }
+        else
+        {
+            carousel!.Start();
+            toggleText = "Stop";
+        }
+
+        started = !started;
+    }
+
+    int selectedIndex;
+
+    private List<Competence>? Competencies;
+    private IEnumerable<IGrouping<string, Competence>>? GroupedCompetences;
+    private string? selectedCategory;
+    private List<string>? categories => GroupedCompetences?.Select(g => g.Key).ToList();
+    private bool? isMobile = null;
+
+    private string GetLevelDescription(int level)
+    {
+        return level switch
+        {
+            1 => "Débutant",
+            2 => "Fondamental",
+            3 => "Intermédiaire",
+            4 => "Avancé",
+            5 => "Expert",
+            _ => "Non défini" // Default case for unexpected levels
+        };
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // JavaScript interop to get window width
+            var width = await JSRuntime.InvokeAsync<int>("getWindowWidth");
+            Console.WriteLine($"💡 Largeur détectée : {width}px");
+            isMobile = width <= 768; // Detect if width is less than or equal to 768px (typical mobile breakpoint)
+            StateHasChanged(); // Notify Blazor that the component state has changed
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        // Populate with your actual competence data
+        Competencies = new List<Competence>
+        {
+            new Competence { Name = "C#", Category = "Langages de programmation", Level = 5, Icon = "code" },
+            new Competence { Name = "Blazor", Category = "Frameworks", Level = 4, Icon = "blazor.svg" },
+            new Competence { Name = ".NET Core", Category = "Frameworks", Level = 4, Icon = "apps" },
+            new Competence { Name = "ASP.NET Core", Category = "Frameworks", Level = 4, Icon = "web" },
+            new Competence { Name = "SQL Server", Category = "Bases de données", Level = 3, Icon = "storage" },
+            new Competence { Name = "JavaScript", Category = "Langages de programmation", Level = 3, Icon = "javascript" },
+            new Competence { Name = "HTML5", Category = "Technologies Web", Level = 4, Icon = "html" },
+            new Competence { Name = "CSS3", Category = "Technologies Web", Level = 3, Icon = "css" },
+            new Competence { Name = "Git", Category = "Outils de développement", Level = 4, Icon = "github.svg" },
+            new Competence { Name = "Azure DevOps", Category = "Outils de développement", Level = 3, Icon = "cloud_queue" },
+            new Competence { Name = "Docker", Category = "DevOps", Level = 2, Icon = "padding" }, // "padding" is often used for containers
+            new Competence { Name = "Méthodes Agiles (Scrum)", Category = "Méthodologies", Level = 4, Icon = "done_all" },
+            new Competence { Name = "Anglais", Category = "Langues", Level = 4, Icon = "language" },
+            new Competence { Name = "Communication", Category = "Soft Skills", Level = 4, Icon = "forum" }
+        };
+
+        // For the carousel (ordered by name for simplicity)
+        //Competencies = Competencies.OrderBy(c => c.Name).ToList();
+        Competencies = (Competencies ?? new List<Competence>())
+            .OrderBy(c => c.Name)
+            .ToList();
+
+        GroupedCompetences = Competencies
+            .OrderBy(c => c.Category) // Order categories alphabetically
+            .ThenBy(c => c.Name) // Order competencies within categories alphabetically
+            .GroupBy(c => c.Category);
+
+        // Afficher le GroupedCompetences
+        // Add these lines for more detailed debugging
+        Console.WriteLine($"Number of total competencies: {Competencies?.Count ?? 0}");
+        Console.WriteLine($"Number of groups: {GroupedCompetences?.Count() ?? 0}");
+
+        if (GroupedCompetences != null)
+        {
+            foreach (var group in GroupedCompetences)
+            {
+                Console.WriteLine($"Group: {group.Key}, Count: {group.Count()}");
+                foreach (var comp in group)
+                {
+                    Console.WriteLine($"  - Competence: {comp.Name}");
+                }
+            }
+        }
+        else
+        {
+            Console.WriteLine("GroupedCompetences is null.");
+        }
+
+    }
+}

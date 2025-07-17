@@ -1,0 +1,31 @@
+﻿@page "/test"
+@inject IJSRuntime JSRuntime
+
+@if (isMobile == null)
+{
+    <p>Chargement...</p>
+}
+else if (isMobile == true)
+{
+    <p style="color: green;">📱 Mode mobile détecté</p>
+}
+else
+{
+    <p style="color: blue;">🖥️ Mode desktop détecté</p>
+}
+
+@code {
+    private bool? isMobile = null;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var width = await JSRuntime.InvokeAsync<int>("getWindowWidth");
+            Console.WriteLine($"💡 Largeur détectée : {width}px");
+            isMobile = width <= 768;
+            StateHasChanged();
+        }
+    }
+
+}

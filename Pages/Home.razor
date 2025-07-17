@@ -1,0 +1,16 @@
+﻿@page "/"
+
+<PageTitle>Home</PageTitle>
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<h3>Bienvenue sur mon portfolio</h3>
+
+<RadzenButton Text="Cliquez ici" Click="@(() => Message = "Bonjour depuis Radzen !")" />
+<p>@Message</p>
+
+@code {
+    private string? Message;
+}

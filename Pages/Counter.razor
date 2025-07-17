@@ -1,0 +1,32 @@
+﻿@page "/faq"
+
+@using Radzen.Blazor
+@using Radzen
+
+<h3>Questions Fréquentes (Radzen Accordion)</h3>
+
+<RadzenCard Class="rz-p-4 rz-mt-4" Variant="Variant.Outlined">
+    <RadzenAccordion ExpandMode="AccordionExpandMode.Single">
+        @* Permet d'ouvrir un seul élément à la fois *@
+        <RadzenAccordionItem Text="Qu'est-ce que Blazor ?" Expanded="false">
+            @* Le titre de l'élément d'accordéon *@
+            <p>Blazor est un framework web open source développé par Microsoft qui permet de créer des applications web interactives côté client en utilisant C# au lieu de JavaScript.</p>
+            <p>Il vous permet de construire des interfaces utilisateur riches et interactives avec les compétences .NET.</p>
+        </RadzenAccordionItem>
+
+        <RadzenAccordionItem Text="Comment fonctionne Radzen ?" Expanded="false">
+            <p>Radzen est une suite de composants UI pour Blazor (et d'autres frameworks) qui fournit des contrôles prêts à l'emploi avec un thème cohérent.</p>
+            <p>Il simplifie le développement d'applications en offrant des composants stylisés et fonctionnels tels que des grilles de données, des formulaires, des boutons, des accordéons, etc.</p>
+        </RadzenAccordionItem>
+
+        <RadzenAccordionItem Text="Puis-je utiliser JavaScript avec Blazor ?" Expanded="false">
+            <p>Oui, absolument ! Bien que Blazor permette de remplacer une grande partie du JavaScript côté client par C#, vous pouvez toujours interopérer avec le JavaScript existant.</p>
+            <p>Ceci est utile pour intégrer des bibliothèques JavaScript tierces ou pour des fonctionnalités spécifiques qui ne sont pas encore disponibles nativement en C# dans Blazor.</p>
+        </RadzenAccordionItem>
+    </RadzenAccordion>
+</RadzenCard>
+
+@code {
+    // Aucune logique C# complexe n'est nécessaire pour cet exemple simple.
+    // Les éléments de l'accordéon sont définis directement dans le markup Razor.
+}

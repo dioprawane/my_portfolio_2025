@@ -1,0 +1,176 @@
+﻿@page "/formations"
+@using Radzen
+@using Radzen.Blazor
+@using BlazorPortfolio.Models
+@inject IJSRuntime JSRuntime
+
+<PageTitle>Mes Formations</PageTitle>
+
+@if (isMobile == null)
+{
+    <p>Chargement...</p>
+}
+else if (isMobile == true)
+{
+    <RadzenStack Orientation="Orientation.Vertical" Gap="1rem" Class="rz-p-2 rz-shadow-4 rz-border-radius-2" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center">
+        <RadzenText TextStyle="TextStyle.H4" Class="rz-mb-2" TextAlignment="TextAlignment.Center">📱 Formations : </RadzenText>
+
+        @foreach (var formation in FormationsList)
+        {
+            <RadzenCard Class="rz-shadow-2 rz-w-100 rz-p-2">
+                <RadzenStack Orientation="Orientation.Vertical" Gap="0.5rem">
+                    <RadzenText Style="font-size: 0.8rem; font-weight: 600;" Class="rz-mb-0">
+                        <RadzenBadge BadgeStyle="BadgeStyle.Light" Text="@(formation.AnneeDebut + "-" + formation.AnneeFin)" class="rz-me-2" />
+                        <b>@formation.Titre</b>
+                    </RadzenText>
+                    <RadzenBadge BadgeStyle="BadgeStyle.Success" Text="@formation.Mention" Visible="@(!string.IsNullOrEmpty(formation.Mention))" />
+                    <hr style="border: none; background-color: var(--rz-text-disabled-color); height: 1px; margin: 0.1rem 0;" />
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.2rem">
+                        @if (!string.IsNullOrEmpty(formation.ImageEcole))
+                        {
+                            <RadzenImage Path="@formation.ImageEcole" AlternateText="@formation.Etablissement" Style="width: 80px; height: 80px; border-radius: 50%" />
+                        }
+                        <RadzenStack Gap="0">
+                            <RadzenText TextStyle="TextStyle.Body2" Class="rz-mb-0">@formation.Etablissement</RadzenText>
+                            <RadzenText TextStyle="TextStyle.Caption">@formation.Lieu</RadzenText>
+                        </RadzenStack>
+                    </RadzenStack>
+                    <RadzenButton Text="Détails" ButtonStyle="ButtonStyle.Primary" Click="@(() => ShowFormationDetails(formation))" Style="font-size: 0.75rem; padding: 0.25rem 0.5rem; width: 100%;" />
+                </RadzenStack>
+            </RadzenCard>
+        }
+    </RadzenStack>
+}
+else
+{
+    <RadzenStack Orientation="Orientation.Vertical" Gap="2rem" Class="rz-p-4 rz-shadow-4 rz-border-radius-2" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center">
+        <RadzenText TextStyle="TextStyle.H3" Class="rz-mb-4" TextAlignment="TextAlignment.Center">🎓 Mes Formations : </RadzenText>
+
+        @* 'FormationsList' will be the name of your collection, and 'formation' will be an individual item of type 'Formations' *@
+        @foreach (var formation in FormationsList)
+        {
+            <RadzenCard Class="rz-shadow-2 rz-w-100 rz-max-width-600 rz-p-3">
+                <RadzenStack Orientation="Orientation.Vertical" Gap="0.5rem">
+                    <RadzenRow AlignItems="AlignItems.Center">
+                        <RadzenColumn Size="9">
+                            <RadzenText TextStyle="TextStyle.H6" Class="rz-mb-0">
+                                <RadzenBadge BadgeStyle="BadgeStyle.Light" Text="@(formation.AnneeDebut + "-" + formation.AnneeFin)" class="rz-me-2" />
+                                <b>@formation.Titre</b>
+                            </RadzenText>
+                        </RadzenColumn>
+                        <RadzenColumn Size="3" Class="rz-text-align-end">
+                            <RadzenBadge BadgeStyle="BadgeStyle.Success" Text="@formation.Mention" Visible="@(!string.IsNullOrEmpty(formation.Mention))" />
+                        </RadzenColumn>
+                    </RadzenRow>
+
+                    <hr style="border: none; background-color: var(--rz-text-disabled-color); height: 1px; margin: 0.5rem 0;" />
+
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween" Gap="1rem">
+                        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="1rem">
+                            @if (!string.IsNullOrEmpty(formation.ImageEcole))
+                            {
+                                <RadzenImage Path="@formation.ImageEcole" AlternateText="@formation.Etablissement" Style="width: 150px; height: 150px; border-radius: 50%" />
+                            }
+                            <RadzenStack Gap="0">
+                                <RadzenText TextStyle="TextStyle.Body1" Class="rz-mb-0">@formation.Etablissement</RadzenText>
+                                <RadzenText TextStyle="TextStyle.Body2">@formation.Lieu</RadzenText>
+                            </RadzenStack>
+                        </RadzenStack>
+                        <RadzenButton Text="Détails" ButtonStyle="ButtonStyle.Primary" Click="@(() => ShowFormationDetails(formation))" Style="font-size: 0.75rem; padding: 0.25rem 0.5rem;" />
+                    </RadzenStack>
+                </RadzenStack>
+            </RadzenCard>
+        }
+    </RadzenStack>
+}
+
+@code {
+    [Inject]
+    public DialogService? DialogService { get; set; }
+
+    private bool? isMobile = null;
+
+    // Use 'Formations' as the type for individual items in the list
+    private List<Formations> FormationsList { get; set; } = new List<Formations>(); // Renamed for clarity
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var width = await JSRuntime.InvokeAsync<int>("getWindowWidth");
+            Console.WriteLine($"💡 Largeur détectée : {width}px");
+            isMobile = width <= 768; // Détecte si la largeur est inférieure ou égale à 768px (taille typique pour mobile)
+            StateHasChanged(); // Informe Blazor que l'état du composant a changé
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        // Initialize with 'Formations' class
+        FormationsList = new List<Formations>
+        {
+            new Formations // <<< Use 'Formations' here
+            {
+                Titre = "MASTER MIAGE parcours IA2",
+                Etablissement = "Université Côte d'Azur",
+                Lieu = "Sophia Antipolis, France",
+                AnneeDebut = 2023,
+                AnneeFin = 2025,
+                Mention = "En cours",
+                DescriptionCourte = "Master en Intelligence Artificielle Appliquée. Axé sur les techniques modernes d'apprentissage automatique et le développement d'applications intelligentes.",
+                CompetencesAcquises = new List<string> { "Deep Learning", "Machine Learning", "Traitement du langage naturel", "Développement full-stack (C#, .NET, Blazor, Angular)", "Cloud Computing (Azure, AWS)", "Méthodes Agiles" },
+                CertificatUrl = "https://example.com/master_ia2.pdf",
+                ImageEcole = "images/unice.webp"
+             },
+            new Formations // <<< Use 'Formations' here
+            {
+                Titre = "LICENCE MIAGE",
+                Etablissement = "Université Côte d'Azur",
+                Lieu = "Sophia Antipolis, France",
+                AnneeDebut = 2022,
+                AnneeFin = 2023,
+                Mention = "Assez Bien",
+                DescriptionCourte = "Licence en Méthodes Informatiques Appliquées à la Gestion des Entreprises. Acquisition des bases solides en informatique de gestion.",
+                CompetencesAcquises = new List<string> { "Gestion de projet IT", "Bases de données (SQL, NoSQL)", "Développement web (HTML, CSS, JavaScript, PHP)", "Systèmes d'information", "Programmation orientée objet (Java, C#)" },
+                CertificatUrl = "https://example.com/licence_miage.pdf",
+                ImageEcole = "images/unice.webp"
+            },
+            new Formations // <<< Use 'Formations' here
+            {
+                Titre = "DUT STID",
+                Etablissement = "IUT de Nice",
+                Lieu = "Sophia Antipolis, France",
+                AnneeDebut = 2020,
+                AnneeFin = 2022,
+                Mention = "Bien",
+                DescriptionCourte = "Diplôme Universitaire de Technologie en Statistiques et Informatique Décisionnelle. Formation axée sur l'analyse de données et la prise de décision.",
+                CompetencesAcquises = new List<string> { "Statistiques descriptives et inférentielles", "Modélisation prédictive", "Programmation R/Python pour l'analyse de données", "Business Intelligence (Power BI, Tableau)", "Exploration de données" },
+                CertificatUrl = "https://example.com/dut_stid.pdf",
+                ImageEcole = "images/iut.png"
+            },
+            new Formations // <<< Use 'Formations' here
+            {
+                Titre = "LICENCE 1 EN MPI",
+                Etablissement = "Université Cheikh Anta Diop (UCAD)",
+                Lieu = "Dakar, Sénégal",
+                AnneeDebut = 2018,
+                AnneeFin = 2019,
+                Mention = "Validée",
+                DescriptionCourte = "Première année de licence en sciences fondamentales, jetant les bases pour les études informatiques et scientifiques.",
+                CompetencesAcquises = new List<string> { "Algèbre linéaire", "Analyse mathématique", "Mécanique du point", "Électricité", "Algorithmique et introduction à la programmation" },
+                CertificatUrl = "https://example.com/l1_ucad.pdf",
+                ImageEcole = "images/ucad2.png"
+            }
+        };
+    }
+
+    // The parameter type must now be 'Formations' (plural)
+    async Task ShowFormationDetails(Formations formation) // <<< Changed to 'Formations'
+    {
+        await DialogService!.OpenAsync<FormationDetailsDialog>(
+            formation.Titre, // Title of the dialog
+            new Dictionary<string, object>() { { "CurrentFormation", formation } }, // Parameters to pass to the dialog
+            new DialogOptions() { Width = "700px", Height = "auto", Resizable = true, Draggable = true }
+        );
+    }
+}

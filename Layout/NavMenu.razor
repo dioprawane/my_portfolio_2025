@@ -1,0 +1,23 @@
+﻿@using Radzen
+@using Radzen.Blazor
+
+<RadzenStack AlignItems="Radzen.AlignItems.Center" class="rz-py-4" Style="padding: var(--rz-panel-menu-item-padding); border-bottom: var(--rz-panel-menu-item-border);">
+    <RadzenImage Path="favicon.png" style="width: 48px; height: 48px;" AlternateText="Logo" />
+    <RadzenText Text="DIOP Serigne Rawane" TextStyle="TextStyle.Subtitle1" class="rz-mb-0" style="color: var(--rz-sidebar-color);" />
+</RadzenStack>
+
+<RadzenPanelMenu>
+    <RadzenPanelMenuItem Text="À propos" Path="apropos" Icon="person" />
+    <RadzenPanelMenuItem Text="Parcours" Icon="school">
+        <RadzenPanelMenuItem Text="Formation" Path="formations" Icon="menu_book" />
+        <RadzenPanelMenuItem Text="Compétences" Path="competences" Icon="engineering" />
+    </RadzenPanelMenuItem>
+    <RadzenPanelMenuItem Text="Expériences" Path="exp" Icon="work" />
+    <RadzenPanelMenuItem Text="Projets" Path="projets" Icon="code" />
+    <RadzenPanelMenuItem Text="Contact" Path="contact" Icon="email" />
+</RadzenPanelMenu>
+
+<RadzenStack AlignItems="Radzen.AlignItems.Center" class="rz-py-4">
+    <RadzenText Text="Mon site v2.0.0" TextStyle="TextStyle.Caption" TagName="TagName.P" TextAlign="TextAlign.Center" />
+    <RadzenText Text="Copyright Ⓒ 2024" TextStyle="TextStyle.Caption" class="rz-mb-0" TagName="TagName.P" TextAlign="TextAlign.Center" />
+</RadzenStack>

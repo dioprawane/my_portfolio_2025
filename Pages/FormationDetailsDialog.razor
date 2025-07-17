@@ -1,0 +1,84 @@
+﻿@using BlazorPortfolio.Models
+@inject DialogService DialogService
+
+<RadzenStack Orientation="Orientation.Vertical" Gap="1.5rem" Class="rz-p-4">
+
+    <RadzenText TextStyle="TextStyle.H4">Formation @CurrentFormation.AnneeDebut - @CurrentFormation.AnneeFin</RadzenText>
+
+    <RadzenRow>
+        <!-- Bloc gauche - Contact -->
+        <RadzenColumn Size="12" SizeMD="6" class="rz-p-4 rz-border-radius-1" Style="border: var(--rz-grid-cell-border); background-color: #fafafa;">
+            <RadzenText TextStyle="TextStyle.Subtitle1">Établissement</RadzenText>
+
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="1rem">
+                <RadzenImage Path="@CurrentFormation.ImageEcole" Style="width: 100px; height: 100px; border-radius: 50%" />
+                <RadzenStack Gap="0">
+                    <RadzenText TextStyle="TextStyle.Overline" class="rz-mt-2" Style="color: var(--rz-text-tertiary-color);">Nom</RadzenText>
+                    <RadzenText TextStyle="TextStyle.Body1"><b>@CurrentFormation.Etablissement</b></RadzenText>
+
+                    <RadzenText TextStyle="TextStyle.Overline" class="rz-mt-3" Style="color: var(--rz-text-tertiary-color);">Lieu</RadzenText>
+                    <RadzenText TextStyle="TextStyle.Body1"><b>@CurrentFormation.Lieu</b></RadzenText>
+                </RadzenStack>
+            </RadzenStack>
+        </RadzenColumn>
+
+        <!-- Bloc droit - Informations -->
+        <RadzenColumn Size="12" SizeMD="6" class="rz-p-4 rz-border-radius-1" Style="border: var(--rz-grid-cell-border); background-color: #fafafa;">
+            <RadzenText TextStyle="TextStyle.Subtitle1">Informations</RadzenText>
+
+            <RadzenStack Gap="0">
+                <RadzenText TextStyle="TextStyle.Overline" Style="color: var(--rz-text-tertiary-color);">Année</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1"><b>@CurrentFormation.AnneeDebut - @CurrentFormation.AnneeFin</b></RadzenText>
+
+                <RadzenText TextStyle="TextStyle.Overline" Style="color: var(--rz-text-tertiary-color);">Mention</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1"><b>@CurrentFormation.Mention</b></RadzenText>
+            </RadzenStack>
+        </RadzenColumn>
+    </RadzenRow>
+
+    <!-- Bloc description -->
+    <RadzenStack>
+        <RadzenText TextStyle="TextStyle.Subtitle1" class="rz-mb-2">Description</RadzenText>
+        <RadzenText TextStyle="TextStyle.Body2" Class="rz-w-100 rz-mt-2" Style="white-space: pre-wrap;">@CurrentFormation.DescriptionCourte</RadzenText>
+    </RadzenStack>
+
+    <!-- Bloc compétences -->
+    @if (CurrentFormation.CompetencesAcquises != null && CurrentFormation.CompetencesAcquises.Any())
+    {
+        <RadzenText TextStyle="TextStyle.Subtitle1">Compétences acquises</RadzenText>
+        <RadzenDataGrid Data="@GetCompetences()" TItem="CompetenceRow" ShowPagingSummary="false" AllowPaging="false" AllowSorting="false" AllowFiltering="false" Style="border-radius: 8px;">
+            <Columns>
+                <RadzenDataGridColumn TItem="CompetenceRow" Property="Id" Title="#" Width="60px" />
+                <RadzenDataGridColumn TItem="CompetenceRow" Property="Nom" Title="Compétence" />
+            </Columns>
+        </RadzenDataGrid>
+    }
+
+    @if (!string.IsNullOrEmpty(CurrentFormation.CertificatUrl) && CurrentFormation.CertificatUrl != "#")
+    {
+        <RadzenButton Icon="link" Text="Voir le certificat" Link="@CurrentFormation.CertificatUrl" Target="_blank" ButtonStyle="ButtonStyle.Secondary" Class="rz-mt-3" />
+    }
+
+    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End">
+        <RadzenButton Text="Fermer" Click="(() => DialogService.Close())" ButtonStyle="ButtonStyle.Primary" Style="width: 120px;" />
+    </RadzenStack>
+
+</RadzenStack>
+
+@code {
+    [Parameter]
+    public Formations CurrentFormation { get; set; }
+
+    public class CompetenceRow
+    {
+        public int Id { get; set; }
+        public string Nom { get; set; }
+    }
+
+    private IEnumerable<CompetenceRow> GetCompetences()
+    {
+        return CurrentFormation.CompetencesAcquises?
+            .Select((c, i) => new CompetenceRow { Id = i + 1, Nom = c }) ?? Enumerable.Empty<CompetenceRow>();
+    }
+}
+

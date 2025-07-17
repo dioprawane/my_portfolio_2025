@@ -1,0 +1,96 @@
+﻿@page "/contacts"
+@using Radzen
+@using Radzen.Blazor
+@inject NotificationService NotificationService
+
+<RadzenCard Style="max-width: 900px; margin: auto; padding: 2rem;">
+    <RadzenRow>
+        <RadzenColumn Size="12" class="rz-text-center">
+            <RadzenIcon Icon="email" Style="font-size: 40px; color: #1976d2;" />
+            <h2>Contactez-moi</h2>
+            <p>Vous pouvez m’écrire via ce formulaire ou me retrouver sur mes réseaux professionnels.</p>
+        </RadzenColumn>
+    </RadzenRow>
+
+    <!-- Infos de contact -->
+    <RadzenRow class="rz-mt-2 rz-mb-4" Style="gap: 2rem; justify-content: center;">
+        <RadzenColumn Size="4" class="rz-text-center">
+            <RadzenIcon Icon="alternate_email" Style="font-size: 24px;" />
+            <p>serigne.rawane@email.com</p>
+        </RadzenColumn>
+        <RadzenColumn Size="4" class="rz-text-center">
+            <RadzenIcon Icon="phone" Style="font-size: 24px;" />
+            <p>+33 6 12 34 56 78</p>
+        </RadzenColumn>
+        <RadzenColumn Size="4" class="rz-text-center">
+            <RadzenIcon Icon="location_on" Style="font-size: 24px;" />
+            <p>Nice, France</p>
+        </RadzenColumn>
+    </RadzenRow>
+
+    <!-- Réseaux sociaux -->
+    <RadzenRow class="rz-text-center rz-mb-4">
+        <RadzenColumn Size="12">
+            <a href="https://www.linkedin.com/in/serignerawane" target="_blank" class="rz-mx-2">
+                <RadzenIcon Icon="linkedin" Style="font-size: 28px; color: #0077b5;" />
+            </a>
+            <a href="https://github.com/serignerawane" target="_blank" class="rz-mx-2">
+                <RadzenIcon Icon="github" Style="font-size: 28px; color: #333;" />
+            </a>
+            <a href="https://twitter.com/serignerawane" target="_blank" class="rz-mx-2">
+                <RadzenIcon Icon="twitter" Style="font-size: 28px; color: #1DA1F2;" />
+            </a>
+        </RadzenColumn>
+    </RadzenRow>
+
+    <!-- Formulaire -->
+    <RadzenTemplateForm TItem="ContactModel" Data="@contact" Submit="@OnSubmit">
+        <RadzenRow Style="gap: 1rem;">
+            <RadzenColumn Size="6">
+                <RadzenTextBox @bind-Value="contact.Nom" Name="Nom" Placeholder="Votre nom" Style="width: 100%;" />
+                <RadzenRequiredValidator Component="Nom" Text="Nom requis." />
+            </RadzenColumn>
+            <RadzenColumn Size="6">
+                <RadzenTextBox @bind-Value="contact.Email" Name="Email" Placeholder="Votre email" Style="width: 100%;" />
+                <RadzenRequiredValidator Component="Email" Text="Email requis." />
+                <RadzenEmailValidator Component="Email" Text="Email invalide." />
+            </RadzenColumn>
+            <RadzenColumn Size="12">
+                <RadzenTextArea @bind-Value="contact.Message" Name="Message" Placeholder="Votre message..." Rows="5" Style="width: 100%;" />
+                <RadzenRequiredValidator Component="Message" Text="Message requis." />
+            </RadzenColumn>
+            <RadzenColumn Size="12" class="rz-text-center">
+                <RadzenButton ButtonStyle="ButtonStyle.Primary" Text="Envoyer" Icon="send" Type="Submit" />
+            </RadzenColumn>
+        </RadzenRow>
+    </RadzenTemplateForm>
+</RadzenCard>
+
+<RadzenNotification />
+
+@code {
+    private ContactModel contact = new();
+
+    private void OnSubmit()
+    {
+        // À remplacer par une logique réelle d'envoi de mail
+        Console.WriteLine($"[Contact] Nom: {contact.Nom}, Email: {contact.Email}, Message: {contact.Message}");
+
+        NotificationService.Notify(new NotificationMessage
+            {
+                Severity = NotificationSeverity.Success,
+                Summary = "Message envoyé",
+                Detail = "Merci ! Je vous répondrai rapidement.",
+                Duration = 4000
+            });
+
+        contact = new(); // Réinitialiser le formulaire
+    }
+
+    public class ContactModel
+    {
+        public string Nom { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Message { get; set; } = string.Empty;
+    }
+}

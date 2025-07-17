@@ -1,0 +1,163 @@
+﻿@page "/contact"
+@using Radzen
+@using Radzen.Blazor
+@inject DialogService DialogService
+@inject NotificationService NotificationService
+@using System.Text.Json
+@using System.ComponentModel.DataAnnotations
+@using Radzen.Blazor.Rendering @* NEW: Add this using directive for TemplateFormInvalidSubmitEventArgs *@
+
+<RadzenStack Orientation="Radzen.Orientation.Vertical" Gap="2rem" Class="rz-p-4 rz-text-align-center">
+
+    <RadzenText Text="Contactez-moi" TextStyle="TextStyle.H4" TagName="TagName.H1" Class="rz-mb-4" />
+
+    <RadzenRow Gap="2rem" Class="rz-p-0 rz-p-lg-4 rz-w-100 rz-mx-auto" Style="max-width: 1200px; align-items: stretch;">
+        <RadzenColumn Size="12" SizeMD="5" Style="height: 100%;">
+            <RadzenFieldset Text="Mes Coordonnées" Class="rz-shadow-1" Style="min-height: 550px; display: flex; flex-direction: column; justify-content: space-between;">
+                <RadzenStack Orientation="Radzen.Orientation.Vertical" Gap="1rem">
+                    <RadzenStack Orientation="Radzen.Orientation.Horizontal" AlignItems="Radzen.AlignItems.Center" Gap="0.5rem" JustifyContent="Radzen.JustifyContent.Start">
+                        <RadzenIcon Icon="email" Class="rz-text-primary" Style="font-size: 1.5rem;" />
+                        <RadzenLink Path="mailto:votre.email@example.com" Text="votre.email@example.com" Class="rz-text-truncate" />
+                    </RadzenStack>
+
+                    <RadzenStack Orientation="Radzen.Orientation.Horizontal" AlignItems="Radzen.AlignItems.Center" Gap="0.5rem" JustifyContent="Radzen.JustifyContent.Start">
+                        <RadzenIcon Icon="email" Class="rz-text-primary" Style="font-size: 1.5rem;" />
+                        <RadzenLink Path="mailto:votre.email@example.com" Text="votre.email@example.com" Class="rz-text-truncate" />
+                    </RadzenStack>
+
+
+                    <RadzenStack Orientation="Radzen.Orientation.Horizontal" AlignItems="Radzen.AlignItems.Center" Gap="0.5rem" JustifyContent="Radzen.JustifyContent.Start">
+                        <RadzenIcon Icon="phone" Class="rz-text-primary" Style="font-size: 1.5rem;" />
+                        <RadzenLink Path="tel:+33123456789" Text="+33 1 23 45 67 89" /> @* Remplacez par votre numéro *@
+                    </RadzenStack>
+
+                    <RadzenStack Orientation="Radzen.Orientation.Horizontal" AlignItems="Radzen.AlignItems.Center" Gap="0.5rem" JustifyContent="Radzen.JustifyContent.Start">
+                        <RadzenIcon Icon="location_on" Class="rz-text-primary" Style="font-size: 1.5rem;" />
+                        <RadzenText Text="Votre Ville, Votre Pays" TextStyle="TextStyle.Body1" /> @* Remplacez par votre ville/pays *@
+                    </RadzenStack>
+
+                    <RadzenDivider class="rz-my-3" /> @* Visual separator *@
+
+                    <RadzenText Text="Retrouvez-moi sur les réseaux sociaux" TextStyle="TextStyle.Subtitle1" TagName="TagName.H3" Class="rz-mb-2" />
+                    <RadzenStack Orientation="Orientation.Horizontal" Gap="1rem" JustifyContent="JustifyContent.Center">
+                        <RadzenLink Path="https://www.linkedin.com/in/votre-profil-linkedin" Target="_blank">
+                            <RadzenImage Path="linkedin-svgrepo-com.svg" Style="width: 64px; height: 64px;" AlternateText="LinkedIn" />
+                        </RadzenLink>
+                        <RadzenLink Path="https://github.com/votre-profil-github" Target="_blank">
+                            <RadzenImage Path="github-142-svgrepo-com.svg" Style="width: 64px; height: 64px;" AlternateText="GitHub" />
+                        </RadzenLink>
+                        <RadzenLink Path="https://www.instagram.com/votre-profil" Target="_blank">
+                            <RadzenImage Path="instagram-1-svgrepo-com.svg" Style="width: 64px; height: 64px;" AlternateText="Instagram" />
+                        </RadzenLink>
+                    </RadzenStack>
+                </RadzenStack>
+            </RadzenFieldset>
+        </RadzenColumn>
+
+        <RadzenColumn Size="12" SizeMD="5" Style="height: 100%;">
+            <RadzenFieldset Text="Envoyez-moi un message" Class="rz-shadow-1" Style="min-height: 550px; display: flex; flex-direction: column; justify-content: space-between;">
+                @* FIX 1: Keep the lambda expression for Submit ************************
+                         It's the most reliable way to ensure EventCallback is handled correctly.
+                *@
+                <RadzenTemplateForm Data="@model" Submit="@((args) => OnSubmit(args))" TItem="ContactFormModel" InvalidSubmit="@OnInvalidSubmit">
+                    <RadzenStack Orientation="Radzen.Orientation.Vertical" Gap="1rem">
+                        <RadzenRow AlignItems="AlignItems.Center">
+                            <RadzenColumn Size="12" SizeMD="4">
+                                <RadzenLabel Text="Votre Nom" Component="Name" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="12" SizeMD="8">
+                                <RadzenTextBox @bind-Value="model.Name" Placeholder="Votre nom complet" Class="w-100" />
+                                <RadzenRequiredValidator Component="Name" Text="Le nom est requis" Popup="true" />
+                            </RadzenColumn>
+                        </RadzenRow>
+
+                        <RadzenRow AlignItems="AlignItems.Center">
+                            <RadzenColumn Size="12" SizeMD="4">
+                                <RadzenLabel Text="Votre Email" Component="Email" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="12" SizeMD="8">
+                                <RadzenTextBox @bind-Value="model.Email" Placeholder="votre.email@example.com" Class="w-100" />
+                                <RadzenRequiredValidator Component="Email" Text="L'email est requis" Popup="true" />
+                                <RadzenEmailValidator Component="Email" Text="Format d'email invalide" Popup="true" />
+                            </RadzenColumn>
+                        </RadzenRow>
+
+                        <RadzenRow AlignItems="AlignItems.Center">
+                            <RadzenColumn Size="12" SizeMD="4">
+                                <RadzenLabel Text="Sujet" Component="Subject" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="12" SizeMD="8">
+                                <RadzenTextBox @bind-Value="model.Subject" Placeholder="Sujet du message" Class="w-100" />
+                                <RadzenRequiredValidator Component="Subject" Text="Le sujet est requis" Popup="true" />
+                            </RadzenColumn>
+                        </RadzenRow>
+
+                        <RadzenRow AlignItems="AlignItems.Start">
+                            <RadzenColumn Size="12" SizeMD="4">
+                                <RadzenLabel Text="Votre Message" Component="Message" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="12" SizeMD="8">
+                                <RadzenTextArea @bind-Value="model.Message" Rows="5" Placeholder="Écrivez votre message ici..." Class="w-100" />
+                                <RadzenRequiredValidator Component="Message" Text="Le message est requis" Popup="true" />
+                            </RadzenColumn>
+                        </RadzenRow>
+
+                        <RadzenRow>
+                            <RadzenColumn Size="12" Class="rz-text-align-center rz-pt-3">
+                                <RadzenButton ButtonType="ButtonType.Submit" Text="Envoyer le message" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.Large" Icon="send" />
+                            </RadzenColumn>
+                        </RadzenRow>
+                    </RadzenStack>
+                </RadzenTemplateForm>
+            </RadzenFieldset>
+        </RadzenColumn>
+    </RadzenRow>
+
+</RadzenStack>
+
+@code {
+    // Modèle pour le formulaire de contact
+    //EventConsole console;
+    public class ContactFormModel
+    {
+        [Required(ErrorMessage = "Le nom est requis")]
+        public string Name { get; set; }
+
+        [Required(ErrorMessage = "L'email est requis")]
+        [EmailAddress(ErrorMessage = "Format d'email invalide")]
+        public string Email { get; set; }
+
+        [Required(ErrorMessage = "Le sujet est requis")]
+        public string Subject { get; set; }
+
+        [Required(ErrorMessage = "Le message est requis")]
+        public string Message { get; set; }
+    }
+
+    ContactFormModel model = new ContactFormModel();
+
+    // Méthode appelée lorsque le formulaire est soumis et valide
+    async Task OnSubmit(ContactFormModel args)
+    {
+        NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Info, Summary = "Envoi en cours...", Detail = "Votre message est en cours d'envoi.", Duration = 4000 });
+
+        // IMPORTANT: Ici, vous implémenteriez la logique d'envoi de l'e-mail à votre API backend ou service tiers.
+        // Comme expliqué précédemment, vous ne pouvez PAS envoyer d'e-mails directement depuis Blazor WebAssembly.
+
+        // Simuler un envoi réussi
+        await Task.Delay(2000); // Délai pour simuler une requête réseau
+
+        // Afficher une notification de succès
+        NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Succès", Detail = "Votre message a été envoyé avec succès. Je vous répondrai dès que possible !", Duration = 5000 });
+
+        // Réinitialiser le formulaire après l'envoi
+        model = new ContactFormModel();
+        StateHasChanged(); // Pour rafraîchir l'UI après la réinitialisation du modèle
+    }
+
+    // Méthode appelée lorsque le formulaire est soumis et contient des erreurs de validation
+    void OnInvalidSubmit(FormInvalidSubmitEventArgs args)
+    {
+        Console.WriteLine($"InvalidSubmit: {JsonSerializer.Serialize(args, new JsonSerializerOptions() { WriteIndented = true })}");
+    }
+}

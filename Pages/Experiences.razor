@@ -1,0 +1,156 @@
+﻿@page "/exp"
+@using BlazorPortfolio.Models
+@using Radzen
+@using Radzen.Blazor
+@inject IJSRuntime JSRuntime
+
+<PageTitle>Expériences</PageTitle>
+
+<RadzenStack Orientation="Orientation.Vertical" Gap="2rem" Class="rz-p-4 rz-p-md-8 rz-w-100 rz-flex-justify-content-center"> @* Added rz-w-100 and rz-flex-justify-content-center *@
+
+    <RadzenText Text="MES EXPÉRIENCES" TextStyle="TextStyle.H4" Class="rz-text-uppercase rz-text-bold rz-border-bottom rz-pb-1 rz-text-center" /> @* Added rz-text-center *@
+
+    @foreach (var exp in ExperiencesList)
+    {
+        <RadzenCard Class="rz-my-3 rz-mx-auto rz-shadow-4" Style="width: 100%; max-width: 540px; border-radius: 12px; overflow: hidden;">
+            <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="1rem" Class="rz-p-4">
+                <!--<RadzenImage Path="/images/placeholder.jpg" Style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;" />-->
+                @if (!string.IsNullOrEmpty(exp.ImageCompetence))
+                {
+                    <RadzenImage Path="@exp.ImageCompetence" AlternateText="@exp.Title"
+                                 Style="@(IsMobile ? "width: 100px; height: 160px; border-radius: 50%;" : "width: 100px; height: 100px; border-radius: 50%;")" />
+                }
+                <RadzenStack Gap="0">
+                    <RadzenText TextStyle="TextStyle.Overline">Poste</RadzenText>
+                    <RadzenText TextStyle="TextStyle.Body1"><b>@exp.Title</b></RadzenText>
+
+                    <RadzenText TextStyle="TextStyle.Overline" Class="rz-mt-4">Entreprise</RadzenText>
+                    <RadzenText TextStyle="TextStyle.Body1"><b>@exp.Company</b></RadzenText>
+
+                    <RadzenText TextStyle="TextStyle.Overline" Class="rz-mt-4">Période</RadzenText>
+                    <RadzenText TextStyle="TextStyle.Body1"><b>@exp.Duration</b></RadzenText>
+                </RadzenStack>
+            </RadzenStack>
+
+            <!-- Réalisations -->
+            <RadzenCard Class="rz-background-color-primary-light rz-shadow-0 rz-border-radius-0 rz-p-8"
+                        Style="margin: 0.5rem calc(-1 * var(--rz-card-padding)) 0.25rem;">
+                <RadzenText TextStyle="TextStyle.H6" Class="rz-color-on-primary-light">
+                    <strong>Missions</strong>
+                </RadzenText>
+                <ul class="rz-color-on-primary-light rz-mt-2" style="padding-left: 1.25rem;">
+                    @foreach (var resp in exp.Responsibilities)
+                    {
+                        <li>@resp</li>
+                    }
+                </ul>
+            </RadzenCard>
+
+            <!-- Compétences utilisées -->
+            @if (exp.Skills?.Any() == true)
+            {
+                <RadzenCard Class="rz-shadow-0 rz-border-radius-0 rz-p-8"
+                            Style="background-color: #e9f0fa; margin: 0 calc(-1 * var(--rz-card-padding)) 0.5rem;">
+                    <RadzenText TextStyle="TextStyle.H6" Class="rz-color-primary rz-mb-2">
+                        <strong>Compétences </strong>
+                    </RadzenText>
+                    <div class="rz-d-flex rz-flex-wrap" style="gap: 0.5rem; row-gap: 0.5rem; column-gap: 0.5rem;">
+                        @foreach (var skill in exp.Skills)
+                        {
+                            <span style="
+                                        background-color: #d6e4f7;
+                                        color: #1a4a83;
+                                        font-weight: 600;
+                                        padding: 0.6rem 0.9rem;
+                                        border-radius: 999px;
+                                        font-size: 0.85rem;
+                                        display: inline-block;
+                                        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                                        margin-right: 0.75rem;
+                                        margin-bottom: 1rem;">
+                                @skill
+                            </span>
+                        }
+                    </div>
+
+                </RadzenCard>
+            }
+
+
+        </RadzenCard>
+    }
+</RadzenStack>
+
+@code {
+    private List<Experience> ExperiencesList = new()
+    {
+        new Experience
+        {
+            Title = "Apprenti chargé d'études statistiques",
+            Company = "Urssaf (Acoss)",
+            Duration = "Depuis 2022",
+            Responsibilities = new()
+            {
+                "Développement d’une application .NET pour optimiser le suivi budgétaire.",
+                "Remplacement d’outils Excel par une interface moderne.",
+                "Création de modèles prédictifs avec Power BI.",
+                "Modélisation de processus métier via Iterop (JavaScript, JUEL)."
+            },
+            Skills = new() { "C#", ".NET", "Blazor", "Power BI", "SQL", "JavaScript", "ITEROP", "JUEL" },
+            ImageCompetence = "images/logoU.svg"
+        },
+        new Experience
+        {
+            Title = "Stage data analyst",
+            Company = "Urssaf (Acoss)",
+            Duration = "Avril 2022 - Juin 2022",
+            Responsibilities = new()
+            {
+                "Création de tableaux de bord Power BI orientés performance.",
+                "Modélisation de données stratégiques et prévisionnelles."
+            },
+            Skills = new() { "Power BI", "SQL", "Data Storytelling" },
+            ImageCompetence = "images/logoU.svg"
+        },
+        new Experience
+        {
+            Title = "Agent de sécurité / Chef de poste",
+            Company = "Current France",
+            Duration = "Depuis 2021",
+            Responsibilities = new()
+            {
+                "Surveillance et vidéoprotection.",
+                "Coordination des équipes et gestion des incidents."
+            },
+            Skills = new() { "Vidéoprotection", "Leadership", "Sécurité" },
+            ImageCompetence = "images/secu.webp"
+        },
+        new Experience
+        {
+            Title = "Enseignant en mathématiques",
+            Company = "Cours particuliers",
+            Duration = "Depuis 2018",
+            Responsibilities = new()
+            {
+                "Soutien en mathématiques de la 6e au supérieur.",
+                "Préparation aux examens, remobilisation pédagogique."
+            },
+            Skills = new() { "Pédagogie", "Mathématiques", "Communication" },
+            ImageCompetence = "images/Cours.png"
+        }
+    };
+
+    private bool IsMobile { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // This JavaScript function needs to be defined in your wwwroot/index.html or app.js
+            // Example: window.getWindowWidth = () => window.innerWidth;
+            var width = await JSRuntime.InvokeAsync<int>("getWindowWidth");
+            IsMobile = width <= 768; // You can adjust this breakpoint as needed for "mobile"
+            StateHasChanged(); // Re-render the component with the correct image size
+        }
+    }
+}

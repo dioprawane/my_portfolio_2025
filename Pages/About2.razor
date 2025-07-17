@@ -1,0 +1,55 @@
+﻿@page "/a-propos"
+@using Radzen
+@using Radzen.Blazor
+
+<RadzenStack Orientation="Radzen.Orientation.Vertical" Gap="1rem" Class="rz-p-4">
+
+    <RadzenText Text="À propos de moi" TextStyle="TextStyle.H4" TagName="TagName.H1" TextAlign="TextAlign.Center" Class="rz-mb-4" />
+
+    <RadzenCard Class="rz-shadow-1 rz-p-4">
+        <RadzenStack Orientation="Radzen.Orientation.Vertical" Gap="1rem" AlignItems="Radzen.AlignItems.Center">
+            <RadzenImage Path="6.png" Style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 3px solid var(--rz-primary);" AlternateText="Photo de profil" />
+            <RadzenText Text="DIOP Serigne Rawane" TextStyle="TextStyle.H5" TagName="TagName.H2" Class="rz-mb-0" />
+            <RadzenText Text="Développeur Full Stack" TextStyle="TextStyle.Subtitle1" TagName="TagName.H3" Class="rz-mb-0 rz-text-secondary" />
+            <RadzenText Text="Bienvenue sur mon portfolio ! Je suis un développeur passionné par la création de solutions web innovantes et performantes. Fort d'une expérience solide en développement front-end et back-end, j'excellle dans la conception d'applications robustes et conviviales." TextStyle="TextStyle.Body1" TextAlign="TextAlign.Center" Class="rz-my-3" />
+
+            <RadzenStack Orientation="Radzen.Orientation.Horizontal" Gap="1rem" JustifyContent="JustifyContent.Center" Class="rz-mt-3">
+                <div class="rz-p-12 rz-text-align-center">
+                    <RadzenLink Icon="person" Path="https://www.linkedin.com/in/votre-profil-linkedin" Text="LinkedIn" />
+                </div>
+                <div class="rz-p-12 rz-text-align-center">
+                    <RadzenLink Icon="person" Path="https://github.com/votre-profil-github" Text="GitHub" />
+                </div>
+                @* Vous pouvez ajouter d'autres liens sociaux ici *@
+            </RadzenStack>
+        </RadzenStack>
+    </RadzenCard>
+
+    <RadzenCard Class="rz-shadow-1 rz-p-4">
+        <RadzenText Text="Mes Valeurs" TextStyle="TextStyle.H5" TagName="TagName.H2" TextAlign="TextAlign.Center" Class="rz-mb-3" />
+        <RadzenStack Orientation="Radzen.Orientation.Horizontal" Wrap="Radzen.FlexWrap.Wrap" JustifyContent="JustifyContent.SpaceAround" Gap="1.5rem">
+            <RadzenStack Orientation="Radzen.Orientation.Vertical" AlignItems="Radzen.AlignItems.Center" Gap="0.5rem">
+                <RadzenIcon Icon="lightbulb" Style="font-size: 3rem; color: var(--rz-info);" />
+                <RadzenText Text="Innovation" TextStyle="TextStyle.Subtitle1" TagName="TagName.H4" />
+                <RadzenText Text="Recherche constante de nouvelles technologies et solutions créatives." TextAlign="TextAlign.Center" TextStyle="TextStyle.Caption" />
+            </RadzenStack>
+            <RadzenStack Orientation="Radzen.Orientation.Vertical" AlignItems="Radzen.AlignItems.Center" Gap="0.5rem">
+                <RadzenIcon Icon="handshake" Style="font-size: 3rem; color: var(--rz-success);" />
+                <RadzenText Text="Collaboration" TextStyle="TextStyle.Subtitle1" TagName="TagName.H4" />
+                <RadzenText Text="Esprit d'équipe et communication ouverte pour atteindre les objectifs." TextAlign="TextAlign.Center" TextStyle="TextStyle.Caption" />
+            </RadzenStack>
+            <RadzenStack Orientation="Radzen.Orientation.Vertical" AlignItems="Radzen.AlignItems.Center" Gap="0.5rem">
+                <RadzenIcon Icon="check_circle" Style="font-size: 3rem; color: var(--rz-warning);" />
+                <RadzenText Text="Qualité" TextStyle="TextStyle.Subtitle1" TagName="TagName.H4" />
+                <RadzenText Text="Engagement à fournir des solutions robustes, fiables et maintenables." TextAlign="TextAlign.Center" TextStyle="TextStyle.Caption" />
+            </RadzenStack>
+        </RadzenStack>
+    </RadzenCard>
+
+    @* Vous pouvez ajouter d'autres sections ici, par exemple : "Mes intérêts", "Ma philosophie de développement", etc. *@
+
+</RadzenStack>
+
+@code {
+    // Aucune logique C# spécifique n'est nécessaire pour cette page "À propos" simple.
+}

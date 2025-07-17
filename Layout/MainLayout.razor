@@ -1,0 +1,37 @@
+﻿@inherits LayoutComponentBase
+@using Radzen
+@using Radzen.Blazor
+
+<RadzenComponents />
+
+<RadzenLayout style="grid-template-areas: 'rz-sidebar rz-header' 'rz-sidebar rz-body';">
+    <RadzenHeader>
+        <RadzenRow JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="0" class="rz-px-2 rz-h-full">
+            <RadzenColumn Size="5" class="d-flex align-items-center">
+                <RadzenSidebarToggle Click="@ToggleSidebar" Style="margin-right: 1rem;" />
+                <RadzenText Text="DIOP Serigne Rawane" TextStyle="TextStyle.H6" style="color: white; white-space: nowrap;" />
+            </RadzenColumn>
+        </RadzenRow>
+    </RadzenHeader>
+
+    <RadzenBody Expanded="@sidebarExpanded">
+        <RadzenRow class="rz-mx-auto rz-px-4 rz-pt-4" Style="max-width: 1440px;">
+            <RadzenColumn Size="12">
+                @Body
+            </RadzenColumn>
+        </RadzenRow>
+    </RadzenBody>
+
+    <RadzenSidebar Expanded="@sidebarExpanded" Style="z-index: 2">
+        <NavMenu />
+    </RadzenSidebar>
+</RadzenLayout>
+
+@code {
+    private bool sidebarExpanded = true;
+
+    private void ToggleSidebar()
+    {
+        sidebarExpanded = !sidebarExpanded;
+    }
+}

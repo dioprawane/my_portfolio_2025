@@ -1,0 +1,192 @@
+﻿@page "/projets2"
+@using Radzen
+@using Radzen.Blazor
+@using BlazorPortfolio
+// Ensure you reference your Project model namespace
+@inject DialogService DialogService // For potential future project detail dialogs
+
+<RadzenStack Orientation="Radzen.Orientation.Vertical" Gap="2rem" Class="rz-p-4 rz-text-align-center">
+
+    <RadzenText Text="Mes Projets Récents" TextStyle="TextStyle.H3" TagName="TagName.H1" Class="rz-mb-4 rz-text-primary" />
+    <RadzenText Text="Découvrez quelques-uns de mes travaux et réalisations." TextStyle="TextStyle.Subtitle1" Class="rz-mb-5" />
+
+    {{/* Optional: Project Category Filter (Uncomment if you add categories to your Project model) */}}
+    @*
+    <RadzenStack Orientation="Radzen.Orientation.Horizontal" Gap="1rem" JustifyContent="Radzen.JustifyContent.Center" Class="rz-mb-4">
+        <RadzenButton Text="Tout" Click="@(() => FilterProjects("All"))" ButtonStyle="@(SelectedCategory == "All" ? ButtonStyle.Primary : ButtonStyle.Light)" />
+        <RadzenButton Text="Web" Click="@(() => FilterProjects("Web"))" ButtonStyle="@(SelectedCategory == "Web" ? ButtonStyle.Primary : ButtonStyle.Light)" />
+        <RadzenButton Text="Mobile" Click="@(() => FilterProjects("Mobile"))" ButtonStyle="@(SelectedCategory == "Mobile" ? ButtonStyle.Primary : ButtonStyle.Light)" />
+        <RadzenButton Text="Bureau" Click="@(() => FilterProjects("Desktop"))" ButtonStyle="@(SelectedCategory == "Desktop" ? ButtonStyle.Primary : ButtonStyle.Light)" />
+    </RadzenStack>
+    *@
+
+    <RadzenDataList Data="@FilteredProjects" WrapItems="true" AllowPaging="true" PageSize="6" PagerHorizontalAlign="HorizontalAlign.Center" Class="rz-mb-5">
+        <Template Context="project">
+            <RadzenCard Style="width: 100%; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: flex; flex-direction: column; height: 100%;">
+                <RadzenImage Path="@project.ImagePath" AlternateText="@project.Title" Style="width: 100%; height: 200px; object-fit: cover; border-bottom: 1px solid var(--rz-border-color);" />
+                <RadzenStack Orientation="Radzen.Orientation.Vertical" Gap="0.5rem" Class="rz-p-3" Style="flex-grow: 1;">
+                    <RadzenText Text="@project.Title" TextStyle="TextStyle.H6" TagName="TagName.H4" Class="rz-mb-2 rz-text-primary" />
+                    <RadzenText Text="@project.Description" TextStyle="TextStyle.Body2" Class="rz-mb-3 rz-text-secondary" />
+
+                    @if (project.Technologies != null && project.Technologies.Any())
+                    {
+                        <RadzenStack Orientation="Radzen.Orientation.Horizontal" WrapItems="true" Gap="0.5rem" Class="rz-mb-3">
+                            @foreach (var tech in project.Technologies)
+                            {
+                                <RadzenBadge Text="@tech" BadgeStyle="BadgeStyle.Light" />
+                            }
+                        </RadzenStack>
+                    }
+
+                    <RadzenStack Orientation="Radzen.Orientation.Horizontal" Gap="0.5rem" JustifyContent="Radzen.JustifyContent.End" Class="rz-mt-auto">
+                        @if (!string.IsNullOrEmpty(project.DemoLink))
+                        {
+                            <RadzenLink Path="@project.DemoLink" Target="_blank">
+                                <RadzenButton Icon="link" Text="Démo" ButtonStyle="ButtonStyle.Info" Size="ButtonSize.Small" Variant="Variant.Flat" />
+                            </RadzenLink>
+                        }
+                        @if (!string.IsNullOrEmpty(project.RepoLink))
+                        {
+                            <RadzenLink Path="@project.RepoLink" Target="_blank">
+                                <RadzenButton Icon="code" Text="Code" ButtonStyle="ButtonStyle.Dark" Size="ButtonSize.Small" Variant="Variant.Flat" />
+                            </RadzenLink>
+                        }
+                        {{/* Optional: More details button to open a dialog */}}
+                        @*
+                        <RadzenButton Icon="info" Text="Détails" ButtonStyle="ButtonStyle.Secondary" Size="ButtonSize.Small" Variant="Variant.Flat" Click="@(() => ShowProjectDetails(project))" />
+                        *@
+                    </RadzenStack>
+                </RadzenStack>
+            </RadzenCard>
+        </Template>
+    </RadzenDataList>
+
+</RadzenStack>
+
+@code {
+    public class Project
+    {
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public string ImagePath { get; set; } // Path to your project screenshot/image
+        public List<string> Technologies { get; set; } // List of technologies used (e.g., "C#", "Blazor", "Azure")
+        public string DemoLink { get; set; } // Optional: link to a live demo
+        public string RepoLink { get; set; } // Optional: link to the GitHub repository
+        public string Category { get; set; } // Optional: for filtering/categorization (e.g., "Web", "Mobile", "Desktop")
+    }
+
+    private List<Project> projects;
+    private List<Project> FilteredProjects => projects.Where(p => SelectedCategory == "All" || p.Category == SelectedCategory).ToList();
+    private string SelectedCategory = "All";
+
+    protected override void OnInitialized()
+    {
+        // Populate with dummy project data
+        projects = new List<Project>
+        {
+            new Project
+            {
+                Title = "Portfolio Personnel Blazor",
+                Description = "Un portfolio web moderne et réactif développé avec Blazor WebAssembly et Radzen Blazor Components.",
+                ImagePath = "images/project_portfolio.png", // Make sure you have this image in wwwroot/images
+                Technologies = new List<string> { "Blazor WebAssembly", "C#", "Radzen Blazor", "HTML", "CSS" },
+                RepoLink = "https://github.com/votre-profil/votre-repo-portfolio",
+                DemoLink = "https://votre-portfolio.com", // Replace with your actual deployed portfolio URL
+                Category = "Web"
+            },
+            new Project
+            {
+                Title = "Application de Gestion de Tâches",
+                Description = "Une application full-stack pour organiser et suivre vos tâches quotidiennes, avec authentification utilisateur.",
+                ImagePath = "images/project_tasks.png", // Make sure you have this image
+                Technologies = new List<string> { "ASP.NET Core API", "Entity Framework Core", "SQL Server", "Angular", "TypeScript" },
+                RepoLink = "https://github.com/votre-profil/app-gestion-taches",
+                DemoLink = null, // No live demo available
+                Category = "Web"
+            },
+            new Project
+            {
+                Title = "Jeu de Plateau en Ligne",
+                Description = "Implémentation d'un jeu de plateau classique avec multijoueur en temps réel via SignalR.",
+                ImagePath = "images/project_boardgame.png", // Make sure you have this image
+                Technologies = new List<string> { "Blazor Server", "SignalR", "C#", "JavaScript" },
+                RepoLink = "https://github.com/votre-profil/jeu-en-ligne",
+                DemoLink = "https://jeu.example.com",
+                Category = "Web"
+            },
+            new Project
+            {
+                Title = "Application Mobile de Recettes",
+                Description = "Une application mobile pour découvrir et gérer des recettes, développée avec .NET MAUI.",
+                ImagePath = "images/project_recipes.png", // Make sure you have this image
+                Technologies = new List<string> { ".NET MAUI", "C#", "Xamarin.Forms", "SQLite" },
+                RepoLink = "https://github.com/votre-profil/app-recettes-mobile",
+                DemoLink = null,
+                Category = "Mobile"
+            },
+             new Project
+            {
+                Title = "Système de Recommandation E-commerce",
+                Description = "Un système backend utilisant des algorithmes de machine learning pour recommander des produits aux utilisateurs.",
+                ImagePath = "images/project_ecommerce_reco.png", // Make sure you have this image
+                Technologies = new List<string> { "Python", "Django", "Machine Learning", "PostgreSQL", "REST API" },
+                RepoLink = "https://github.com/votre-profil/reco-ecommerce",
+                DemoLink = null,
+                Category = "Web"
+            },
+             new Project
+            {
+                Title = "Outil de Visualisation de Données",
+                Description = "Application desktop pour visualiser des ensembles de données complexes avec des graphiques interactifs.",
+                ImagePath = "images/project_data_viz.png", // Make sure you have this image
+                Technologies = new List<string> { "C#", "WPF", "LiveCharts" },
+                RepoLink = "https://github.com/votre-profil/outil-viz-donnees",
+                DemoLink = null,
+                Category = "Desktop"
+            }
+        };
+    }
+
+    private void FilterProjects(string category)
+    {
+        SelectedCategory = category;
+    }
+
+    // Optional: Method to show project details in a dialog
+    // async Task ShowProjectDetails(Project project)
+    // {
+    //     await DialogService.OpenAsync(project.Title, ds =>
+    //         @<RadzenStack Orientation="Radzen.Orientation.Vertical" Gap="1rem" Class="rz-p-4">
+    //             <RadzenImage Path="@project.ImagePath" AlternateText="@project.Title" Style="width: 100%; height: 250px; object-fit: cover;" />
+    //             <RadzenText Text="@project.Description" TextStyle="TextStyle.Body1" />
+    //             @if (project.Technologies != null && project.Technologies.Any())
+    //             {
+    //                 <RadzenText Text="Technologies:" TextStyle="TextStyle.Subtitle2" />
+    //                 <RadzenStack Orientation="Radzen.Orientation.Horizontal" WrapItems="true" Gap="0.5rem">
+    //                     @foreach (var tech in project.Technologies)
+    //                     {
+    //                         <RadzenBadge Text="@tech" BadgeStyle="BadgeStyle.Primary" />
+    //                     }
+    //                 </RadzenStack>
+    //             }
+    //             <RadzenStack Orientation="Radzen.Orientation.Horizontal" Gap="0.5rem" JustifyContent="Radzen.JustifyContent.End">
+    //                 @if (!string.IsNullOrEmpty(project.DemoLink))
+    //                 {
+    //                     <RadzenLink Path="@project.DemoLink" Target="_blank">
+    //                         <RadzenButton Icon="link" Text="Voir la démo" ButtonStyle="ButtonStyle.Info" />
+    //                     </RadzenLink>
+    //                 }
+    //                 @if (!string.IsNullOrEmpty(project.RepoLink))
+    //                 {
+    //                     <RadzenLink Path="@project.RepoLink" Target="_blank">
+    //                         <RadzenButton Icon="code" Text="Voir le code" ButtonStyle="ButtonStyle.Dark" />
+    //                     </RadzenLink>
+    //                 }
+    //             </RadzenStack>
+    //             <RadzenStack HorizontalAlign="Radzen.Blazor.Enums.HorizontalAlign.Center" Class="rz-mt-4">
+    //                 <RadzenButton Text="Fermer" Click="@(_ => ds.Close())" ButtonStyle="ButtonStyle.Secondary" />
+    //             </RadzenStack>
+    //         </RadzenStack>
+    //     );
+    // }
+}
