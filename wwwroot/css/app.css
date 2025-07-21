@@ -110,3 +110,7 @@ body {
     border-radius: 10px;
     box-shadow: 0px 2px 10px rgba(0,0,0,0.1);
 }
+
+.rz-carousel-item {
+    height: 200px !important;
+}

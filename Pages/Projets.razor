@@ -1,6 +1,8 @@
 ﻿@page "/projets"
 @using Radzen
 @using Radzen.Blazor
+@using BlazorPortfolio.Models
+@inject IJSRuntime JSRuntime
 
 <RadzenStack Orientation="Orientation.Vertical" Gap="2rem" Class="rz-p-4">
     <RadzenText Text="Mes Projets" TextStyle="TextStyle.H4" TagName="TagName.H1" Class="rz-text-center" />
@@ -10,7 +12,31 @@
         {
             <RadzenColumn Size="12" SizeMD="4">
                 <RadzenCard Style="height: 100%; padding: 1rem;" Class="rz-shadow-2">
-                    <RadzenImage Path="@projet.Image" Style="width: 100%; height: 180px; object-fit: cover; border-radius: 0.5rem;" />
+                    <!--<RadzenImage Path="@projet.Image" Style="width: 100%; height: 180px; object-fit: cover; border-radius: 0.5rem;" />-->
+                    @if (projet.Images != null && projet.Images.Any())
+                    {
+                        <RadzenCarousel Autoplay="true" AutoplayInterval="3000" ShowArrows="true" ShowPagers="true"
+                                        Style="width: 100%; height: 200px; border-radius: 0.5rem; overflow: hidden;">
+                            <Items>
+                                @foreach (var imgPath in projet.Images)
+                                {
+                                    <RadzenCarouselItem Style="height: 200px;">
+                                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background-color: #f9f9f9;">
+                                            <img src="@($"/{imgPath}")" alt="image projet"
+                                                 style="max-width: 90%; max-height: 90%; object-fit: contain; border-radius: 0.5rem; transition: opacity 1s ease;" />
+                                        </div>
+                                    </RadzenCarouselItem>
+                                }
+                            </Items>
+                        </RadzenCarousel>
+
+                    }
+                    else
+                    {
+                        <img src="/images/iut.jpg" alt="image par défaut"
+                             style="width: 100%; height: 200px; object-fit: cover; border-radius: 0.5rem;" />
+                    }
+
 
                     <RadzenText Text="@projet.Titre" TextStyle="TextStyle.H6" Class="rz-mt-3" />
 
@@ -44,15 +70,6 @@
 </RadzenStack>
 
 @code {
-    public class Projet
-    {
-        public string Titre { get; set; }
-        public string Description { get; set; }
-        public List<string> Technologies { get; set; }
-        public string Image { get; set; }
-        public string LienGithub { get; set; }
-        public string LienDemo { get; set; }
-    }
 
     List<Projet> projets = new()
     {
@@ -61,8 +78,8 @@
             Titre = "BestProfiles - IA pour le recrutement",
             Description = "Une plateforme de tri intelligent de CV basée sur l’IA, NLP et scoring de profils. Optimisation des recrutements en entreprise et école.",
             Technologies = new List<string> { "Blazor", "FastAPI", "Python", "NLP", "Azure" },
-            Image = "bestprofiles.jpg", // à placer dans wwwroot
-            LienGithub = "https://github.com/ton-projet",
+            Images = new List<string> { "images/unice.webp", "images/iut.png" },
+            LienGithub = "https://github.com/dioprawane/best_profiles_frontend",
             LienDemo = "https://bestprofiles-demo.com"
         },
         new Projet
@@ -70,7 +87,7 @@
             Titre = "Help4You - App solidaire mobile",
             Description = "Application Flutter dédiée à l'entraide sociale, avec géolocalisation et mise en relation d'utilisateurs en situation difficile.",
             Technologies = new List<string> { "Flutter", "Firebase", "Kotlin", "Google Maps" },
-            Image = "help4you.jpg",
+            Images = new List<string> { "images/Cours.png", "images/logoU.svg" },
             LienGithub = "https://github.com/ton-autre-projet",
             LienDemo = ""
         },
@@ -79,7 +96,7 @@
             Titre = "Catalogue Immobilier",
             Description = "Portail de gestion des annonces immobilières en ligne. Upload d’images, filtres avancés, page de détails responsive.",
             Technologies = new List<string> { "React", "Node.js", "MongoDB", "Cloudinary" },
-            Image = "realestate.jpg",
+            Images = new List<string> { "images/ucad.png", "images/urssaf-logo.png" },
             LienGithub = "",
             LienDemo = "https://mon-agence-immo.com"
         }
