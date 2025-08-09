@@ -2,8 +2,27 @@
 @using Radzen.Blazor
 
 <RadzenStack AlignItems="Radzen.AlignItems.Center" class="rz-py-4" Style="padding: var(--rz-panel-menu-item-padding); border-bottom: var(--rz-panel-menu-item-border);">
-    <RadzenImage Path="favicon.png" style="width: 48px; height: 48px;" AlternateText="Logo" />
-    <RadzenText Text="DIOP Serigne Rawane" TextStyle="TextStyle.Subtitle1" class="rz-mb-0" style="color: var(--rz-sidebar-color);" />
+    <!--<RadzenImage Path="/5.jfif" style="width: 48px; height: 48px;" AlternateText="Logo" />-->
+    <RadzenImage Path="/5.jfif"
+                 AlternateText="Photo de profil"
+                 Style="
+                    width: 64px;
+                    height: 64px;
+                    border-radius: 50%;
+                    object-fit: cover;
+                    border: 2px solid var(--rz-primary);
+                    box-shadow: 0 2px 6px rgba(0,0,0,.15);
+                 " />
+    <RadzenText Text="DIOP Serigne Rawane"
+                TextStyle="TextStyle.Subtitle1"
+                Class="rz-mb-0"
+                Style="
+                    color: var(--rz-sidebar-color);
+                    font-weight: 600;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                " />
 </RadzenStack>
 
 <RadzenPanelMenu>

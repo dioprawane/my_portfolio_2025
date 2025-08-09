@@ -6,6 +6,7 @@
 @inject Radzen.DialogService DialogService
 @inject IJSRuntime JSRuntime
 
+<PageTitle>Compétences</PageTitle>
                        
 @if (isMobile == null)                  
 {
@@ -203,7 +204,10 @@ else
 {
     <RadzenStack Orientation="Orientation.Vertical" Gap="2rem" Class="rz-p-4 rz-p-md-8">
 
-        <RadzenText TextStyle="TextStyle.H2" Class="rz-mb-4 rz-text-center">Compétences</RadzenText>
+        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Class="rz-mb-2">
+            <RadzenIcon Icon="engineering" Style="font-size: 2em;" />
+            <RadzenText TextStyle="TextStyle.H3" Class="rz-mb-2" TextAlignment="TextAlignment.Center"> Compétences </RadzenText>
+        </RadzenStack>
 
         @* --- Section 1: RadzenCarousel for a dynamic overview --- *@
         <RadzenCard class="rz-p-4" Variant="Variant.Outlined">

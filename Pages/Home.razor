@@ -1,16 +1,101 @@
 ﻿@page "/"
 
-<PageTitle>Home</PageTitle>
+@using Radzen
+@using Radzen.Blazor
+@inject BlazorPortfolio.Services.GitHubService GitHub
 
-<h1>Hello, world!</h1>
+<RadzenStack Gap="1rem">
+    <RadzenCard>
+        <RadzenRow>
+            <RadzenColumn Size="12" SizeMD="6">
+                <RadzenText TextStyle="TextStyle.H6">Résumé</RadzenText>
+                <div class="rz-mt-2">
+                    <b>Dépôts:</b> @reposCount
+                    <span class="rz-ms-2">Publics: @publicRepos</span>
+                    <span class="rz-ms-2">Privés (estim.): @privateRepos</span><br />
+                    <b>Stars totales:</b> @totalStars
+                </div>
+            </RadzenColumn>
+            <RadzenColumn Size="12" SizeMD="6">
+                <RadzenText TextStyle="TextStyle.H6">Actions (30 jours)</RadzenText>
+                <div class="rz-mt-2">
+                    <b>Workflows:</b> @actionsWorkflows
+                    <span class="rz-ms-2">Runs:</span> @actionsRuns
+                    <span class="rz-ms-2 rz-color-success">Succès:</span> @actionsSuccess
+                    <span class="rz-ms-2 rz-color-danger">Échecs:</span> @actionsFailure<br />
+                    <b>Taux de succès:</b> @actionsPassRate%
+                </div>
+            </RadzenColumn>
+        </RadzenRow>
+    </RadzenCard>
 
-Welcome to your new app.
+    <RadzenRow>
+        <RadzenColumn Size="12" SizeMD="6">
+            <RadzenCard>
+                <RadzenText TextStyle="TextStyle.H6">Répartition par langage (octets)</RadzenText>
+                <RadzenChart Style="height:320px">
+                    <RadzenDonutSeries Data="@languages" CategoryProperty="Key" ValueProperty="Value" />
+                    <RadzenLegend Position="LegendPosition.Right" />
+                </RadzenChart>
+            </RadzenCard>
+        </RadzenColumn>
 
-<h3>Bienvenue sur mon portfolio</h3>
-
-<RadzenButton Text="Cliquez ici" Click="@(() => Message = "Bonjour depuis Radzen !")" />
-<p>@Message</p>
+        <RadzenColumn Size="12" SizeMD="6">
+            <RadzenCard>
+                <RadzenText TextStyle="TextStyle.H6">Top repos par stars</RadzenText>
+                <RadzenChart Style="height:320px">
+                    <RadzenBarSeries Data="@topStars" CategoryProperty="Key" ValueProperty="Value" />
+                    <RadzenCategoryAxis />
+                    <RadzenValueAxis />
+                </RadzenChart>
+            </RadzenCard>
+        </RadzenColumn>
+    </RadzenRow>
+</RadzenStack>
 
 @code {
-    private string? Message;
+    string owner = "dioprawane"; // <-- ton compte GitHub
+
+    // KPI
+    int reposCount, publicRepos, privateRepos, totalStars;
+    int actionsWorkflows, actionsRuns, actionsSuccess, actionsFailure;
+    double actionsPassRate;
+
+    // Charts
+    // Charts
+    List<KeyValuePair<string, long>> languages = new();
+    //List<(string Name, int Stars)> topStars = new();
+    // remplace ta déclaration + projection
+    List<KeyValuePair<string, int>> topStars = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        // 1) Repos
+        var repos = await GitHub.GetAllReposBis(owner);
+        reposCount = repos.Count;
+        publicRepos = repos.Count(r => r.Visibility == "public" || r.Private == false);
+        totalStars = repos.Sum(r => r.StargazersCount);
+        privateRepos = reposCount - publicRepos;
+        //totalStars = repos.Sum(r => (int?)r.stargazers_count ?? 0);
+
+        topStars = repos
+        .Select(r => new KeyValuePair<string, int>(r.Name ?? "", r.StargazersCount))
+        .OrderByDescending(x => x.Value)
+        .Take(8)
+        .ToList();
+
+        // 2) Languages agrégés
+        var langs = await GitHub.GetLanguagesAggBis(owner);
+        languages = langs.OrderByDescending(kv => kv.Value).ToList();
+
+        // 3) Actions summary (30 jours)
+        // 3) Actions summary (30 jours)
+        // L'appel est correct si la méthode est mise à jour
+        var a = await GitHub.GetActionsSummaryBis(owner);
+        actionsWorkflows = a.workflows;
+        actionsRuns = a.runs;
+        actionsSuccess = a.success;
+        actionsFailure = a.failure;
+        actionsPassRate = a.passRate;
+    }
 }

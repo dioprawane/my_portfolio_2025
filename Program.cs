@@ -1,6 +1,7 @@
 using BlazorPortfolio;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using BlazorPortfolio.Services;
 
 // Pour Radzen components
 using Radzen;
@@ -15,5 +16,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 builder.Services.AddRadzenComponents();
 // Pour les services de notification
 builder.Services.AddScoped<NotificationService>();
+builder.Services.AddScoped<GitHubService>();
+
 
 await builder.Build().RunAsync();

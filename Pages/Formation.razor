@@ -13,7 +13,7 @@
 else if (isMobile == true)
 {
     <RadzenStack Orientation="Orientation.Vertical" Gap="1rem" Class="rz-p-2 rz-shadow-4 rz-border-radius-2" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center">
-        <RadzenText TextStyle="TextStyle.H4" Class="rz-mb-2" TextAlignment="TextAlignment.Center">📱 Formations : </RadzenText>
+        <RadzenText TextStyle="TextStyle.H4" Class="rz-mb-2" TextAlignment="TextAlignment.Center">🎓 Formations </RadzenText>
 
         @foreach (var formation in FormationsList)
         {
@@ -44,7 +44,7 @@ else if (isMobile == true)
 else
 {
     <RadzenStack Orientation="Orientation.Vertical" Gap="2rem" Class="rz-p-4 rz-shadow-4 rz-border-radius-2" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center">
-        <RadzenText TextStyle="TextStyle.H3" Class="rz-mb-4" TextAlignment="TextAlignment.Center">🎓 Mes Formations : </RadzenText>
+        <RadzenText TextStyle="TextStyle.H3" Class="rz-mb-4" TextAlignment="TextAlignment.Center">🎓 Formations </RadzenText>
 
         @* 'FormationsList' will be the name of your collection, and 'formation' will be an individual item of type 'Formations' *@
         @foreach (var formation in FormationsList)
