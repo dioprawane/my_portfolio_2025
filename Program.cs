@@ -1,12 +1,12 @@
 using BlazorPortfolio;
+using BlazorPortfolio.Services;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using BlazorPortfolio.Services;
-using System.Net.Http;
 using Microsoft.Extensions.DependencyInjection; // <--- obligatoire pour AddHttpClient
-
 // Pour Radzen components
 using Radzen;
+using System.Net.Http;
+using static System.Net.WebRequestMethods;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -18,7 +18,8 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 builder.Services.AddScoped(sp => new AnalyticsApiClient(
     new HttpClient
     {
-        BaseAddress = new Uri("http://127.0.0.1:8000/") // ou depuis config
+        //BaseAddress = new Uri("http://127.0.0.1:8000/") // ou depuis config
+        BaseAddress = new Uri("https://back-portefolio.onrender.com/") // ou depuis config
     }
 ));
 
