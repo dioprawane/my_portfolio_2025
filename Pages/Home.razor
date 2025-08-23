@@ -1,101 +1,456 @@
 ﻿@page "/"
-
 @using Radzen
 @using Radzen.Blazor
-@inject BlazorPortfolio.Services.GitHubService GitHub
+@inject BlazorPortfolio.Services.AnalyticsApiClient Analytics
+@using System.Globalization;
+@inject BlazorPortfolio.Services.LocalCache Cache
+@using System.Text.Json;
 
-<RadzenStack Gap="1rem">
-    <RadzenCard>
-        <RadzenRow>
-            <RadzenColumn Size="12" SizeMD="6">
-                <RadzenText TextStyle="TextStyle.H6">Résumé</RadzenText>
-                <div class="rz-mt-2">
-                    <b>Dépôts:</b> @reposCount
-                    <span class="rz-ms-2">Publics: @publicRepos</span>
-                    <span class="rz-ms-2">Privés (estim.): @privateRepos</span><br />
-                    <b>Stars totales:</b> @totalStars
-                </div>
-            </RadzenColumn>
-            <RadzenColumn Size="12" SizeMD="6">
-                <RadzenText TextStyle="TextStyle.H6">Actions (30 jours)</RadzenText>
-                <div class="rz-mt-2">
-                    <b>Workflows:</b> @actionsWorkflows
-                    <span class="rz-ms-2">Runs:</span> @actionsRuns
-                    <span class="rz-ms-2 rz-color-success">Succès:</span> @actionsSuccess
-                    <span class="rz-ms-2 rz-color-danger">Échecs:</span> @actionsFailure<br />
-                    <b>Taux de succès:</b> @actionsPassRate%
-                </div>
-            </RadzenColumn>
-        </RadzenRow>
-    </RadzenCard>
 
-    <RadzenRow>
-        <RadzenColumn Size="12" SizeMD="6">
-            <RadzenCard>
-                <RadzenText TextStyle="TextStyle.H6">Répartition par langage (octets)</RadzenText>
-                <RadzenChart Style="height:320px">
-                    <RadzenDonutSeries Data="@languages" CategoryProperty="Key" ValueProperty="Value" />
-                    <RadzenLegend Position="LegendPosition.Right" />
-                </RadzenChart>
-            </RadzenCard>
-        </RadzenColumn>
+<RadzenStack Gap="1rem" Style="position: relative">
 
-        <RadzenColumn Size="12" SizeMD="6">
-            <RadzenCard>
-                <RadzenText TextStyle="TextStyle.H6">Top repos par stars</RadzenText>
-                <RadzenChart Style="height:320px">
-                    <RadzenBarSeries Data="@topStars" CategoryProperty="Key" ValueProperty="Value" />
-                    <RadzenCategoryAxis />
-                    <RadzenValueAxis />
-                </RadzenChart>
-            </RadzenCard>
+    <RadzenRow JustifyContent="JustifyContent.SpaceBetween" AlignItems="AlignItems.Center" class="rz-mb-4">
+        <RadzenColumn Size="12">
+            <RadzenText TextStyle="TextStyle.Subtitle1" class="rz-m-0">
+                Sample dashboard that uses data from the <RadzenLink Text="ASP.NET GitHub repository" Path="https://github.com/dotnet/aspnetcore/issues" target="_blank" />. Data is updated 24 hours.
+            </RadzenText>
         </RadzenColumn>
     </RadzenRow>
+
+    <RadzenRow Style="--rz-text-h2-line-height: 1; --rz-text-h2-font-weight: 200;">
+        <RadzenColumn Size="12" SizeMD="12" SizeXL="2">
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeMD="4" SizeXL="12">
+                    <RadzenCard Variant="Variant.Outlined" Style="height: 100%;">
+                        <RadzenStack JustifyContent="JustifyContent.SpaceBetween" Style="height: 100%;">
+                            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
+                                <RadzenText TextStyle="TextStyle.H6">Repos en solo</RadzenText>
+                                <RadzenText TextStyle="TextStyle.H2" class="rz-color-info rz-m-0">@($"{Math.Round(closeRatioPercentage)}%")</RadzenText>
+                            </RadzenStack>
+                            <RadzenProgressBar ProgressBarStyle="ProgressBarStyle.Info" @bind-Value=@closeRatioPercentage ShowValue="false" Style="--rz-progressbar-background-color: var(--rz-info-lighter); --rz-progressbar-height: 1rem;" />
+                        </RadzenStack>
+                    </RadzenCard>
+                </RadzenColumn>
+
+                <!--<RadzenColumn Size="12" SizeMD="4" SizeXL="12">
+                    <RadzenCard Variant="Variant.Outlined" Style="height: 100%;">
+                        <RadzenStack Gap="0">
+                            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
+                                <RadzenText TextStyle="TextStyle.H6">Open Issues</RadzenText>
+                                <RadzenText TextStyle="TextStyle.H2" class="rz-color-success rz-m-0">
+                                    @($"{topLanguageSharePct}%")
+                                </RadzenText>
+                            </RadzenStack>
+                            <RadzenSparkline Style="width: 100%; height: 80px;">
+                                <RadzenColumnSeries Data="@languagesShareTop5"
+                                                    CategoryProperty="Name"
+                                                    ValueProperty="Share"
+                                                    Title="Langages"
+                                                    Fill="var(--rz-success)" />
+                                <RadzenColumnOptions Margin="0" />
+                                <RadzenCategoryAxis Padding="20" Visible="false" />
+                            </RadzenSparkline>
+                        </RadzenStack>
+                    </RadzenCard>
+                </RadzenColumn>-->
+
+
+
+                <RadzenColumn Size="12" SizeMD="8" SizeXL="12">
+                    <RadzenCard Variant="Variant.Outlined">
+                        <RadzenText TextStyle="TextStyle.H6">Répartition par langage (octets)</RadzenText>
+                        <RadzenChart Style="height:auto; width: auto">
+                            <RadzenDonutSeries Data="@languagesShareTop5" CategoryProperty="Name" ValueProperty="Share" />
+                            <RadzenLegend Position="LegendPosition.Right" />
+                        </RadzenChart>
+                    </RadzenCard>
+                </RadzenColumn>
+
+
+                <!--<RadzenColumn Size="12" SizeMD="6">
+                    <RadzenCard>
+                        <RadzenText TextStyle="TextStyle.H6">Répartition par langage (octets)</RadzenText>
+                        <RadzenChart Style="height:320px">
+                            <RadzenDonutSeries Data="@languages" CategoryProperty="Key" ValueProperty="Value" />
+                            <RadzenLegend Position="LegendPosition.Right" />
+                        </RadzenChart>
+                    </RadzenCard>
+                </RadzenColumn>-->
+
+                <RadzenColumn Size="12" SizeMD="12" SizeXL="12">
+                    <RadzenCard Variant="Variant.Outlined" Style="height: 100%;">
+                        <RadzenStack Gap="0">
+                            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
+                                <RadzenText TextStyle="TextStyle.H6">Répartition par langage (octets)</RadzenText>
+                            </RadzenStack>
+                            <RadzenSparkline Style="width: 100%; height: 80px;">
+                                <RadzenColumnSeries Data="@languages"
+                                                    CategoryProperty="Key"
+                                                    ValueProperty="Value"
+                                                    Title="Langages"
+                                                    Fill="var(--rz-success)" />
+                                <RadzenColumnOptions Margin="0" />
+                                <RadzenCategoryAxis Padding="20" Visible="false" />
+                            </RadzenSparkline>
+                        </RadzenStack>
+                    </RadzenCard>
+                </RadzenColumn>
+
+
+
+                <RadzenColumn Size="12" SizeMD="12" SizeLG="6">
+                    <RadzenCard Variant="Variant.Outlined" Style="height: 100%;">
+                        <RadzenStack Style="height: 100%;" JustifyContent="JustifyContent.SpaceBetween">
+                            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
+                                <RadzenText TextStyle="TextStyle.H6">Commits (par mois)</RadzenText>
+                                <RadzenText TextStyle="TextStyle.H2" class="rz-m-0">
+                                    @overview?.Kpis.Commits12mTotal
+                                </RadzenText>
+                            </RadzenStack>
+
+                            <RadzenChart Style="width: 100%; height: 80%;">
+                                <RadzenAreaSeries Data="@commitsByMonth"
+                                                  ValueProperty="Count"
+                                                  CategoryProperty="Month"
+                                                  Title="Commits/mois"
+                                                  Smooth="true"
+                                                  Stroke="var(--rz-success)"
+                                                  Fill="var(--rz-success-lighter)">
+                                    <RadzenMarkers Visible="true" MarkerType="MarkerType.Circle" />
+                                </RadzenAreaSeries>
+
+                                <RadzenValueAxis>
+                                    <RadzenGridLines Visible="true" />
+                                </RadzenValueAxis>
+
+                                <RadzenCategoryAxis Padding="40" Formatter="@MonthFmt" />
+                                <RadzenLegend Visible="false" />
+                            </RadzenChart>
+                        </RadzenStack>
+                    </RadzenCard>
+                </RadzenColumn>
+
+
+                <RadzenRow class="rz-mt-4">
+                    <RadzenColumn Size="12">
+                        <RadzenCard Variant="Variant.Outlined" Style="--rz-card-padding: 0;">
+                            <RadzenDataGrid Data="@filteredRepos"
+                                            Style="height: 600px"
+                                            AllowFiltering="true"
+                                            FilterPopupRenderMode="PopupRenderMode.OnDemand"
+                                            AllowSorting="true">
+
+                                <HeaderTemplate>
+                                    <div class="rz-p-3 rz-d-flex rz-gap-2 rz-align-items-center">
+                                        <RadzenDropDown Data="@visibilityOptions"
+                                                        @bind-Value="selectedVisibility"
+                                                        Change="@(_ => ApplyRepoFilter())"
+                                                        Style="min-width: 160px" />
+                                        <RadzenTextBox Placeholder="Search name / language"
+                                                       Style="min-width: 240px"
+                                                       @bind-Value="searchText"
+                                                       Change="@(_ => ApplyRepoFilter())" />
+                                        <div class="rz-ml-auto rz-color-secondary">Total: <b>@filteredRepos.Count</b></div>
+                                    </div>
+                                </HeaderTemplate>
+
+                                <Columns>
+                                    <RadzenDataGridColumn Title="Repos" Width="350px" Sortable="true" Property="@nameof(RepoDto.Name)">
+                                        <Template Context="r">
+                                            <RadzenLink Path="@r.HtmlUrl" Text="@r.Name" Target="_blank" />
+                                        </Template>
+                                    </RadzenDataGridColumn>
+
+                                    <RadzenDataGridColumn Title="Visible" Width="110px">
+                                        <Template Context="r">
+                                            @if (string.Equals(r.Visibility, "public", StringComparison.OrdinalIgnoreCase))
+                                            {
+                                                <RadzenBadge Text="Public" IsPill="true" Variant="Variant.Flat" Shade="Shade.Light" BadgeStyle="BadgeStyle.Success" />
+                                            }
+                                            else
+                                            {
+                                                <RadzenBadge Text="Private" IsPill="true" Variant="Variant.Flat" Shade="Shade.Light" BadgeStyle="BadgeStyle.Info" />
+                                            }
+                                        </Template>
+                                    </RadzenDataGridColumn>
+
+                                    <RadzenDataGridColumn Title="Language" Width="130px">
+                                        <Template Context="r">
+                                            <span class="rz-badge rz-badge-pill" style="background:#eef2ff;color:#334; padding:4px 10px;">
+                                                @(!string.IsNullOrWhiteSpace(r.Language) ? r.Language : "—")
+                                            </span>
+                                        </Template>
+                                    </RadzenDataGridColumn>
+
+                                    <RadzenDataGridColumn Title="Owner" Property="Owner.Login" Width="170px">
+                                        <FilterTemplate>
+                                            <RadzenDropDown AllowClear="true"
+                                                            AllowFiltering="true"
+                                                            Data="@repos.Select(r => r.Owner).DistinctBy(o => o.Login).ToList()"
+                                                            TextProperty="Login"
+                                                            @bind-Value="selectedOwner"
+                                                            Change="@(_ => ApplyRepoFilter())">
+                                                <Template Context="owner">
+                                                    <div style="white-space: nowrap">
+                                                        <img style="width:24px;height:24px;border-radius:50%;margin-inline-end:8px;"
+                                                             src="@owner.AvatarUrl" alt="Owner avatar" />
+                                                        @owner.Login
+                                                    </div>
+                                                </Template>
+                                            </RadzenDropDown>
+                                        </FilterTemplate>
+
+                                        <Template Context="repo">
+                                            <img style="width:32px;height:32px;border-radius:50%;margin-inline-end:8px;border:1px solid #ccc;"
+                                                 src="@repo.Owner.AvatarUrl" alt="Owner avatar" />
+                                            <b>@repo.Owner.Login</b>
+                                        </Template>
+                                    </RadzenDataGridColumn>
+
+
+
+                                </Columns>
+
+                            </RadzenDataGrid>
+                        </RadzenCard>
+                    </RadzenColumn>
+                </RadzenRow>
+
+
+                
+            </RadzenRow>
+        </RadzenColumn>
+        
+    </RadzenRow>
+
 </RadzenStack>
 
+<style>
+    .rz-tabview-panel {
+        height: 100%;
+    }
+
+    .rz-default,
+    .rz-dark,
+    .rz-standard,
+    .rz-standard-dark,
+    .rz-software,
+    .rz-software-dark,
+    .rz-humanistic,
+    .rz-humanistic-dark {
+        .rz-card:has(.rz-tabview)
+
+    {
+        --rz-card-border: none;
+    }
+
+    }
+</style>
+
+
 @code {
-    string owner = "dioprawane"; // <-- ton compte GitHub
+    string owner = "dioprawane";
 
     // KPI
     int reposCount, publicRepos, privateRepos, totalStars;
     int actionsWorkflows, actionsRuns, actionsSuccess, actionsFailure;
     double actionsPassRate;
 
-    // Charts
+    // Nouveaux champs UI
+    int soloRepos, multiRepos, knownRepos, unknownRepos;
+    double soloSharePct;
+
+    double closeRatioPercentage = 0;
+    double closeRatio = 0;
+
     // Charts
     List<KeyValuePair<string, long>> languages = new();
-    //List<(string Name, int Stars)> topStars = new();
-    // remplace ta déclaration + projection
     List<KeyValuePair<string, int>> topStars = new();
+
+    record LangShare(string Name, double Share);
+
+    List<LangShare> languagesShareTop5 = new();
+    string topLanguageName = "";
+    double topLanguageSharePct = 0;
+
+    record MonthPoint(DateTime Month, int Count);
+    List<MonthPoint> commitsByMonth = new();
+
+    private static readonly CultureInfo Fr = new("fr-FR");
+
+    // Garde tes autres champs existants...
+    OverviewDto? overview;
+
+    //const string CacheKey = "overview:dioprawane:v1";
+    const string CacheKey = "overview:dioprawane:v2"; // <- nouveau
+    readonly TimeSpan Ttl = TimeSpan.FromHours(12); // ajuste la fraicheur souhaitée
+
+    int test;
+
+    private string MonthFmt(object value)
+    {
+        if (value is DateTime dt)
+            return dt.ToString("MMM yyyy", Fr); // ex: "août 2025"
+        return string.Empty;
+    }
+
+    bool isRefreshing;
+    CancellationTokenSource? _pollCts;
+    string jobStatus = "idle";
+
+    List<RepoDto> repos = new();
+    List<RepoDto> filteredRepos = new();
+
+    string selectedVisibility = "All";
+    readonly string[] visibilityOptions = ["All", "Public", "Private"];
+
+    List<string> allTopics = new();
+    List<string> selectedTopics = new();
+
+    string searchText = "";
+
+    RepoDto.OwnerDto? selectedOwner;
+
+    void ApplyOverview(OverviewDto o)
+    {
+        // --- mappages centralisés (évite les doublons) ---
+        commitsByMonth = (o.CommitsByMonth ?? new())
+            .OrderBy(m => m.MonthEnd)
+            .Select(m =>
+            {
+                var dt = DateTime.ParseExact(m.MonthEnd, "yyyy-MM-dd",
+                                             CultureInfo.InvariantCulture,
+                                             DateTimeStyles.AssumeUniversal);
+                return new MonthPoint(new DateTime(dt.Year, dt.Month, 1), m.Count);
+            })
+            .ToList();
+
+        reposCount = o.Kpis.Repos;
+        publicRepos = o.Kpis.PublicRepos;
+        privateRepos = o.Kpis.PrivateRepos;
+        totalStars = o.Kpis.TotalStars;
+
+        soloRepos = o.Collab.Solo;
+        multiRepos = o.Collab.Multi;
+        unknownRepos = o.Collab.Unknown;
+        knownRepos = o.Collab.Known;
+        soloSharePct = o.Collab.SoloSharePct;
+
+        actionsWorkflows = o.Actions30d.Workflows;
+        actionsRuns = o.Actions30d.Runs;
+        actionsSuccess = o.Actions30d.Success;
+        actionsFailure = o.Actions30d.Failure;
+        actionsPassRate = o.Actions30d.PassRate;
+
+        closeRatio = reposCount > 0 ? soloRepos / (double)reposCount : 0;
+        closeRatioPercentage = closeRatio * 100;
+
+        languages = o.Languages
+            .OrderByDescending(l => l.Bytes)
+            .Select(l => new KeyValuePair<string, long>(l.Language, l.Bytes))
+            .ToList();
+
+        topStars = o.TopStars
+            .OrderByDescending(t => t.Stars)
+            .Take(8)
+            .Select(t => new KeyValuePair<string, int>(t.Name, t.Stars))
+            .ToList();
+
+        var totalBytes = languages.Sum(kv => kv.Value);
+        languagesShareTop5 = languages.Take(5)
+            .Select(kv => new LangShare(kv.Key, totalBytes > 0 ? Math.Round(kv.Value * 100.0 / totalBytes, 1) : 0.0))
+            .ToList();
+
+        if (languages.Count > 0)
+        {
+            topLanguageName = languages[0].Key;
+            topLanguageSharePct = totalBytes > 0 ? Math.Round(languages[0].Value * 100.0 / totalBytes, 1) : 0.0;
+        }
+    }
 
     protected override async Task OnInitializedAsync()
     {
-        // 1) Repos
-        var repos = await GitHub.GetAllReposBis(owner);
-        reposCount = repos.Count;
-        publicRepos = repos.Count(r => r.Visibility == "public" || r.Private == false);
-        totalStars = repos.Sum(r => r.StargazersCount);
-        privateRepos = reposCount - publicRepos;
-        //totalStars = repos.Sum(r => (int?)r.stargazers_count ?? 0);
 
-        topStars = repos
-        .Select(r => new KeyValuePair<string, int>(r.Name ?? "", r.StargazersCount))
-        .OrderByDescending(x => x.Value)
-        .Take(8)
-        .ToList();
+        // récupère la liste depuis l’API (rapide, tu la caches localement si tu veux)
+        repos = await Analytics.GetReposAsync(owner) ?? new();
+        // topics distincts pour le filtre
+        allTopics = repos.SelectMany(r => r.Topics ?? new())
+                         .Distinct(StringComparer.OrdinalIgnoreCase)
+                         .OrderBy(t => t)
+                         .ToList();
+        ApplyRepoFilter();
 
-        // 2) Languages agrégés
-        var langs = await GitHub.GetLanguagesAggBis(owner);
-        languages = langs.OrderByDescending(kv => kv.Value).ToList();
 
-        // 3) Actions summary (30 jours)
-        // 3) Actions summary (30 jours)
-        // L'appel est correct si la méthode est mise à jour
-        var a = await GitHub.GetActionsSummaryBis(owner);
-        actionsWorkflows = a.workflows;
-        actionsRuns = a.runs;
-        actionsSuccess = a.success;
-        actionsFailure = a.failure;
-        actionsPassRate = a.passRate;
+        // 1) pré-afficher depuis le cache local si dispo
+        var localCached = await Cache.GetJsonAsync<Cached<OverviewDto>>(CacheKey);
+        if (localCached?.Data is not null)
+        {
+            overview = localCached.Data;
+            ApplyOverview(overview);
+            StateHasChanged();
+        }
+
+        // 2) récupérer le JSON "latest" côté API (rapide) puis rafraîchir le cache local
+        try
+        {
+            var o = await Analytics.GetOverviewCachedAsync(owner);
+            if (o is not null)
+            {
+                overview = o;
+                ApplyOverview(overview);
+                await Cache.SetJsonAsync(CacheKey, new Cached<OverviewDto>
+                {
+                    Data = overview,
+                    SavedAt = DateTimeOffset.UtcNow
+                });
+            }
+        }
+        catch (HttpRequestException ex)
+        {
+            Console.WriteLine($"[Home] Could not load cached overview from API: {ex.Message}");
+        }
     }
+
+
+    void ApplyRepoFilter()
+    {
+        IEnumerable<RepoDto> q = repos;
+
+        Console.WriteLine($"Applying filter: visibility={selectedVisibility}, topics=[{string.Join(", ", selectedTopics)}], search='{searchText}', owner='{selectedOwner?.Login}'");
+
+        // visibility
+        if (selectedVisibility == "Public")
+            q = q.Where(r => string.Equals(r.Visibility, "public", StringComparison.OrdinalIgnoreCase));
+        else if (selectedVisibility == "Private")
+            q = q.Where(r => string.Equals(r.Visibility, "private", StringComparison.OrdinalIgnoreCase));
+
+        // topics (ET logique : chaque sélection doit être présente)
+        if (selectedTopics.Count > 0)
+            q = q.Where(r => selectedTopics.All(t => (r.Topics ?? new()).Contains(t, StringComparer.OrdinalIgnoreCase)));
+
+        // search on name OR language
+        if (!string.IsNullOrWhiteSpace(searchText))
+        {
+            var s = searchText.Trim();
+            q = q.Where(r =>
+                (r.Name?.Contains(s, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                (r.Language?.Contains(s, StringComparison.OrdinalIgnoreCase) ?? false));
+        }
+
+
+        // owner
+        if (selectedOwner is not null)
+            q = q.Where(r => r.Owner.Login == selectedOwner.Login);
+
+        filteredRepos = q.ToList();
+
+        // tri par stars desc par défaut
+        filteredRepos = q.OrderByDescending(r => r.StargazersCount)
+                         .ThenBy(r => r.Name)
+                         .ToList();
+        StateHasChanged();
+    }
+
+
+
 }
