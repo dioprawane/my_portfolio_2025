@@ -14,8 +14,7 @@
 
         @foreach (var exp in ExperiencesList)
         {
-            <RadzenCard Class="rz-shadow-3 rz-w-100 rz-mx-auto" Style="max-width: 480px; border-radius: 12px; overflow: hidden;">
-                <!-- En-tête : logo + infos clés -->
+           <!-- <RadzenCard Class="rz-shadow-3 rz-w-100 rz-mx-auto" Style="max-width: 480px; border-radius: 12px; overflow: hidden;">
                 <RadzenStack Orientation="Orientation.Horizontal" Gap="0.75rem" Class="rz-p-3" AlignItems="AlignItems.Center">
                     @if (!string.IsNullOrEmpty(exp.ImageCompetence))
                     {
@@ -35,7 +34,6 @@
                     </RadzenStack>
                 </RadzenStack>
 
-                <!-- Bloc Missions (fond couleur, pleine largeur) -->
                 <RadzenCard Class="rz-background-color-primary-light rz-shadow-0 rz-border-radius-0 rz-p-4"
                             Style="margin: 0 calc(-1 * var(--rz-card-padding)) 0;">
                     <RadzenText TextStyle="TextStyle.Subtitle2" Class="rz-color-on-primary-light rz-mb-2">
@@ -76,48 +74,36 @@
                         </div>
                     </RadzenCard>
                 }
-            </RadzenCard>
-        }
-    </RadzenStack>
-}
-else
-{
-    <RadzenStack Orientation="Orientation.Vertical" Gap="2rem" Class="rz-p-4 rz-p-md-8 rz-w-100 rz-flex-justify-content-center"> @* Added rz-w-100 and rz-flex-justify-content-center *@
+            </RadzenCard>-->
+            <RadzenCard Class="rz-shadow-3 rz-w-100 rz-mx-auto xp-card" Style="max-width: 480px; border-radius: 16px; overflow: hidden;">
+                <div class="xp-accent"></div>  @* petite barre d’accent en haut *@
 
-        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Class="rz-mb-2">
-            <RadzenIcon Icon="work" Style="font-size: 2em;" />
-            <RadzenText TextStyle="TextStyle.H3" Class="rz-mb-2" TextAlignment="TextAlignment.Center"> Expériences </RadzenText>
-        </RadzenStack>
-
-        @foreach (var exp in ExperiencesList)
-        {
-            <RadzenCard Class="rz-my-3 rz-mx-auto rz-shadow-4" Style="width: 100%; max-width: 75%; border-radius: 12px; overflow: hidden;">
-                <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="1rem" Class="rz-p-4">
-                    <!--<RadzenImage Path="/images/placeholder.jpg" Style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;" />-->
+                <RadzenStack Orientation="Orientation.Horizontal" Gap="0.75rem" Class="rz-p-3 xp-hero" AlignItems="AlignItems.Center">
                     @if (!string.IsNullOrEmpty(exp.ImageCompetence))
                     {
                         <RadzenImage Path="@exp.ImageCompetence" AlternateText="@exp.Title"
-                                     Style="@(IsMobile ? "width: 100px; height: 160px; border-radius: 50%;" : "width: 100px; height: 100px; border-radius: 50%; margin-right: 40px;")" />
+                                     Class="xp-logo"
+                                     Style="width: 56px; height: 56px; border-radius: 50%; object-fit: cover;" />
                     }
-                    <RadzenStack Gap="0">
+
+                    <RadzenStack Gap="0.15rem" Class="xp-texts">
                         <RadzenText TextStyle="TextStyle.Overline">Poste</RadzenText>
-                        <RadzenText TextStyle="TextStyle.Body1"><b>@exp.Title</b></RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body2" Class="xp-strong">@exp.Title</RadzenText>
 
-                        <RadzenText TextStyle="TextStyle.Overline" Class="rz-mt-4">Entreprise</RadzenText>
-                        <RadzenText TextStyle="TextStyle.Body1"><b>@exp.Company</b></RadzenText>
+                        <RadzenText TextStyle="TextStyle.Overline" Class="rz-mt-2">Entreprise</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body2" Class="xp-strong">@exp.Company</RadzenText>
 
-                        <RadzenText TextStyle="TextStyle.Overline" Class="rz-mt-4">Période</RadzenText>
-                        <RadzenText TextStyle="TextStyle.Body1"><b>@exp.Duration</b></RadzenText>
+                        <RadzenText TextStyle="TextStyle.Overline" Class="rz-mt-2">Période</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body2" Class="xp-strong">@exp.Duration</RadzenText>
                     </RadzenStack>
                 </RadzenStack>
 
-                <!-- Réalisations -->
-                <RadzenCard Class="rz-background-color-primary-light rz-shadow-0 rz-border-radius-0 rz-p-8"
-                            Style="margin: 0.5rem calc(-1 * (var(--rz-card-padding))) 0.25rem;">
-                    <RadzenText TextStyle="TextStyle.H6" Class="rz-color-on-primary-light">
+                <RadzenCard Class="rz-background-color-primary-light rz-shadow-0 rz-border-radius-0 rz-p-4 xp-missions"
+                            Style="margin: 0 calc(-1 * var(--rz-card-padding)) 0;">
+                    <RadzenText TextStyle="TextStyle.Subtitle2" Class="rz-color-on-primary-light rz-mb-2 xp-section-title">
                         <strong>Missions</strong>
                     </RadzenText>
-                    <ul class="rz-color-on-primary-light rz-mt-2" style="padding-left: 1.25rem;">
+                    <ul class="rz-color-on-primary-light xp-list">
                         @foreach (var resp in exp.Responsibilities)
                         {
                             <li>@resp</li>
@@ -125,41 +111,265 @@ else
                     </ul>
                 </RadzenCard>
 
-                <!-- Compétences utilisées -->
                 @if (exp.Skills?.Any() == true)
                 {
-                    <RadzenCard Class="rz-shadow-0 rz-border-radius-0 rz-p-8"
-                                Style="background-color: #e9f0fa; margin: 0 calc(-1 * var(--rz-card-padding)) 0.5rem;">
-                        <RadzenText TextStyle="TextStyle.H6" Class="rz-color-primary rz-mb-2">
-                            <strong>Compétences </strong>
+                    <RadzenCard Class="rz-shadow-0 rz-border-radius-0 rz-p-8 xp-skills"
+                                Style="background-color: #e9f0fa; margin: 0 calc(-1 * var(--rz-card-padding)) 0.3rem;">
+                        <RadzenText TextStyle="TextStyle.H6" Class="rz-color-primary rz-mb-2 xp-section-title">
+                            <strong>Compétences</strong>
                         </RadzenText>
-                        <div class="rz-d-flex rz-flex-wrap" style="gap: 0.5rem; row-gap: 0.5rem; column-gap: 0.5rem;">
+                        <div class="rz-d-flex rz-flex-wrap xp-chips">
                             @foreach (var skill in exp.Skills)
                             {
-                                <span style="
-                                            background-color: #d6e4f7;
-                                            color: #1a4a83;
-                                            font-weight: 600;
-                                            padding: 0.6rem 0.9rem;
-                                            border-radius: 999px;
-                                            font-size: 0.85rem;
-                                            display: inline-block;
-                                            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-                                            margin-right: 0.75rem;
-                                            margin-bottom: 1rem;">
-                                    @skill
-                                </span>
+                                <span class="xp-chip">@skill</span>
                             }
                         </div>
-
                     </RadzenCard>
                 }
-
-
             </RadzenCard>
         }
     </RadzenStack>
 }
+else
+{
+    <RadzenStack Orientation="Orientation.Vertical" Gap="2rem"
+                 Class="rz-p-4 rz-p-md-8 rz-w-100 rz-flex-justify-content-center">
+
+        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center"
+                     JustifyContent="JustifyContent.Center" Class="rz-mb-2">
+            <RadzenIcon Icon="work" Style="font-size: 2em;" />
+            <RadzenText TextStyle="TextStyle.H3" Class="rz-mb-2" TextAlignment="TextAlignment.Center">
+                Expériences
+            </RadzenText>
+        </RadzenStack>
+
+        @foreach (var exp in ExperiencesList)
+        {
+            <RadzenCard Class="rz-my-3 rz-mx-auto rz-shadow-4 xp-card"
+                        Style="width: 100%; max-width: 75%; border-radius: 16px; overflow: hidden;">
+
+                <!-- Accent color bar -->
+                <div class="xp-accent"></div>
+
+                <!-- Header: logo + infos -->
+                <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start"
+                             Gap="1rem" Class="rz-p-4 xp-hero">
+
+                    @if (!string.IsNullOrEmpty(exp.ImageCompetence))
+                    {
+                        <RadzenImage Path="@exp.ImageCompetence" AlternateText="@exp.Title"
+                                     Class="xp-logo"
+                                     Style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-right: 40px;" />
+                    }
+
+                    <RadzenStack Gap="0" Class="xp-texts">
+                        <RadzenText TextStyle="TextStyle.Overline">Poste</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1" Class="xp-strong">@exp.Title</RadzenText>
+
+                        <RadzenText TextStyle="TextStyle.Overline" Class="rz-mt-4">Entreprise</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1" Class="xp-strong">@exp.Company</RadzenText>
+
+                        <RadzenText TextStyle="TextStyle.Overline" Class="rz-mt-4">Période</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1" Class="xp-strong">@exp.Duration</RadzenText>
+                    </RadzenStack>
+                </RadzenStack>
+
+                <!-- Missions -->
+                <RadzenCard Class="rz-background-color-primary-light rz-shadow-0 rz-border-radius-0 rz-p-8 xp-missions"
+                            Style="margin: 0.5rem calc(-1 * (var(--rz-card-padding))) 0.25rem;">
+                    <RadzenText TextStyle="TextStyle.H6" Class="rz-color-on-primary-light xp-section-title">
+                        <strong>Missions</strong>
+                    </RadzenText>
+                    <ul class="rz-color-on-primary-light xp-list rz-mt-2">
+                        @foreach (var resp in exp.Responsibilities)
+                        {
+                            <li>@resp</li>
+                        }
+                    </ul>
+                </RadzenCard>
+
+                <!-- Skills -->
+                @if (exp.Skills?.Any() == true)
+                {
+                    <RadzenCard Class="rz-shadow-0 rz-border-radius-0 rz-p-8 xp-skills"
+                                Style="background-color: #e9f0fa; margin: 0 calc(-1 * var(--rz-card-padding)) 0.5rem;">
+                        <RadzenText TextStyle="TextStyle.H6" Class="rz-color-primary rz-mb-2 xp-section-title">
+                            <strong>Compétences</strong>
+                        </RadzenText>
+                        <div class="rz-d-flex rz-flex-wrap xp-chips">
+                            @foreach (var skill in exp.Skills)
+                            {
+                                <span class="xp-chip">@skill</span>
+                            }
+                        </div>
+                    </RadzenCard>
+                }
+            </RadzenCard>
+        }
+    </RadzenStack>
+}
+
+<style>
+    /* ---------- CARD ---------- */
+    .xp-card {
+        position: relative;
+        border-radius: 16px;
+        overflow: hidden;
+        transition: transform .2s ease, box-shadow .2s ease;
+        will-change: transform;
+    }
+
+        .xp-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px rgba(0,0,0,.12), 0 4px 10px rgba(0,0,0,.08);
+        }
+
+    /* petit filet dégradé en haut */
+    .xp-accent {
+        position: absolute;
+        inset: 0 0 auto 0;
+        height: 4px;
+        background: linear-gradient(90deg, #5b6cff, #7c4dff, #4dd0e1);
+        opacity: .95;
+    }
+
+    /* header */
+    .xp-hero {
+        isolation: isolate;
+    }
+
+    .xp-logo {
+        animation: xp-pop .6s cubic-bezier(.2,.7,.2,1) both;
+        box-shadow: 0 4px 14px rgba(0,0,0,.12);
+    }
+
+    .xp-texts {
+        animation: xp-fade-up .5s .05s ease-out both;
+    }
+
+    .xp-strong {
+        font-weight: 700;
+    }
+
+    /* missions avec fond dégradé doux + reveal */
+    .xp-missions {
+        --bg1: rgba(94,88,194,.95);
+        --bg2: rgba(94,88,194,.88);
+        background: linear-gradient(180deg, var(--bg1), var(--bg2)) !important;
+        animation: xp-sweep .6s ease both;
+    }
+
+    /* titres de sections (Missions/Compétences) */
+    .xp-section-title {
+        letter-spacing: .2px;
+    }
+
+    /* bullets propres */
+    .xp-list {
+        padding-left: 1.25rem;
+        margin: .35rem 0 0;
+    }
+
+        .xp-list li {
+            margin: .35rem 0;
+        }
+
+    /* zone compétences */
+    .xp-skills {
+        animation: xp-fade-in .5s .05s ease both;
+    }
+
+    .xp-chips {
+        gap: .45rem;
+        row-gap: .55rem;
+        column-gap: .55rem;
+    }
+
+    /* chip animée */
+    .xp-chip {
+        background: #d6e4f7;
+        color: #1a4a83;
+        font-weight: 600;
+        padding: .45rem .8rem;
+        border-radius: 999px;
+        font-size: .85rem;
+        display: inline-block;
+        box-shadow: 0 1px 3px rgba(0,0,0,.12);
+        transform: translateZ(0);
+        transition: transform .15s ease, box-shadow .15s ease, background .2s ease;
+    }
+
+        .xp-chip:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(76,105,168,.28);
+            background: #cfe0ff;
+        }
+
+    /* animations */
+    @@keyframes xp-pop {
+        from {
+            transform: scale(.92);
+            opacity: 0;
+        }
+
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    @@keyframes xp-fade-up {
+        from {
+            transform: translateY(6px);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    @@keyframes xp-fade-in {
+        from {
+            opacity: 0
+        }
+
+        to {
+            opacity: 1
+        }
+    }
+
+    @@keyframes xp-sweep {
+        from {
+            clip-path: inset(0 0 100% 0);
+        }
+
+        to {
+            clip-path: inset(0 0 0 0);
+        }
+    }
+
+    /* respecte les préférences d’accessibilité */
+    @@media (prefers-reduced-motion: reduce) {
+        .xp-card, .xp-logo, .xp-texts, .xp-missions, .xp-skills, .xp-chip {
+            animation: none !important;
+            transition: none !important;
+        }
+    }
+
+    /* dark mode doux */
+    @@media (prefers-color-scheme: dark) {
+        .xp-chip {
+            background: #133459;
+            color: #d1e5ff;
+        }
+
+            .xp-chip:hover {
+                background: #18456f;
+            }
+    }
+</style>
 
 @code {
     private List<Experience> ExperiencesList = new()

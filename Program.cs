@@ -23,6 +23,9 @@ builder.Services.AddScoped(sp => new AnalyticsApiClient(
     }
 ));
 
+// Print de la base address
+Console.WriteLine("BaseAddress: " + builder.Services.BuildServiceProvider().GetRequiredService<HttpClient>().BaseAddress);
+
 // Pour Radze
 builder.Services.AddRadzenComponents();
 // Pour les services de notification

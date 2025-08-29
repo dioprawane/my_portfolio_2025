@@ -17,7 +17,7 @@ else if (isMobile == true)
 
         @foreach (var formation in FormationsList)
         {
-            <RadzenCard Class="rz-shadow-2 rz-w-100 rz-p-2">
+            <!--<RadzenCard Class="rz-shadow-2 rz-w-100 rz-p-2">
                 <RadzenStack Orientation="Orientation.Vertical" Gap="0.5rem">
                     <RadzenText Style="font-size: 0.8rem; font-weight: 600;" Class="rz-mb-0">
                         <RadzenBadge BadgeStyle="BadgeStyle.Light" Text="@(formation.AnneeDebut + "-" + formation.AnneeFin)" class="rz-me-2" />
@@ -37,6 +37,35 @@ else if (isMobile == true)
                     </RadzenStack>
                     <RadzenButton Text="Détails" ButtonStyle="ButtonStyle.Primary" Click="@(() => ShowFormationDetails(formation))" Style="font-size: 0.75rem; padding: 0.25rem 0.5rem; width: 100%;" />
                 </RadzenStack>
+            </RadzenCard>-->
+            <RadzenCard Class="formation-card formation-card--mobile">
+                <div class="formation-header">
+                    <span class="formation-year">@formation.AnneeDebut-@formation.AnneeFin</span>
+                    <span class="formation-title">@formation.Titre</span>
+                    <RadzenBadge class="formation-mention"
+                                 BadgeStyle="BadgeStyle.Success"
+                                 Text="@formation.Mention"
+                                 Visible="@(!string.IsNullOrEmpty(formation.Mention))" />
+                </div>
+
+                <hr class="formation-sep" />
+
+                <div class="formation-body">
+                    @if (!string.IsNullOrEmpty(formation.ImageEcole))
+                    {
+                        <img class="formation-logo formation-logo--sm" src="@formation.ImageEcole" alt="@formation.Etablissement" />
+                    }
+
+                    <div class="formation-texts">
+                        <div class="formation-school">@formation.Etablissement</div>
+                        <div class="formation-location">@formation.Lieu</div>
+                    </div>
+
+                    <RadzenButton class="formation-btn formation-btn--full"
+                                  Text="Détails"
+                                  ButtonStyle="ButtonStyle.Primary"
+                                  Click="@(() => ShowFormationDetails(formation))" />
+                </div>
             </RadzenCard>
         }
     </RadzenStack>
@@ -49,7 +78,7 @@ else
         @* 'FormationsList' will be the name of your collection, and 'formation' will be an individual item of type 'Formations' *@
         @foreach (var formation in FormationsList)
         {
-            <RadzenCard Class="rz-shadow-2 rz-w-100 rz-max-width-600 rz-p-3">
+            <!--<RadzenCard Class="rz-shadow-2 rz-w-100 rz-max-width-600 rz-p-3">
                 <RadzenStack Orientation="Orientation.Vertical" Gap="0.5rem">
                     <RadzenRow AlignItems="AlignItems.Center">
                         <RadzenColumn Size="9">
@@ -79,10 +108,197 @@ else
                         <RadzenButton Text="Détails" ButtonStyle="ButtonStyle.Primary" Click="@(() => ShowFormationDetails(formation))" Style="font-size: 0.75rem; padding: 0.25rem 0.5rem;" />
                     </RadzenStack>
                 </RadzenStack>
+            </RadzenCard>-->
+            <RadzenCard Class="formation-card">
+                <div class="formation-header">
+                    <span class="formation-year">@formation.AnneeDebut-@formation.AnneeFin</span>
+                    <span class="formation-title">@formation.Titre</span>
+                    <RadzenBadge class="formation-mention"
+                                 BadgeStyle="BadgeStyle.Success"
+                                 Text="@formation.Mention"
+                                 Visible="@(!string.IsNullOrEmpty(formation.Mention))" />
+                </div>
+
+                <hr class="formation-sep" />
+
+                <div class="formation-body">
+                    @if (!string.IsNullOrEmpty(formation.ImageEcole))
+                    {
+                        <img class="formation-logo" src="@formation.ImageEcole" alt="@formation.Etablissement" />
+                    }
+
+                    <div class="formation-texts">
+                        <div class="formation-school">@formation.Etablissement</div>
+                        <div class="formation-location">@formation.Lieu</div>
+                        @if (!string.IsNullOrEmpty(formation.DescriptionCourte))
+                        {
+                            <div class="formation-desc">@formation.DescriptionCourte</div>
+                        }
+                    </div>
+
+                    <RadzenButton class="formation-btn"
+                                  Text="Détails"
+                                  ButtonStyle="ButtonStyle.Primary"
+                                  Click="@(() => ShowFormationDetails(formation))" />
+                </div>
             </RadzenCard>
         }
     </RadzenStack>
 }
+
+<style>
+    .formation-card {
+        position: relative;
+        border-radius: 12px;
+        padding: 14px 16px 16px;
+        border: 1px solid rgba(0,0,0,.06);
+        box-shadow: 0 1px 2px rgba(0,0,0,.04);
+        transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+        overflow: hidden;
+    }
+
+        .formation-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 22px rgba(0,0,0,.10), 0 2px 6px rgba(0,0,0,.06);
+            border-color: rgba(25,118,210,.25);
+        }
+
+    .formation-card--mobile {
+        padding: 12px;
+    }
+
+    .formation-header {
+        display: flex;
+        align-items: center;
+        gap: .75rem;
+    }
+
+    .formation-year {
+        font-weight: 700;
+        font-size: .9rem;
+        padding: .35rem .6rem;
+        border-radius: 8px;
+        color: #374151;
+        background: #eef2f7;
+        border: 1px solid rgba(0,0,0,.06);
+    }
+
+    .formation-title {
+        font-weight: 800;
+        font-size: clamp(1rem, .9rem + .4vw, 1.25rem);
+        letter-spacing: .2px;
+        text-transform: uppercase;
+        flex: 1;
+    }
+
+    .formation-mention {
+        font-weight: 700;
+        letter-spacing: .4px;
+    }
+
+    .formation-sep {
+        border: none;
+        height: 1px;
+        background: var(--rz-text-disabled-color, #e5e7eb);
+        margin: .6rem 0 .9rem;
+    }
+
+    .formation-body {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .formation-logo {
+        width: 120px;
+        height: 120px;
+        border-radius: 14px;
+        object-fit: contain;
+        background: #fff;
+        border: 1px solid rgba(0,0,0,.05);
+        box-shadow: 0 2px 10px rgba(0,0,0,.06);
+    }
+
+    .formation-logo--sm {
+        width: 80px;
+        height: 80px;
+    }
+
+    .formation-texts {
+        display: flex;
+        flex-direction: column;
+        gap: .15rem;
+    }
+
+    .formation-school {
+        font-size: 1.05rem;
+        font-weight: 700;
+    }
+
+    .formation-location {
+        color: var(--rz-text-secondary-color,#6b7280);
+    }
+
+    .formation-desc {
+        color: var(--rz-text-secondary-color,#6b7280);
+        margin-top: .25rem;
+    }
+
+    .formation-btn {
+        margin-left: auto;
+        min-width: 120px;
+        font-weight: 700;
+        border-radius: 10px;
+        box-shadow: 0 6px 14px rgba(63,81,181,.18);
+    }
+
+    @@container (max-width: 680px) {
+        .formation-body {
+            grid-template-columns: auto 1fr;
+        }
+
+        .formation-btn {
+            grid-column: 1 / -1;
+            width: 100%;
+            margin-left: 0;
+        }
+    }
+
+    @@media (max-width: 800px) {
+        .formation-body {
+            grid-template-columns: auto 1fr;
+        }
+
+        .formation-btn {
+            grid-column: 1 / -1;
+            width: 100%;
+            margin-left: 0;
+        }
+    }
+
+    @@media (prefers-color-scheme: dark) {
+        .formation-card {
+            border-color: rgba(255,255,255,.08);
+            background: #0f1317;
+        }
+
+            .formation-card:hover {
+                border-color: rgba(66,165,245,.35);
+            }
+
+        .formation-year {
+            background: #0e1b27;
+            color: #cfe6ff;
+            border-color: rgba(66,165,245,.25);
+        }
+
+        .formation-logo {
+            background: #0c0f12;
+            border-color: rgba(255,255,255,.06);
+        }
+    }
+</style>
 
 @code {
     [Inject]

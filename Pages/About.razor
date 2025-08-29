@@ -2,10 +2,12 @@
 @using Radzen
 @using Radzen.Blazor
 
+@using Microsoft.AspNetCore.Components
+
 <PageTitle>A Propos</PageTitle>
 
 <RadzenCard Style="max-width: 900px; margin: auto; padding: 2rem;">
-    <RadzenRow>
+    <!--<RadzenRow>
         <RadzenColumn Size="12" Style="text-align: center;">
             <RadzenAvatar Style="width: 100px; height: 100px;" Path="6.png" />
             <RadzenStack AlignItems="AlignItems.Center" class="rz-mx-auto rz-my-12">
@@ -18,7 +20,24 @@
         </RadzenColumn>
     </RadzenRow>
 
-    <RadzenDivider />
+    <RadzenDivider />-->
+
+    <RadzenStack AlignItems="AlignItems.Center" Gap="1.25rem">
+
+        <!-- Cadre photo design -->
+        <div class="profile-frame">
+            <img src="/ap.png"
+                 alt="Portrait de DIOP Serigne Rawane"
+                 loading="lazy"
+                 class="profile-photo" />
+        </div>
+
+        <!-- Titres -->
+        <h2 class="about-name">DIOP Serigne Rawane</h2>
+        <div class="about-role">Concepteur Développeur Fullstack, Data Analyst & IA</div>
+    </RadzenStack>
+
+    <RadzenDivider class="rz-my-4" />
 
     <RadzenRow class="rz-mt-4">
         <RadzenColumn Size="12">
@@ -30,7 +49,7 @@
         </RadzenColumn>
     </RadzenRow>
 
-    <RadzenRow class="rz-mt-4 rz-gap-2">
+    <!--<RadzenRow class="rz-mt-4 rz-gap-2">
         <RadzenColumn Size="6">
             <RadzenCard Style="height: 100%;">
                 <RadzenIcon Icon="school" Style="font-size: 24px; color: #1976d2;" />
@@ -53,5 +72,154 @@
                 Ce site a été conçu avec Blazor et les composants Radzen pour illustrer mes compétences en développement web moderne.
             </RadzenAlert>
         </RadzenColumn>
+    </RadzenRow>-->
+    <RadzenRow class="rz-mt-4 rz-gap-2">
+
+        <RadzenColumn Size="12" SizeMD="6">
+            <RadzenCard Class="info-card" @onclick="GoToFormations">
+                <div class="info-accent"></div>
+                <RadzenStack Gap="0.35rem">
+                    <RadzenIcon Icon="school" Class="info-icon" />
+                    <div class="info-title">Formation</div>
+                    <div class="info-subtitle">Master MIAGE IA2 - Université Côte d’Azur</div>
+                </RadzenStack>
+            </RadzenCard>
+        </RadzenColumn>
+
+        <RadzenColumn Size="12" SizeMD="6">
+            <RadzenCard Class="info-card" @onclick="GoToExperiences">
+                <div class="info-accent"></div>
+                <RadzenStack Gap="0.35rem">
+                    <RadzenIcon Icon="work" Class="info-icon" />
+                    <div class="info-title">Expérience</div>
+                    <div class="info-subtitle">Développeur .NET & Statisticien - Acoss</div>
+                </RadzenStack>
+            </RadzenCard>
+        </RadzenColumn>
+
     </RadzenRow>
+
+    <RadzenRow class="rz-mt-4">
+        <RadzenColumn Size="12">
+            <RadzenAlert Severity="Info">
+                Ce site a été conçu avec Blazor et les composants Radzen pour illustrer mes compétences en développement web moderne.
+            </RadzenAlert>
+        </RadzenColumn>
+    </RadzenRow>
+
 </RadzenCard>
+
+
+<style>
+    .profile-frame{
+      position: relative;
+      width: min(360px, 84vw);
+      aspect-ratio: 3 / 4;                 /* cadre vertical harmonieux */
+      border-radius: 60% / 20%;
+      padding: 6px;                        /* espace pour l'anneau */
+      background: conic-gradient(from 160deg,
+                  #6ee7f9, #a78bfa, #f472b6, #6ee7f9);
+      /* halo subtil */
+      box-shadow:
+        0 8px 24px rgba(0,0,0,.16),
+        0 1px 0 rgba(255,255,255,.2) inset;
+    }
+
+    .profile-photo{
+      width: 100%;
+      height: 100%;
+      display: block;
+      border-radius: 60% / 20%; /* un peu moins que le frame */
+      object-fit: cover;                    /* recadre proprement */
+      object-position: center 40%;
+      background: #111;                     /* sécurité si l'image tarde */
+      box-shadow: 0 12px 40px rgba(0,0,0,.25);
+      filter: saturate(1.05) contrast(1.02);
+      transition: transform .35s ease, box-shadow .35s ease;
+    }
+
+    .profile-frame:hover .profile-photo{
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 18px 50px rgba(0,0,0,.32);
+    }
+
+    /* ----- Typo titres ----- */
+    .about-name{
+      font-size: clamp(1.35rem, 1.1rem + 1.5vw, 2rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin: .25rem 0 0 0;
+      letter-spacing: .2px;
+    }
+
+    .about-role{
+      color: var(--rz-text-secondary-color, #6b7280);
+      font-size: clamp(.95rem, .85rem + .4vw, 1.05rem);
+    }
+
+    /* Option : assombrit le card très légèrement pour effet vitré */
+    .rz-card{
+      backdrop-filter: saturate(1.2) blur(0px);
+    }
+
+    /* --- Cards style --- */
+.info-card{
+  position: relative;
+  height: 100%;
+  padding: 1.25rem 1.25rem 1.35rem 1.25rem;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .2s ease;
+  border: 1px solid rgba(0,0,0,.06);
+  box-shadow: 0 1px 1px rgba(0,0,0,.04);
+  overflow: hidden;
+}
+.info-card:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0,0,0,.10), 0 2px 6px rgba(0,0,0,.06);
+  border-color: rgba(25,118,210,.25);
+}
+
+/* petit filet dégradé en haut (comme un tag visuel) */
+.info-accent{
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 4px;
+  background: linear-gradient(90deg,#1976d2, #42a5f5, #90caf9);
+  opacity: .9;
+}
+
+/* Icone + typographies */
+.info-icon{
+  font-size: 24px;
+  color: #1976d2;
+}
+.info-title{
+  font-weight: 700;
+  font-size: clamp(1rem, .9rem + .4vw, 1.25rem);
+  line-height: 1.2;
+}
+.info-subtitle{
+  color: var(--rz-text-secondary-color, #6b7280);
+  font-size: clamp(.95rem, .9rem + .2vw, 1rem);
+}
+
+/* Support dark/light subtil */
+:root .info-card{ background: #fff; }
+    @@media (prefers-color-scheme: dark) {
+        :root .info-card {
+            background: #101418;
+            border-color: rgba(255,255,255,.06);
+        }
+
+            :root .info-card:hover {
+                border-color: rgba(66,165,245,.35);
+            }
+    }
+</style>
+
+@code {
+    [Inject] NavigationManager Nav { get; set; } = default!;
+    void GoToFormations() => Nav.NavigateTo("/formations");
+    void GoToExperiences() => Nav.NavigateTo("/exp");
+}

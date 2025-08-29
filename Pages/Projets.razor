@@ -15,9 +15,8 @@
     <RadzenRow Class="rz-mx-auto" Style="max-width: 1200px;" Gap="2rem">
         @foreach (var projet in projets)
         {
-            <RadzenColumn Size="12" SizeMD="4">
+            <!--<RadzenColumn Size="12" SizeMD="4">
                 <RadzenCard Style="height: 100%; padding: 1rem;" Class="rz-shadow-2">
-                    <!--<RadzenImage Path="@projet.Image" Style="width: 100%; height: 180px; object-fit: cover; border-radius: 0.5rem;" />-->
                     @if (projet.Images != null && projet.Images.Any())
                     {
                         <RadzenCarousel Autoplay="true" AutoplayInterval="3000" ShowArrows="true" ShowPagers="true"
@@ -69,10 +68,330 @@
                         }
                     </RadzenStack>
                 </RadzenCard>
+            </RadzenColumn>-->
+            <RadzenColumn Size="12" SizeMD="4">
+                <RadzenCard Style="height: 100%; padding: 1rem;" Class="rz-shadow-2 proj-card">
+                    <div class="proj-media">
+                        @if (projet.Images != null && projet.Images.Any())
+                        {
+                            <RadzenCarousel Autoplay="true" AutoplayInterval="3000" ShowArrows="true" ShowPagers="true"
+                                            Style="width: 100%; height: 200px; border-radius: 0.5rem; overflow: hidden;">
+                                <Items>
+                                    @foreach (var imgPath in projet.Images)
+                                    {
+                                        <RadzenCarouselItem Style="height: 200px;">
+                                            <div class="proj-media-frame">
+                                                <img src="@($"/{imgPath}")" alt="image projet" class="proj-img" />
+                                            </div>
+                                        </RadzenCarouselItem>
+                                    }
+                                </Items>
+                            </RadzenCarousel>
+                        }
+                        else
+                        {
+                            <img src="/images/iut.jpg" alt="image par défaut" class="proj-img proj-img--static" />
+                        }
+                        <div class="proj-glow"></div>
+                    </div>
+
+                    <RadzenText Text="@projet.Titre" TextStyle="TextStyle.H6" Class="rz-mt-3 proj-title" />
+                    <RadzenText Text="@projet.Description" TextStyle="TextStyle.Body2" Class="rz-mt-1 rz-text-justify proj-desc" />
+
+                    <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" Wrap="Radzen.FlexWrap.Wrap"
+                                 Class="rz-mt-2 proj-chips">
+                        @foreach (var tech in projet.Technologies)
+                        {
+                            <span class="proj-chip">@tech</span>
+                        }
+                    </RadzenStack>
+
+                    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="0.5rem"
+                                 Class="rz-mt-3 proj-actions">
+                        @if (!string.IsNullOrEmpty(projet.LienGithub))
+                        {
+                            <RadzenLink Path="@projet.LienGithub" Target="_blank" class="proj-action">
+                                <RadzenIcon Icon="code" />
+                            </RadzenLink>
+                        }
+                        @if (!string.IsNullOrEmpty(projet.LienDemo))
+                        {
+                            <RadzenLink Path="@projet.LienDemo" Target="_blank" class="proj-action proj-action--primary">
+                                <RadzenIcon Icon="launch" />
+                            </RadzenLink>
+                        }
+                    </RadzenStack>
+                </RadzenCard>
             </RadzenColumn>
         }
     </RadzenRow>
 </RadzenStack>
+
+<style>
+    /* ----- Carte ----- */
+    .proj-card {
+        position: relative;
+        border-radius: 14px;
+        overflow: hidden;
+        transition: transform .18s ease, box-shadow .18s ease, border-color .2s ease;
+        border: 1px solid rgba(0,0,0,.06);
+    }
+
+        .proj-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 14px 28px rgba(0,0,0,.12), 0 6px 12px rgba(0,0,0,.08);
+            border-color: rgba(25,118,210,.25);
+        }
+
+    /* ----- Média haut (image/carrousel) ----- */
+    .proj-media {
+        position: relative;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .proj-media-frame {
+        width: 100%;
+        height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f9f9f9;
+    }
+
+    .proj-img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: cover;
+        width: 100%;
+        height: 200px;
+        border-radius: 8px;
+        transform: scale(1);
+        transition: transform .35s ease, filter .35s ease;
+    }
+
+    .proj-img--static {
+        object-fit: cover;
+    }
+
+    .proj-card:hover .proj-img {
+        transform: scale(1.04);
+        filter: saturate(1.05) contrast(1.02);
+    }
+
+    /* halo dégradé doux quand hover */
+    .proj-glow {
+        pointer-events: none;
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(120% 70% at 50% -10%, rgba(66,165,245,.35), transparent 60%);
+        opacity: 0;
+        transition: opacity .3s ease;
+    }
+
+    .proj-card:hover .proj-glow {
+        opacity: 1;
+    }
+
+    /* ----- Titre & description ----- */
+    .proj-title {
+        letter-spacing: .2px;
+    }
+
+    .proj-desc {
+        color: var(--rz-text-secondary-color,#6b7280);
+    }
+
+    /* ----- Chips tech ----- */
+    .proj-chips {
+        gap: .45rem;
+    }
+
+    .proj-chip {
+        background: #eef2f7;
+        color: #334155;
+        padding: .35rem .6rem;
+        border-radius: 999px;
+        font-weight: 600;
+        font-size: .83rem;
+        box-shadow: 0 1px 2px rgba(0,0,0,.08);
+        transition: transform .12s ease, box-shadow .12s ease, background .2s ease;
+    }
+
+        .proj-chip:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(59,130,246,.18);
+            background: #e3ebff;
+        }
+
+    /* ----- Actions (icônes) ----- */
+    .proj-actions .proj-action {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        display: grid;
+        place-items: center;
+        background: #f3f4f6;
+        color: #333;
+        text-decoration: none;
+        transition: transform .15s ease, background .2s ease, box-shadow .15s ease;
+    }
+
+        .proj-actions .proj-action:hover {
+            transform: translateY(-2px);
+            background: #e8ebf7;
+            box-shadow: 0 6px 14px rgba(0,0,0,.12);
+        }
+
+    .proj-actions .proj-action--primary {
+        background: #e8f1ff;
+        color: #1976d2;
+    }
+
+        .proj-actions .proj-action--primary:hover {
+            background: #d9e9ff;
+        }
+
+    /* animations d’arrivée */
+    @@keyframes proj-fade-up {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(6px)
+    }
+
+    to {
+        opacity: 1;
+        transform: none
+    }
+
+    }
+
+    .proj-card {
+        animation: proj-fade-up .35s ease both;
+    }
+
+    /* accessibilité */
+    @@media (prefers-reduced-motion: reduce) {
+        .proj-card, .proj-img, .proj-chip, .proj-action, .proj-glow
+
+    {
+        transition: none !important;
+        animation: none !important;
+    }
+
+    }
+
+    /* dark mode doux */
+    @@media (prefers-color-scheme: dark) {
+        .proj-card
+
+    {
+        border-color: rgba(255,255,255,.08);
+        background: #0f1317;
+    }
+
+    .proj-chip {
+        background: #122033;
+        color: #dbeafe;
+    }
+
+    .proj-actions .proj-action {
+        background: #16202b;
+        color: #e5e7eb;
+    }
+
+    .proj-actions .proj-action--primary {
+        background: #0f2b4a;
+        color: #7fb7ff;
+    }
+        /* accent dégradé qui glisse autour de la carte */
+        .proj-card {
+            position: relative;
+            border-radius: 14px;
+            will-change: transform, box-shadow;
+            transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+            transform-style: preserve-3d;
+        }
+            /* bordure gradient animée */
+            .proj-card::before {
+                content: "";
+                position: absolute;
+                inset: -1px;
+                border-radius: 16px;
+                padding: 1px; /* épaisseur de la “bordure” */
+                background: linear-gradient(130deg,#7aa8ff,transparent 30%, #b892ff 70%, transparent);
+                -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+                -webkit-mask-composite: xor;
+                mask-composite: exclude;
+                opacity: 0;
+                transform: scale(0.98);
+                transition: opacity .25s ease, transform .25s ease;
+            }
+
+            .proj-card:hover::before {
+                opacity: 1;
+                transform: none;
+            }
+            /* balayage lumineux */
+            .proj-card::after {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(115deg, transparent 35%, rgba(255,255,255,.15), transparent 65%);
+                transform: translateX(-120%);
+                transition: transform .6s ease;
+                pointer-events: none;
+            }
+
+            .proj-card:hover::after {
+                transform: translateX(120%);
+            }
+            /* élévation de la carte au survol (plus sensible) */
+            .proj-card:hover {
+                transform: translateY(-6px) scale(1.01);
+                box-shadow: 0 18px 34px rgba(0,0,0,.12), 0 8px 16px rgba(0,0,0,.08);
+                border-color: rgba(25,118,210,.28);
+            }
+        /* micro “lift” du contenu */
+        .proj-title, .proj-desc, .proj-chips, .proj-actions {
+            transition: transform .25s ease, opacity .25s ease;
+        }
+
+        .proj-card:hover .proj-title {
+            transform: translateY(-2px);
+        }
+
+        .proj-card:hover .proj-desc {
+            transform: translateY(-1px);
+        }
+
+        .proj-card:hover .proj-chips {
+            transform: translateY(-3px);
+        }
+
+        .proj-card:hover .proj-actions {
+            transform: translateY(-3px);
+        }
+        /* apparition des cartes au chargement */
+        @@keyframes proj-fade-up {
+            from {
+                opacity: 0;
+                transform: translateY(8px)
+            }
+
+            to {
+                opacity: 1;
+                transform: none
+            }
+        }
+
+        .proj-card {
+            animation: proj-fade-up .4s ease both;
+        }
+
+</style>
 
 @code {
 
