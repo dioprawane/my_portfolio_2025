@@ -1,10 +1,12 @@
 ﻿@using Radzen
 @using Radzen.Blazor
+@inject NavigationManager NavigationManager
 
 <RadzenStack AlignItems="Radzen.AlignItems.Center" class="rz-py-4" Style="padding: var(--rz-panel-menu-item-padding); border-bottom: var(--rz-panel-menu-item-border);">
     <!--<RadzenImage Path="/5.jfif" style="width: 48px; height: 48px;" AlternateText="Logo" />-->
     <RadzenImage Path="/5.jfif"
                  AlternateText="Photo de profil"
+                 Click="GoHome"
                  Style="
                     width: 64px;
                     height: 64px;
@@ -28,7 +30,7 @@
 <RadzenPanelMenu>
     <RadzenPanelMenuItem Text="À propos" Path="apropos" Icon="person" />
     <RadzenPanelMenuItem Text="Parcours" Icon="school">
-        <RadzenPanelMenuItem Text="Formation" Path="formations" Icon="menu_book" />
+        <RadzenPanelMenuItem Text="Formations" Path="formations" Icon="menu_book" />
         <RadzenPanelMenuItem Text="Compétences" Path="competences" Icon="engineering" />
     </RadzenPanelMenuItem>
     <RadzenPanelMenuItem Text="Expériences" Path="exp" Icon="work" />
@@ -40,3 +42,10 @@
     <RadzenText Text="Mon site v2.0.0" TextStyle="TextStyle.Caption" TagName="TagName.P" TextAlign="TextAlign.Center" />
     <RadzenText Text="Copyright Ⓒ 2024" TextStyle="TextStyle.Caption" class="rz-mb-0" TagName="TagName.P" TextAlign="TextAlign.Center" />
 </RadzenStack>
+
+@code {
+    private void GoHome()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+}

@@ -118,10 +118,22 @@
                         <RadzenText TextStyle="TextStyle.H6" Class="rz-color-primary rz-mb-2 xp-section-title">
                             <strong>Compétences</strong>
                         </RadzenText>
-                        <div class="rz-d-flex rz-flex-wrap xp-chips">
+                        <div class="rz-d-flex rz-flex-wrap xp-chips" style="gap: 0.3rem; row-gap: 0.3rem; column-gap: 0.3rem;">
                             @foreach (var skill in exp.Skills)
                             {
-                                <span class="xp-chip">@skill</span>
+                                <span class="xp-chip"  style="
+                                                                            background-color: #d6e4f7;
+                                                                            color: #1a4a83;
+                                                                            font-weight: 600;
+                                                                            padding: 0.2rem 0.5rem;
+                                                                            border-radius: 999px;
+                                                                            font-size: 0.7rem;
+                                                                            display: inline-block;
+                                                                            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                                                                            margin-right: 0.6rem;
+                                                                            margin-bottom: 0.5rem;">
+                                    @skill
+                                </span>
                             }
                         </div>
                     </RadzenCard>
@@ -196,10 +208,22 @@ else
                         <RadzenText TextStyle="TextStyle.H6" Class="rz-color-primary rz-mb-2 xp-section-title">
                             <strong>Compétences</strong>
                         </RadzenText>
-                        <div class="rz-d-flex rz-flex-wrap xp-chips">
+                        <div class="rz-d-flex rz-flex-wrap xp-chips" style="gap: 0.5rem; row-gap: 0.5rem; column-gap: 0.5rem;">
                             @foreach (var skill in exp.Skills)
                             {
-                                <span class="xp-chip">@skill</span>
+                                <span class="xp-chip"  style="
+                                                            background-color: #d6e4f7;
+                                                            color: #1a4a83;
+                                                            font-weight: 600;
+                                                            padding: 0.6rem 0.9rem;
+                                                            border-radius: 999px;
+                                                            font-size: 0.85rem;
+                                                            display: inline-block;
+                                                            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                                                            margin-right: 0.75rem;
+                                                            margin-bottom: 1rem;">
+                                    @skill
+                                </span>
                             }
                         </div>
                     </RadzenCard>
@@ -386,7 +410,7 @@ else
                 "Création de modèles prédictifs avec Power BI.",
                 "Modélisation de processus métier via Iterop (JavaScript, JUEL)."
             },
-            Skills = new() { "C#", ".NET", "Blazor", "Power BI", "SQL", "JavaScript", "ITEROP", "JUEL" },
+            Skills = new() { "C#", ".NET", "Entity Framework", "Blazor", "Power BI", "SQL", "Base de données", "Python", "JavaScript", "ITEROP", "JUEL" },
             ImageCompetence = "images/logoU.svg"
         },
         new Experience
@@ -399,7 +423,7 @@ else
                 "Création de tableaux de bord Power BI orientés performance.",
                 "Modélisation de données stratégiques et prévisionnelles."
             },
-            Skills = new() { "Power BI", "SQL", "Data Storytelling" },
+            Skills = new() { "Power BI", "SQL", "Base de données", "Data Storytelling", "Python" },
             ImageCompetence = "images/logoU.svg"
         },
         new Experience

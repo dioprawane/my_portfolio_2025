@@ -374,6 +374,7 @@
         .proj-card:hover .proj-actions {
             transform: translateY(-3px);
         }
+
         /* apparition des cartes au chargement */
         @@keyframes proj-fade-up {
             from {
@@ -390,7 +391,7 @@
         .proj-card {
             animation: proj-fade-up .4s ease both;
         }
-
+        }
 </style>
 
 @code {
@@ -423,6 +424,41 @@
             Images = new List<string> { "images/ucad.png", "images/urssaf-logo.png" },
             LienGithub = "",
             LienDemo = "https://mon-agence-immo.com"
+        },
+        new Projet
+        {
+            Titre = "Gestion des devoirs en ligne",
+            Description = "Développement d’un site web de gestion des devoirs (front Angular, back MongoDB) déployé sur Render.",
+            Technologies = new List<string> { "Angular", "MongoDB", "Render" },
+            Images = new List<string> { "images/unice.webp" }
+        },
+        new Projet
+        {
+            Titre = "Computer Vision - Langue des signes",
+            Description = "Application interactive traduisant l’alphabet et les gestes de la langue des signes en texte/parole grâce à la vision par ordinateur.",
+            Technologies = new List<string> { "Python", "OpenCV", "TensorFlow", "Keras" },
+            Images = new List<string> { "images/iut.png" }
+        },
+        new Projet
+        {
+            Titre = "Optimisation Viola-Jones",
+            Description = "Refonte GPU de l’algorithme de détection faciale Viola-Jones pour accélérer les performances de la reconnaissance faciale.",
+            Technologies = new List<string> { "Python", "CUDA", "OpenCV" },
+            Images = new List<string> { "images/unice.webp" }
+        },
+        new Projet
+        {
+            Titre = "Pricing Immobilier & Prédiction Obésité",
+            Description = "Modèles de Machine Learning pour estimer le prix des maisons et prédire l’obésité à partir de bases de données réelles.",
+            Technologies = new List<string> { "Python", "Scikit-learn", "TensorFlow" },
+            Images = new List<string> { "images/iut.png" }
+        },
+        new Projet
+        {
+            Titre = "Dashboards Power BI",
+            Description = "Tableaux de bord opérationnels, stratégiques et prédictifs pour l’Urssaf avec Power BI et modélisation statistique.",
+            Technologies = new List<string> { "Power BI", "SQL", "Data Storytelling" },
+            Images = new List<string> { "images/urssaf-logo.png" }
         }
     };
 }

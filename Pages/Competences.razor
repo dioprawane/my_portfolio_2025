@@ -314,68 +314,256 @@ else
             </RadzenCarousel>
         </RadzenCard>
 
-        @* --- Section 2: Categorized list using RadzenAccordion --- *@
-        <RadzenCard class="rz-p-4 rz-mt-4" Variant="Variant.Outlined">
-            <RadzenText TextStyle="TextStyle.H3" Class="rz-mb-4 rz-text-center">Compétences par Catégorie</RadzenText>
+        @* --- Section 2: Compétences par catégorie (design premium) --- *@
+        <RadzenCard class="rz-p-5 skill-wrap" Variant="Variant.Outlined">
+            <div class="skill-header">
+                <RadzenIcon Icon="workspace_premium" />
+                <RadzenText TextStyle="TextStyle.H3">Compétences par Catégorie</RadzenText>
+            </div>
 
             @if (GroupedCompetences != null && GroupedCompetences.Any())
             {
                 @foreach (var categoryGroup in GroupedCompetences)
                 {
-                    <RadzenText TextStyle="TextStyle.H4" Class="rz-mt-4 rz-mb-2">@categoryGroup.Key</RadzenText>
-                    <RadzenStack Orientation="Orientation.Vertical" Gap="1rem">
-                        @if (categoryGroup.Any()) 
+                    <h3 class="skill-category">@categoryGroup.Key</h3>
+
+                    <div class="skill-grid">
+                        @foreach (var c in categoryGroup)
                         {
-                            @foreach (var competence in categoryGroup)
-                            {
-                                <RadzenCard Class="rz-p-3 rz-shadow-1" Variant="Variant.Outlined"
-                                            Style="border-left: 4px solid var(--rz-primary-color); border-radius: 6px;">
-                                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="1rem">
-                                        @if (!string.IsNullOrEmpty(competence.Icon))
+                            <RadzenCard Class="skill-card" Variant="Variant.Flat">
+                                <div class="skill-card__accent"></div>
+
+                                <div class="skill-card__left">
+                                    @if (!string.IsNullOrEmpty(c.Icon)
+                                                        && (c.Icon.EndsWith(".png", StringComparison.OrdinalIgnoreCase)
+                                                        || c.Icon.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase)
+                                                        || c.Icon.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase)
+                                                        || c.Icon.EndsWith(".svg", StringComparison.OrdinalIgnoreCase)))
+                                    {
+                                        <img class="skill-icon" src="@($"/images/{c.Icon}")" alt="@c.Name" />
+                                    }
+                                    else
+                                    {
+                                        <div class="skill-icon skill-icon--chip">
+                                            <RadzenIcon Icon="@(string.IsNullOrWhiteSpace(c.Icon) ? "apps" : c.Icon)" />
+                                        </div>
+                                    }
+                                </div>
+
+                                <div class="skill-card__main">
+                                    <div class="skill-title">@c.Name</div>
+
+                                    <div class="skill-stars" aria-label="niveau">
+                                        @for (int i = 0; i < c.Level; i++)
                                         {
-                                            // Check if the icon is a file path (e.g., ends with .png, .jpg, .svg)
-                                            @if (competence.Icon.EndsWith(".png", StringComparison.OrdinalIgnoreCase) ||
-                                                                competence.Icon.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase) ||
-                                                                competence.Icon.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase) ||
-                                                                competence.Icon.EndsWith(".svg", StringComparison.OrdinalIgnoreCase))
-                                            {
-                                                <img src="@($"/images/{competence.Icon}")" alt="@competence.Name icon" style="width: 1.5em; height: 1.5em; margin-right: 0.5rem;" />
-                                            }
-                                            else // Assume it's a Radzen/Material Icon
-                                            {
-                                                <RadzenIcon Icon="@competence.Icon"
-                                                            Style="font-size: 1.5em; color: var(--rz-text-secondary-color);" />
-                                            }
+                                            <RadzenIcon Icon="star" class="star star--full" />
                                         }
+                                        @for (int i = c.Level; i < 5; i++)
+                                        {
+                                            <RadzenIcon Icon="star" class="star" />
+                                        }
+                                    </div>
 
-                                        <RadzenText TextStyle="TextStyle.Body1" Class="rz-text-bold">@competence.Name</RadzenText>
-                                        <div style="flex-grow:1;"></div>
+                                    <div class="skill-bar">
+                                        <div class="skill-bar__fill" style="width:@(c.Level * 20)%"></div>
+                                    </div>
+                                </div>
 
-                                        <RadzenStack Orientation="Orientation.Horizontal" Gap="0.2rem">
-                                            @for (int i = 0; i < competence.Level; i++)
-                                            {
-                                                <RadzenIcon Icon="star" Style="color: gold;" />
-                                            }
-                                            @for (int i = competence.Level; i < 5; i++)
-                                            {
-                                                <RadzenIcon Icon="star_border" Style="color: lightgray;" />
-                                            }
-                                        </RadzenStack>
-                                    </RadzenStack>
-                                </RadzenCard>
-                            }
+                                <div class="skill-card__right">
+                                    <span class="skill-badge">@($"{c.Level}/5")</span>
+                                </div>
+                            </RadzenCard>
                         }
-                    </RadzenStack>
+                    </div>
                 }
             }
             else
             {
-                <RadzenText Text="Aucune compétence à afficher." Class="rz-text-center" />
+                <RadzenText Text="Aucune compétence à afficher." class="rz-text-center" />
             }
         </RadzenCard>
 
+
     </RadzenStack>
 }
+
+<style>
+    /* ====== Premium Skills ====== */
+    .skill-wrap {
+        border-radius: 14px;
+    }
+
+    .skill-header {
+        display: flex;
+        align-items: center;
+        gap: .6rem;
+        margin-bottom: 1.2rem;
+    }
+
+        .skill-header .rz-icon {
+            font-size: 1.8rem;
+            color: var(--rz-primary);
+        }
+
+    .skill-category {
+        margin: 1.6rem 0 .8rem;
+        font-weight: 800;
+        letter-spacing: .3px;
+        font-size: clamp(1.2rem, .9rem + .8vw, 1.6rem);
+    }
+
+    .skill-grid {
+        display: grid;
+        gap: 14px;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    }
+
+    .skill-card {
+        position: relative;
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        gap: 14px;
+        padding: 14px 16px;
+        border-radius: 12px;
+        border: 1px solid rgba(0,0,0,.06);
+        box-shadow: 0 1px 2px rgba(0,0,0,.04);
+        transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+        background: var(--rz-card-background,var(--rz-base-background));
+        overflow: hidden;
+    }
+
+        .skill-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 22px rgba(0,0,0,.10), 0 2px 6px rgba(0,0,0,.06);
+            border-color: rgba(25,118,210,.25);
+        }
+
+    .skill-card__accent {
+        position: absolute;
+        inset: 0 0 auto 0;
+        height: 3px;
+        background: linear-gradient(90deg, #64b5f6, #a78bfa, #f472b6);
+        opacity: .9;
+    }
+
+    /* left icon */
+    .skill-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        object-fit: contain;
+        background: #fff;
+        border: 1px solid rgba(0,0,0,.06);
+        box-shadow: 0 2px 10px rgba(0,0,0,.06);
+    }
+
+    .skill-icon--chip {
+        display: grid;
+        place-items: center;
+        background: #eef2f7;
+        color: #475569;
+    }
+
+        .skill-icon--chip .rz-icon {
+            font-size: 22px;
+        }
+
+    /* middle column */
+    .skill-title {
+        font-weight: 700;
+        line-height: 1.15;
+        letter-spacing: .2px;
+        margin-bottom: 4px;
+    }
+
+    /* stars */
+    .skill-stars {
+        display: flex;
+        gap: 2px;
+        margin-bottom: 6px;
+    }
+
+    .star {
+        color: #cbd5e1;
+        transition: transform .15s ease, color .15s ease;
+    }
+
+    .star--full {
+        color: #f6c453;
+        filter: drop-shadow(0 1px 0 rgba(0,0,0,.05));
+    }
+
+    .skill-card:hover .star--full {
+        transform: translateY(-1px);
+    }
+
+    /* level bar */
+    .skill-bar {
+        height: 6px;
+        background: #e8edf4;
+        border-radius: 999px;
+        overflow: hidden;
+    }
+
+    .skill-bar__fill {
+        height: 100%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, #60a5fa, #7c3aed);
+        transition: width .35s ease;
+    }
+
+    /* right badge */
+    .skill-badge {
+        background: #eef2f7;
+        color: #334155;
+        font-weight: 700;
+        padding: .25rem .5rem;
+        border-radius: 999px;
+        font-size: .8rem;
+        box-shadow: 0 1px 2px rgba(0,0,0,.06);
+    }
+
+    /* Dark mode */
+    @@media (prefers-color-scheme: dark) {
+        .skill-card
+
+    {
+        border-color: rgba(255,255,255,.08);
+        background: #0f1317;
+    }
+
+    .skill-icon {
+        background: #0c0f12;
+        border-color: rgba(255,255,255,.06);
+    }
+
+    .skill-icon--chip {
+        background: #122033;
+        color: #dbeafe;
+    }
+
+    .skill-badge {
+        background: #16202b;
+        color: #e5e7eb;
+    }
+
+    .skill-bar {
+        background: #152030;
+    }
+
+    }
+
+    /* Motion preferences */
+    @@media (prefers-reduced-motion: reduce) {
+        .skill-card, .star, .skill-bar__fill
+
+    {
+        transition: none !important;
+    }
+
+    }
+</style>
 
 @code {
     RadzenCarousel? carousel;
@@ -437,7 +625,7 @@ else
     protected override void OnInitialized()
     {
         // Populate with your actual competence data
-        Competencies = new List<Competence>
+        /*Competencies = new List<Competence>
         {
             new Competence { Name = "C#", Category = "Langages de programmation", Level = 5, Icon = "code" },
             new Competence { Name = "Blazor", Category = "Frameworks", Level = 4, Icon = "blazor.svg" },
@@ -449,22 +637,82 @@ else
             new Competence { Name = "CSS3", Category = "Technologies Web", Level = 3, Icon = "css" },
             new Competence { Name = "Git", Category = "Outils de développement", Level = 4, Icon = "github.svg" },
             new Competence { Name = "Azure DevOps", Category = "Outils de développement", Level = 3, Icon = "cloud_queue" },
-            new Competence { Name = "Docker", Category = "DevOps", Level = 2, Icon = "padding" }, // "padding" is often used for containers
+            new Competence { Name = "Docker", Category = "DevOps", Level = 2, Icon = "padding" },
             new Competence { Name = "Méthodes Agiles (Scrum)", Category = "Méthodologies", Level = 4, Icon = "done_all" },
             new Competence { Name = "Anglais", Category = "Langues", Level = 4, Icon = "language" },
             new Competence { Name = "Communication", Category = "Soft Skills", Level = 4, Icon = "forum" }
+        };*/
+        Competencies = new List<Competence>
+        {
+            // Langages (CV: Python, Java, SQL, C#, JavaScript, R, Kotlin, Dart)
+            new Competence { Name = "Python",      Category = "Langages de programmation", Level = 4, Icon = "code" },        // niveau courant
+            new Competence { Name = "Java",        Category = "Langages de programmation", Level = 4, Icon = "code" },        // courant
+            new Competence { Name = "C#",          Category = "Langages de programmation", Level = 4, Icon = "code" },        // courant
+            new Competence { Name = "SQL",         Category = "Langages de programmation", Level = 4, Icon = "code" },        // courant
+            new Competence { Name = "JavaScript",  Category = "Langages de programmation", Level = 3, Icon = "javascript" },
+            new Competence { Name = "R",           Category = "Langages de programmation", Level = 2, Icon = "functions" },
+            new Competence { Name = "Kotlin",      Category = "Langages de programmation", Level = 2, Icon = "smartphone" },
+            new Competence { Name = "Dart",        Category = "Langages de programmation", Level = 2, Icon = "smartphone" },
+
+            // Frameworks & bibliothèques (CV)
+            new Competence { Name = ".NET Core",   Category = "Frameworks", Level = 4, Icon = "web" },
+            new Competence { Name = "Angular",     Category = "Frameworks", Level = 3, Icon = "angular.svg" },
+            new Competence { Name = "React",       Category = "Frameworks", Level = 3, Icon = "react.svg" },
+            new Competence { Name = "Node.js",     Category = "Frameworks", Level = 3, Icon = "node.svg" },
+            new Competence { Name = "Flutter",     Category = "Frameworks", Level = 3, Icon = "flutter.svg" },
+            new Competence { Name = "Spring Boot", Category = "Frameworks", Level = 2, Icon = "sprout" },
+            new Competence { Name = "FastAPI",     Category = "Frameworks", Level = 3, Icon = "bolt" },
+            new Competence { Name = "Swagger",     Category = "Frameworks", Level = 3, Icon = "api" },
+            new Competence { Name = "LangChain",   Category = "Frameworks", Level = 2, Icon = "hub" },
+
+            // IA / Data Science (CV)
+            new Competence { Name = "Machine Learning",   Category = "IA & Data", Level = 4, Icon = "psychology" },
+            new Competence { Name = "Deep Learning",      Category = "IA & Data", Level = 3, Icon = "memory" },
+            new Competence { Name = "Computer Vision",    Category = "IA & Data", Level = 3, Icon = "visibility" },
+            new Competence { Name = "NLP",                Category = "IA & Data", Level = 3, Icon = "translate" },
+            new Competence { Name = "Federated Learning", Category = "IA & Data", Level = 2, Icon = "group_work" },
+            new Competence { Name = "PyTorch",            Category = "IA & Data", Level = 3, Icon = "science" },
+            new Competence { Name = "TensorFlow",         Category = "IA & Data", Level = 3, Icon = "science" },
+
+            // Bases de données (CV)
+            new Competence { Name = "SQL Server", Category = "Bases de données", Level = 4, Icon = "storage" },
+            new Competence { Name = "MySQL",      Category = "Bases de données", Level = 3, Icon = "storage" },
+            new Competence { Name = "MariaDB",    Category = "Bases de données", Level = 3, Icon = "storage" },
+            new Competence { Name = "MongoDB",    Category = "Bases de données", Level = 3, Icon = "storage" },
+
+            // Outils & autres (CV)
+            new Competence { Name = "Power BI",   Category = "Outils & Plateformes", Level = 4, Icon = "insights" },
+            new Competence { Name = "Docker",     Category = "Outils & Plateformes", Level = 3, Icon = "padding" },
+            new Competence { Name = "GitHub",     Category = "Outils & Plateformes", Level = 4, Icon = "github.svg" },
+            new Competence { Name = "VBA",        Category = "Outils & Plateformes", Level = 2, Icon = "table_chart" },
+            new Competence { Name = "IoT",        Category = "Outils & Plateformes", Level = 2, Icon = "sensors" },
+            new Competence { Name = "Gestion de projet (Agile)", Category = "Méthodologies", Level = 3, Icon = "dashboard" },
+
+            // BPM / Process (expérience URSSAF : ITEROP & JUEL)
+            new Competence { Name = "BPM Iterop", Category = "Process & BPM", Level = 3, Icon = "schema" },
+            new Competence { Name = "JUEL",       Category = "Process & BPM", Level = 2, Icon = "schema" },
+
+            // Langues (CV)
+            new Competence { Name = "Français", Category = "Langues", Level = 5, Icon = "language" },
+            new Competence { Name = "Anglais",  Category = "Langues", Level = 3, Icon = "language" },
+            new Competence { Name = "Wolof",    Category = "Langues", Level = 3, Icon = "language" }
         };
+
+        // Tri & groupements inchangés
+        Competencies = (Competencies ?? new List<Competence>()).OrderBy(c => c.Name).ToList();
+        GroupedCompetences = Competencies.OrderBy(c => c.Category).ThenBy(c => c.Name).GroupBy(c => c.Category);
+
 
         // For the carousel (ordered by name for simplicity)
         //Competencies = Competencies.OrderBy(c => c.Name).ToList();
-        Competencies = (Competencies ?? new List<Competence>())
+        /*Competencies = (Competencies ?? new List<Competence>())
             .OrderBy(c => c.Name)
             .ToList();
 
         GroupedCompetences = Competencies
             .OrderBy(c => c.Category) // Order categories alphabetically
             .ThenBy(c => c.Name) // Order competencies within categories alphabetically
-            .GroupBy(c => c.Category);
+            .GroupBy(c => c.Category);*/
 
         // Afficher le GroupedCompetences
         // Add these lines for more detailed debugging
