@@ -34,7 +34,20 @@
 
         <!-- Titres -->
         <h2 class="about-name">DIOP Serigne Rawane</h2>
-        <div class="about-role">Concepteur Développeur Fullstack, Data Analyst & IA</div>
+        <div class="about-headline">
+            <span class="role-main">Concepteur Développeur .NET</span>
+            <span class="role-dot">•</span>
+            <span class="role-sub">Data&nbsp;Analyst</span>
+            <span class="role-dot">•</span>
+            <span class="role-sub">IA</span>
+        </div>
+        <!--<div class="role-tags">
+            <span class="tag">C# / Blazor</span>
+            <span class="tag">Power&nbsp;BI</span>
+            <span class="tag">ML</span>
+        </div>-->
+
+        <!--<div class="about-role">Concepteur Développeur Fullstack, Data Analyst & IA</div>-->
     </RadzenStack>
 
     <RadzenDivider class="rz-my-4" />
@@ -163,58 +176,126 @@
     }
 
     /* --- Cards style --- */
-.info-card{
-  position: relative;
-  height: 100%;
-  padding: 1.25rem 1.25rem 1.35rem 1.25rem;
-  border-radius: 14px;
-  cursor: pointer;
-  transition: transform .18s ease, box-shadow .18s ease, border-color .2s ease;
-  border: 1px solid rgba(0,0,0,.06);
-  box-shadow: 0 1px 1px rgba(0,0,0,.04);
-  overflow: hidden;
-}
-.info-card:hover{
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(0,0,0,.10), 0 2px 6px rgba(0,0,0,.06);
-  border-color: rgba(25,118,210,.25);
-}
+    .info-card{
+      position: relative;
+      height: 100%;
+      padding: 1.25rem 1.25rem 1.35rem 1.25rem;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: transform .18s ease, box-shadow .18s ease, border-color .2s ease;
+      border: 1px solid rgba(0,0,0,.06);
+      box-shadow: 0 1px 1px rgba(0,0,0,.04);
+      overflow: hidden;
+    }
+    .info-card:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(0,0,0,.10), 0 2px 6px rgba(0,0,0,.06);
+      border-color: rgba(25,118,210,.25);
+    }
 
-/* petit filet dégradé en haut (comme un tag visuel) */
-.info-accent{
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 4px;
-  background: linear-gradient(90deg,#1976d2, #42a5f5, #90caf9);
-  opacity: .9;
-}
+    /* petit filet dégradé en haut (comme un tag visuel) */
+    .info-accent{
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 4px;
+      background: linear-gradient(90deg,#1976d2, #42a5f5, #90caf9);
+      opacity: .9;
+    }
 
-/* Icone + typographies */
-.info-icon{
-  font-size: 24px;
-  color: #1976d2;
-}
-.info-title{
-  font-weight: 700;
-  font-size: clamp(1rem, .9rem + .4vw, 1.25rem);
-  line-height: 1.2;
-}
-.info-subtitle{
-  color: var(--rz-text-secondary-color, #6b7280);
-  font-size: clamp(.95rem, .9rem + .2vw, 1rem);
-}
+    /* Icone + typographies */
+    .info-icon{
+      font-size: 24px;
+      color: #1976d2;
+    }
+    .info-title{
+      font-weight: 700;
+      font-size: clamp(1rem, .9rem + .4vw, 1.25rem);
+      line-height: 1.2;
+    }
+    .info-subtitle{
+      color: var(--rz-text-secondary-color, #6b7280);
+      font-size: clamp(.95rem, .9rem + .2vw, 1rem);
+    }
 
-/* Support dark/light subtil */
-:root .info-card{ background: #fff; }
-    @@media (prefers-color-scheme: dark) {
-        :root .info-card {
-            background: #101418;
-            border-color: rgba(255,255,255,.06);
-        }
-
-            :root .info-card:hover {
-                border-color: rgba(66,165,245,.35);
+    /* Support dark/light subtil */
+    :root .info-card{ background: #fff; }
+        @@media (prefers-color-scheme: dark) {
+            :root .info-card {
+                background: #101418;
+                border-color: rgba(255,255,255,.06);
             }
+
+                :root .info-card:hover {
+                    border-color: rgba(66,165,245,.35);
+                }
+        }
+    /* ------ Headline ------ */
+    .about-headline {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .35rem .6rem;
+        align-items: center;
+        justify-content: center;
+        margin-top: .15rem;
+    }
+
+    .role-main {
+        font-weight: 800;
+        font-size: clamp(1rem,.9rem + .7vw,1.25rem);
+        letter-spacing: .2px;
+        background: linear-gradient(90deg,#1976d2,#7c3aed);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    .role-sub {
+        font-weight: 700;
+        color: var(--rz-text-secondary-color,#6b7280);
+        font-size: clamp(.95rem,.85rem + .4vw,1.05rem);
+    }
+
+    .role-dot {
+        opacity: .35;
+        color: var(--rz-text-secondary-color,#6b7280);
+    }
+
+    /* petites “chips” sous le titre */
+    .role-tags {
+        display: flex;
+        gap: .4rem;
+        justify-content: center;
+        margin-top: .25rem;
+    }
+
+    .tag {
+        background: #eef2f7;
+        color: #334155;
+        font-weight: 700;
+        padding: .25rem .55rem;
+        border-radius: 999px;
+        font-size: .78rem;
+        box-shadow: 0 1px 2px rgba(0,0,0,.06);
+    }
+    @@media (prefers-color-scheme:dark) {
+        .tag
+
+    {
+        background: #122033;
+        color: #dbeafe;
+    }
+
+    }
+
+    /* Sur mobile (pas de souris) : le tap reproduit le hover */
+    @@media (hover:none) {
+        .profile-frame:active .profile-photo, .profile-frame:focus-within .profile-photo
+
+    {
+        transform: translateY(-2px) scale(1.01);
+        box-shadow: 0 18px 50px rgba(0,0,0,.32);
+    }
+
     }
 </style>
 

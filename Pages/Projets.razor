@@ -402,63 +402,80 @@
         {
             Titre = "BestProfiles - IA pour le recrutement",
             Description = "Une plateforme de tri intelligent de CV basée sur l’IA, NLP et scoring de profils. Optimisation des recrutements en entreprise et école.",
-            Technologies = new List<string> { "Blazor", "FastAPI", "Python", "NLP", "Azure" },
-            Images = new List<string> { "images/unice.webp", "images/iut.png" },
+            Technologies = new List<string> { "Angular", "Node.js", "FastAPI", "Python", "NLP", "Docker", "Docker Compose", "MongoDB", "ChromaDB", "Langchain", "OpenAI", "Swagger" },
+            Images = new List<string> { "images/BestProfiles.svg" },
             LienGithub = "https://github.com/dioprawane/best_profiles_frontend",
-            LienDemo = "https://bestprofiles-demo.com"
+            LienDemo = "https://www.bestprofiles.fr"
         },
         new Projet
         {
-            Titre = "Help4You - App solidaire mobile",
-            Description = "Application Flutter dédiée à l'entraide sociale, avec géolocalisation et mise en relation d'utilisateurs en situation difficile.",
-            Technologies = new List<string> { "Flutter", "Firebase", "Kotlin", "Google Maps" },
-            Images = new List<string> { "images/Cours.png", "images/logoU.svg" },
-            LienGithub = "https://github.com/ton-autre-projet",
+            Titre = "Flutter Vinted – Marketplace Mode",
+            Description = "Application mobile Flutter minimaliste de Vinted en MVP : consultation des articles, panier, gestion de compte + prédiction automatique catégorie via IA (CNN).",
+            Technologies = new List<string>
+            {
+                "Flutter",
+                "Firebase Auth & Firestore",
+                "Dart",
+                "REST API (Heroku)",
+                "CNN (Image classification)"
+            },
+            Images = new List<string>
+            {
+                "images/unice.webp",
+                "images/flutter.svg"
+            },
+            LienGithub = "https://github.com/dioprawane/flutter_vinted_projet",
+            LienDemo = "" // pas de demo live, mais on peut déployer si tu le souhaites
+        },
+        new Projet
+        {
+            Titre = "Langue des Signes – Application IA de Vision par Ordinateur",
+            Description = "Solution complète (Front Angular + Back Python/Flask) traduisant l’alphabet et les gestes de la Langue des Signes en texte et parole grâce à la vision par ordinateur et à un modèle CNN entraîné sur des images.",
+            Technologies = new List<string>
+            {
+                "HTML", "CSS", "JavaScript", "Flask", "OpenCV", "TensorFlow", "Keras", "Python"
+            },
+            Images = new List<string>
+            {
+                "images/unice.webp",
+                "images/sign1.png"
+            },
+            LienGithub = "https://github.com/dioprawane/front_sign_language_computer_vision_IA2", // backend IA
+            LienDemo = "https://front-sign-language-computer-vision-ia2.onrender.com/" // frontend
+        },
+        new Projet
+        {
+            Titre = "Optimisation GPU de l’algorithme Viola-Jones",
+            Description = "Projet académique réussi avec brio visant à réimplémenter et optimiser l’algorithme classique de détection de visages de Viola & Jones. L’objectif principal était d’accélérer le calcul en déplaçant les opérations intensives (images intégrales, scans, transpositions) du CPU vers le GPU via CUDA. Le projet inclut une version CPU et une version GPU, des benchmarks comparatifs, ainsi qu’une détection multi-étapes améliorée pour obtenir de meilleures performances.",
+            Technologies = new List<string> { "Python", "CUDA", "NumPy", "OpenCV", "Pillow" },
+            Images = new List<string> { "images/unice.webp", "images/physics_result.jpg" },
+            LienGithub = "https://github.com/dioprawane/projet_viola_jones_ML",
             LienDemo = ""
         },
         new Projet
         {
-            Titre = "Catalogue Immobilier",
-            Description = "Portail de gestion des annonces immobilières en ligne. Upload d’images, filtres avancés, page de détails responsive.",
-            Technologies = new List<string> { "React", "Node.js", "MongoDB", "Cloudinary" },
-            Images = new List<string> { "images/ucad.png", "images/urssaf-logo.png" },
+            Titre = "AssignmentApp – Gestion des Devoirs en Ligne",
+            Description = "Application web développée avec Angular et Node.js pour gérer les devoirs (assignments) : ajout, modification, suppression et suivi. Intégration d’Angular Material pour l’UI, gestion de collections (élèves, matières), pagination, filtres, formulaires avancés (Stepper) et popups de détails. Le projet inclut un back-end MongoDB et l’hébergement complet (front et back) sur Render. Des dashboards interactifs Power BI ont été intégrés pour le suivi des données.",
+            Technologies = new List<string> { "Angular", "Node.js", "MongoDB", "Angular Material", "Power BI", "Render" },
+            Images = new List<string> { "images/unice.webp", "images/angular.svg" },
+            LienGithub = "https://github.com/dioprawane/DIOP_PRUDENT_AngularProjetAssignments",
+            LienDemo = "https://service2222-projet-angular-front-end.onrender.com"
+        },
+        new Projet
+        {
+            Titre = "Pricing Immobilier & Prédiction d’Obésité",
+            Description = "Projets académiques en R et Python combinant régression linéaire (simple et multiple) pour estimer le prix des maisons à partir de variables clés (surface, localisation, pièces, etc.) et modèles de Machine Learning pour prédire le risque d’obésité à partir de données socio-démographiques et médicales. Analyse des performances, comparaison des métriques et interprétation des facteurs influents.",
+            Technologies = new List<string> { "R", "RStudio", "Python", "Scikit-learn", "TensorFlow", "Data Mining", "Machine Learning", "Régression" },
+            Images = new List<string> { "images/iut.png" }
+        },
+        new Projet
+        {
+            Titre = "CICJ Immo – Application de Gestion Immobilière & Consultance Juridique",
+            Description = "Application web développée pour une agence immobilière et de consultance juridique au Sénégal 🇸🇳. Elle permet la mise en ligne, la consultation et la gestion des biens immobiliers et services juridiques, avec un espace administrateur complet pour ajouter, modifier ou supprimer annonces et articles. Les images sont stockées et optimisées via Cloudinary (après migration depuis Base64). Le projet intègre un frontend responsive en React (desktop & mobile), un backend Node.js/Express, une base de données MongoDB structurée pour répondre aux besoins métiers, et un déploiement sur Render avec nom de domaine configuré via Squarespace.",
+            Technologies = new List<string> { "React", "Node.js", "Express", "MongoDB", "Cloudinary", "Render" },
+            Images = new List<string> { "images/i1.jfif", "images/i2.jfif", "images/i3.jfif", "images/react.svg" },
             LienGithub = "",
-            LienDemo = "https://mon-agence-immo.com"
+            LienDemo = "https://cicjimmo.com"
         },
-        new Projet
-        {
-            Titre = "Gestion des devoirs en ligne",
-            Description = "Développement d’un site web de gestion des devoirs (front Angular, back MongoDB) déployé sur Render.",
-            Technologies = new List<string> { "Angular", "MongoDB", "Render" },
-            Images = new List<string> { "images/unice.webp" }
-        },
-        new Projet
-        {
-            Titre = "Computer Vision - Langue des signes",
-            Description = "Application interactive traduisant l’alphabet et les gestes de la langue des signes en texte/parole grâce à la vision par ordinateur.",
-            Technologies = new List<string> { "Python", "OpenCV", "TensorFlow", "Keras" },
-            Images = new List<string> { "images/iut.png" }
-        },
-        new Projet
-        {
-            Titre = "Optimisation Viola-Jones",
-            Description = "Refonte GPU de l’algorithme de détection faciale Viola-Jones pour accélérer les performances de la reconnaissance faciale.",
-            Technologies = new List<string> { "Python", "CUDA", "OpenCV" },
-            Images = new List<string> { "images/unice.webp" }
-        },
-        new Projet
-        {
-            Titre = "Pricing Immobilier & Prédiction Obésité",
-            Description = "Modèles de Machine Learning pour estimer le prix des maisons et prédire l’obésité à partir de bases de données réelles.",
-            Technologies = new List<string> { "Python", "Scikit-learn", "TensorFlow" },
-            Images = new List<string> { "images/iut.png" }
-        },
-        new Projet
-        {
-            Titre = "Dashboards Power BI",
-            Description = "Tableaux de bord opérationnels, stratégiques et prédictifs pour l’Urssaf avec Power BI et modélisation statistique.",
-            Technologies = new List<string> { "Power BI", "SQL", "Data Storytelling" },
-            Images = new List<string> { "images/urssaf-logo.png" }
-        }
     };
 }

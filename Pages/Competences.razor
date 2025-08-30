@@ -645,62 +645,106 @@ else
         Competencies = new List<Competence>
         {
             // Langages (CV: Python, Java, SQL, C#, JavaScript, R, Kotlin, Dart)
-            new Competence { Name = "Python",      Category = "Langages de programmation", Level = 4, Icon = "code" },        // niveau courant
-            new Competence { Name = "Java",        Category = "Langages de programmation", Level = 4, Icon = "code" },        // courant
-            new Competence { Name = "C#",          Category = "Langages de programmation", Level = 4, Icon = "code" },        // courant
-            new Competence { Name = "SQL",         Category = "Langages de programmation", Level = 4, Icon = "code" },        // courant
-            new Competence { Name = "JavaScript",  Category = "Langages de programmation", Level = 3, Icon = "javascript" },
-            new Competence { Name = "R",           Category = "Langages de programmation", Level = 2, Icon = "functions" },
-            new Competence { Name = "Kotlin",      Category = "Langages de programmation", Level = 2, Icon = "smartphone" },
-            new Competence { Name = "Dart",        Category = "Langages de programmation", Level = 2, Icon = "smartphone" },
+            new Competence { Name = "Python",      Category = "Langages de programmation", Level = 4, Icon = "python.svg" },        // niveau courant
+            new Competence { Name = "Java",        Category = "Langages de programmation", Level = 4, Icon = "java.svg" },        // courant
+            new Competence { Name = "C#",          Category = "Langages de programmation", Level = 4, Icon = "csharp.svg" },        // courant
+            new Competence { Name = "SQL",         Category = "Langages de programmation", Level = 4, Icon = "sql.svg" },        // courant
+            new Competence { Name = "JavaScript",  Category = "Langages de programmation", Level = 3, Icon = "js.svg" },
+            new Competence { Name = "TypeScript",  Category = "Langages de programmation", Level = 2, Icon = "ts.svg" },
+            new Competence { Name = "R",           Category = "Langages de programmation", Level = 4, Icon = "r.svg" },
+            new Competence { Name = "Kotlin",      Category = "Langages de programmation", Level = 2, Icon = "kotlin.svg" },
+            new Competence { Name = "Dart",        Category = "Langages de programmation", Level = 2, Icon = "dart2.png" },
 
             // Frameworks & bibliothèques (CV)
-            new Competence { Name = ".NET Core",   Category = "Frameworks", Level = 4, Icon = "web" },
-            new Competence { Name = "Angular",     Category = "Frameworks", Level = 3, Icon = "angular.svg" },
+            new Competence { Name = ".NET Core",   Category = "Frameworks", Level = 3, Icon = "dotnet.svg" },
+            new Competence { Name = "Angular",     Category = "Frameworks", Level = 4, Icon = "angular.svg" },
             new Competence { Name = "React",       Category = "Frameworks", Level = 3, Icon = "react.svg" },
-            new Competence { Name = "Node.js",     Category = "Frameworks", Level = 3, Icon = "node.svg" },
-            new Competence { Name = "Flutter",     Category = "Frameworks", Level = 3, Icon = "flutter.svg" },
-            new Competence { Name = "Spring Boot", Category = "Frameworks", Level = 2, Icon = "sprout" },
-            new Competence { Name = "FastAPI",     Category = "Frameworks", Level = 3, Icon = "bolt" },
-            new Competence { Name = "Swagger",     Category = "Frameworks", Level = 3, Icon = "api" },
-            new Competence { Name = "LangChain",   Category = "Frameworks", Level = 2, Icon = "hub" },
+            new Competence { Name = "Node.js",     Category = "Frameworks", Level = 3, Icon = "nodejs.svg" },
+            new Competence { Name = "Flutter",     Category = "Frameworks", Level = 2, Icon = "flutter.svg" },
+            new Competence { Name = "Spring Boot", Category = "Frameworks", Level = 3, Icon = "spring-logo.svg" },
+            new Competence { Name = "FastAPI",     Category = "Frameworks", Level = 4, Icon = "bolt" },
+            new Competence { Name = "Swagger",     Category = "Frameworks", Level = 4, Icon = "swagger.svg" },
+            new Competence { Name = "LangChain",   Category = "Frameworks", Level = 3, Icon = "hub" },
 
             // IA / Data Science (CV)
             new Competence { Name = "Machine Learning",   Category = "IA & Data", Level = 4, Icon = "psychology" },
-            new Competence { Name = "Deep Learning",      Category = "IA & Data", Level = 3, Icon = "memory" },
-            new Competence { Name = "Computer Vision",    Category = "IA & Data", Level = 3, Icon = "visibility" },
+            new Competence { Name = "Deep Learning",      Category = "IA & Data", Level = 4, Icon = "memory" },
+            new Competence { Name = "Computer Vision",    Category = "IA & Data", Level = 4, Icon = "visibility" },
             new Competence { Name = "NLP",                Category = "IA & Data", Level = 3, Icon = "translate" },
-            new Competence { Name = "Federated Learning", Category = "IA & Data", Level = 2, Icon = "group_work" },
-            new Competence { Name = "PyTorch",            Category = "IA & Data", Level = 3, Icon = "science" },
-            new Competence { Name = "TensorFlow",         Category = "IA & Data", Level = 3, Icon = "science" },
+            new Competence { Name = "Federated Learning", Category = "IA & Data", Level = 3, Icon = "group_work" },
+            new Competence { Name = "PyTorch",            Category = "IA & Data", Level = 4, Icon = "pytorch.svg" },
+            new Competence { Name = "TensorFlow",         Category = "IA & Data", Level = 4, Icon = "tensorflow.svg" },
 
             // Bases de données (CV)
-            new Competence { Name = "SQL Server", Category = "Bases de données", Level = 4, Icon = "storage" },
-            new Competence { Name = "MySQL",      Category = "Bases de données", Level = 3, Icon = "storage" },
-            new Competence { Name = "MariaDB",    Category = "Bases de données", Level = 3, Icon = "storage" },
-            new Competence { Name = "MongoDB",    Category = "Bases de données", Level = 3, Icon = "storage" },
+            new Competence { Name = "SQL Server", Category = "Bases de données", Level = 3, Icon = "sqlserver.svg" },
+            new Competence { Name = "MySQL",      Category = "Bases de données", Level = 4, Icon = "mysql.svg" },
+            new Competence { Name = "MariaDB",    Category = "Bases de données", Level = 3, Icon = "mariadb.svg" },
+            new Competence { Name = "PostgreSQL", Category = "Bases de données", Level = 3, Icon = "postgresql.svg" },
+            new Competence { Name = "MongoDB",    Category = "Bases de données", Level = 4, Icon = "mongodb.svg" },
+            new Competence { Name = "Cassandra",  Category = "Bases de données", Level = 2, Icon = "cassandra.svg" },
 
+            // === APIs ===
+            new Competence { Name = "JSON", Category = "APIs", Level = 3, Icon = "json.svg" },
+            new Competence { Name = "REST", Category = "APIs", Level = 3, Icon = "api" },
+            new Competence { Name = "SOAP", Category = "APIs", Level = 2, Icon = "soap.svg" },
+            new Competence { Name = "XML",  Category = "APIs", Level = 3, Icon = "xml.svg" },
+
+            // === Outils ===
             // Outils & autres (CV)
-            new Competence { Name = "Power BI",   Category = "Outils & Plateformes", Level = 4, Icon = "insights" },
-            new Competence { Name = "Docker",     Category = "Outils & Plateformes", Level = 3, Icon = "padding" },
+            new Competence { Name = "Docker",     Category = "Outils & Plateformes", Level = 3, Icon = "docker2.svg" },
             new Competence { Name = "GitHub",     Category = "Outils & Plateformes", Level = 4, Icon = "github.svg" },
-            new Competence { Name = "VBA",        Category = "Outils & Plateformes", Level = 2, Icon = "table_chart" },
             new Competence { Name = "IoT",        Category = "Outils & Plateformes", Level = 2, Icon = "sensors" },
-            new Competence { Name = "Gestion de projet (Agile)", Category = "Méthodologies", Level = 3, Icon = "dashboard" },
+            new Competence { Name = "Power BI",   Category = "Outils & Plateformes", Level = 4, Icon = "powrbii.png" },
+            new Competence { Name = "VS Code",    Category = "Outils & Plateformes", Level = 4, Icon = "vscode.svg" },
+            new Competence { Name = "Visual Studio",  Category = "Outils & Plateformes", Level = 4, Icon = "visualstudio.svg" },
+            new Competence { Name = "Eclipse",   Category = "Outils & Plateformes", Level = 3, Icon = "eclipse.svg" },
+            new Competence { Name = "Android Studio", Category = "Outils & Plateformes", Level = 3, Icon = "android.svg" },
+            new Competence { Name = "IntelliJ IDEA",   Category = "Outils & Plateformes", Level = 3, Icon = "intellij.svg" },
+
+            new Competence { Name = "Agile", Category = "Méthodologies & Gestion de projet", Level = 3, Icon = "dashboard" },
+            new Competence { Name = "Github Projects", Category = "Méthodologies & Gestion de projet", Level = 4, Icon = "github.svg" },
+            new Competence { Name = "Jira", Category = "Méthodologies & Gestion de projet", Level = 3, Icon = "jira.svg" },
 
             // BPM / Process (expérience URSSAF : ITEROP & JUEL)
             new Competence { Name = "BPM Iterop", Category = "Process & BPM", Level = 3, Icon = "schema" },
-            new Competence { Name = "JUEL",       Category = "Process & BPM", Level = 2, Icon = "schema" },
+            new Competence { Name = "JUEL",       Category = "Process & BPM", Level = 3, Icon = "schema" },
 
             // Langues (CV)
-            new Competence { Name = "Français", Category = "Langues", Level = 5, Icon = "language" },
-            new Competence { Name = "Anglais",  Category = "Langues", Level = 3, Icon = "language" },
-            new Competence { Name = "Wolof",    Category = "Langues", Level = 3, Icon = "language" }
+            new Competence { Name = "Français", Category = "Langues", Level = 5, Icon = "france.svg" },
+            new Competence { Name = "Anglais",  Category = "Langues", Level = 2, Icon = "anglais.png" },
+            new Competence { Name = "Wolof",    Category = "Langues", Level = 5, Icon = "senegal.svg" },
+
         };
 
         // Tri & groupements inchangés
-        Competencies = (Competencies ?? new List<Competence>()).OrderBy(c => c.Name).ToList();
-        GroupedCompetences = Competencies.OrderBy(c => c.Category).ThenBy(c => c.Name).GroupBy(c => c.Category);
+        /*Competencies = (Competencies ?? new List<Competence>()).OrderBy(c => c.Name).ToList();
+        GroupedCompetences = Competencies.OrderBy(c => c.Category).ThenBy(c => c.Name).GroupBy(c => c.Category);*/
+        // Ordre d'affichage des catégories dans la section "par catégorie"
+        var categoryOrder = new Dictionary<string, int>
+        {
+            { "Langages de programmation", 1 },
+            { "Frameworks",               2 },
+            { "Bases de données",         4 },
+            { "IA & Data",                3 },
+            { "APIs",                     5 },
+            { "Outils & Plateformes",     6 },
+
+            // on force ces 2 à la fin :
+            { "Méthodologies",           97 },
+            { "Process & BPM",           98 },
+            { "Langues",                 99 }
+        };
+
+        // Tri des items pour la grille + regroupement dans l'ordre voulu
+        Competencies = (Competencies ?? new List<Competence>())
+            .OrderBy(c => categoryOrder.TryGetValue(c.Category, out var o) ? o : 50)
+            .ThenBy(c => c.Name)
+            .ToList();
+
+        GroupedCompetences = Competencies
+            .GroupBy(c => c.Category)
+            .OrderBy(g => categoryOrder.TryGetValue(g.Key, out var o) ? o : 50);
+
 
 
         // For the carousel (ordered by name for simplicity)
