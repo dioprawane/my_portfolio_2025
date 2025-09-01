@@ -1,4 +1,4 @@
-﻿@page "/exp"
+﻿@page "/experiences"
 @using BlazorPortfolio.Models
 @using Radzen
 @using Radzen.Blazor
@@ -400,17 +400,34 @@ else
     {
         new Experience
         {
-            Title = "Apprenti chargé d'études statistiques/développeur en C#",
+            Title = "Apprenti Concepteur Développeur en C#",
             Company = "Urssaf Caisse Nationale (Acoss)",
-            Duration = "Depuis 2022",
+            Duration = "Janvier 2024 - Septembre 2025",
             Responsibilities = new()
             {
-                "Développement d’une application .NET pour optimiser le suivi budgétaire.",
-                "Remplacement d’outils Excel par une interface moderne.",
-                "Création de modèles prédictifs avec Power BI.",
-                "Modélisation de processus métier via Iterop (JavaScript, JUEL)."
+                "Développement d’une application web en .NET pour la gestion budgétaire.",
+                "Mise en place d’outils pour automatiser le processus de collecte, d’élaboration et de suivi budgétaire pluriannuel.",
+                "Optimisation et fiabilisation du pilotage de plusieurs millions d’euros.",
+                "Modernisation des processus internes en remplaçant des fichiers Excel lourds et chronophages par une interface intuitive et performante.",
             },
-            Skills = new() { "C#", ".NET", "Entity Framework", "Blazor", "Radzen", "Power BI", "SQL", "MySQL", "MariaDB", "SQL Server", "Base de données", "Python", "JavaScript", "ITEROP", "JUEL", "Github Projects", "CI/CD" },
+            Skills = new() { "C#", ".NET", "Entity Framework", "Blazor", "Radzen", "Power BI", "SQL", "MySQL", "MariaDB", "Base de données", "Python", "JavaScript", "Github Projects", "CI/CD" },
+            ImageCompetence = "images/urssaf.png"
+            //ImageCompetence = "images/logoU.svg"
+        },
+        new Experience
+        {
+            Title = "Apprenti Chargé d'études statistiques",
+            Company = "Urssaf Caisse Nationale (Acoss)",
+            Duration = "Septembre 2022 - Décembre 2023",
+            Responsibilities = new()
+            {
+                "Mise en place de flux ETL pour l’extraction, le nettoyage et la transformation de grandes volumétries de données budgétaires.",
+                "Développement de tableaux de bord interactifs Power BI pour le suivi et l’analyse des indicateurs financiers et opérationnels.",
+                "Automatisation du traitement et du reporting des données pour une meilleure fiabilité.",
+                "Optimisation des processus de récupération et de traitement des données via des APIs.",
+                "Modélisation et digitalisation des processus métiers via Iterop (JavaScript, JUEL)."
+            },
+            Skills = new() { "Power BI", "Power Query", "SQL", "SQL Server", "Base de données", "Python", "ETL", "Data Cleaning", "Data Transformation", "DAX", "M", "Iterop", "JUEL" },
             ImageCompetence = "images/urssaf.png"
             //ImageCompetence = "images/logoU.svg"
         },

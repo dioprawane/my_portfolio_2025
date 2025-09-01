@@ -401,7 +401,7 @@
         new Projet
         {
             Titre = "BestProfiles - IA pour le recrutement",
-            Description = "Une plateforme de tri intelligent de CV basée sur l’IA, NLP et scoring de profils. Optimisation des recrutements en entreprise et école.",
+            Description = "Plateforme innovante de tri et de matching de CVs basée sur l’IA et le NLP, développée en auto-entrepreneur. BestProfiles permet aux recruteurs et établissements d’enseignement de gagner un temps considérable dans la présélection des candidatures grâce à un scoring intelligent, au matching automatique avec les offres et à un chatbot conversationnel. La solution intègre un front Angular ergonomique, un backend Python (FastAPI) orchestrant les modèles NLP et le scoring et une base vectorielle (ChromaDB) pour les recherches avancées. Des benchmarks intégrés démontrent les gains de temps (de 5 à 1000 CVs) et la précision des résultats par rapport à une sélection manuelle.",
             Technologies = new List<string> { "Angular", "Node.js", "FastAPI", "Python", "NLP", "Docker", "Docker Compose", "MongoDB", "ChromaDB", "Langchain", "OpenAI", "Swagger" },
             Images = new List<string> { "images/BestProfiles.svg" },
             LienGithub = "https://github.com/dioprawane/best_profiles_frontend",
@@ -409,8 +409,33 @@
         },
         new Projet
         {
+            Titre = "CICJ Immo – Application de Gestion Immobilière & Consultance Juridique",
+            Description = "Application web développée pour une agence immobilière et de consultance juridique au Sénégal 🇸🇳. Elle permet la mise en ligne, la consultation et la gestion des biens immobiliers et services juridiques, avec un espace administrateur complet pour ajouter, modifier ou supprimer annonces et articles. Les images sont stockées et optimisées via Cloudinary (après migration depuis Base64). Le projet intègre un frontend responsive en React (desktop & mobile), un backend Node.js/Express, une base de données MongoDB structurée pour répondre aux besoins métiers, et un déploiement sur Render avec nom de domaine configuré via Squarespace.",
+            Technologies = new List<string> { "React", "Node.js", "Express", "MongoDB", "Cloudinary", "Render", "JSON" },
+            Images = new List<string> { "images/i1.jfif", "images/i2.jfif", "images/i3.jfif", "images/react.svg" },
+            LienGithub = "",
+            LienDemo = "https://cicjimmo.com"
+        },
+        new Projet
+        {
+            Titre = "Langue des Signes – Application IA de Vision par Ordinateur",
+            Description = "Application web de reconnaissance de la Langue des Signes en temps réel, combinant vision par ordinateur et intelligence artificielle. Développée avec un frontend HTML/JS utilisant WebRTC pour capter le flux vidéo directement dans le navigateur, et un backend Flask/Python basé sur OpenCV, TensorFlow et Keras (CNN). La solution traduit l’alphabet et certains gestes en texte puis en parole, tout en offrant une interface interactive permettant de construire des mots et phrases, de mettre en pause ou réinitialiser la détection. Ce projet illustre l’intégration d’un pipeline IA complet et accessible en ligne, pensé pour l’inclusion et l’expérimentation académique.",
+            Technologies = new List<string>
+            {
+                "HTML", "CSS", "JavaScript", "Flask", "OpenCV", "TensorFlow", "Keras", "Python", "WebRTC", "CNN"
+            },
+            Images = new List<string>
+            {
+                "images/unice.webp",
+                "images/sign1.png"
+            },
+            LienGithub = "https://github.com/dioprawane/front_sign_language_computer_vision_IA2", // backend IA
+            LienDemo = "https://front-sign-language-computer-vision-ia2.onrender.com/" // frontend
+        },
+        new Projet
+        {
             Titre = "Flutter Vinted – Marketplace Mode",
-            Description = "Application mobile Flutter minimaliste de Vinted en MVP : consultation des articles, panier, gestion de compte + prédiction automatique catégorie via IA (CNN).",
+            Description = "Développement mobile visant à concevoir un MVP (Minimum Viable Product) d’une application inspirée de Vinted. Développée en Flutter et connectée à Firebase, elle permet de consulter les articles, d’afficher leurs détails et de gérer un panier. En complément, un module innovant de prédiction automatique de la catégorie vestimentaire a été intégré : un modèle CNN entraîné sur des images, accessible via une API, classe les vêtements lors de l’ajout. Ce projet met en avant l’architecture mobile complète, la sécurité et l’intégration d’une IA de Computer Vision.",
             Technologies = new List<string>
             {
                 "Flutter",
@@ -426,22 +451,6 @@
             },
             LienGithub = "https://github.com/dioprawane/flutter_vinted_projet",
             LienDemo = "" // pas de demo live, mais on peut déployer si tu le souhaites
-        },
-        new Projet
-        {
-            Titre = "Langue des Signes – Application IA de Vision par Ordinateur",
-            Description = "Solution complète (Front Angular + Back Python/Flask) traduisant l’alphabet et les gestes de la Langue des Signes en texte et parole grâce à la vision par ordinateur et à un modèle CNN entraîné sur des images.",
-            Technologies = new List<string>
-            {
-                "HTML", "CSS", "JavaScript", "Flask", "OpenCV", "TensorFlow", "Keras", "Python"
-            },
-            Images = new List<string>
-            {
-                "images/unice.webp",
-                "images/sign1.png"
-            },
-            LienGithub = "https://github.com/dioprawane/front_sign_language_computer_vision_IA2", // backend IA
-            LienDemo = "https://front-sign-language-computer-vision-ia2.onrender.com/" // frontend
         },
         new Projet
         {
@@ -467,15 +476,6 @@
             Description = "Projets académiques en R et Python combinant régression linéaire (simple et multiple) pour estimer le prix des maisons à partir de variables clés (surface, localisation, pièces, etc.) et modèles de Machine Learning pour prédire le risque d’obésité à partir de données socio-démographiques et médicales. Analyse des performances, comparaison des métriques et interprétation des facteurs influents.",
             Technologies = new List<string> { "R", "RStudio", "Python", "Scikit-learn", "TensorFlow", "Data Mining", "Machine Learning", "Régression" },
             Images = new List<string> { "images/iut.png" }
-        },
-        new Projet
-        {
-            Titre = "CICJ Immo – Application de Gestion Immobilière & Consultance Juridique",
-            Description = "Application web développée pour une agence immobilière et de consultance juridique au Sénégal 🇸🇳. Elle permet la mise en ligne, la consultation et la gestion des biens immobiliers et services juridiques, avec un espace administrateur complet pour ajouter, modifier ou supprimer annonces et articles. Les images sont stockées et optimisées via Cloudinary (après migration depuis Base64). Le projet intègre un frontend responsive en React (desktop & mobile), un backend Node.js/Express, une base de données MongoDB structurée pour répondre aux besoins métiers, et un déploiement sur Render avec nom de domaine configuré via Squarespace.",
-            Technologies = new List<string> { "React", "Node.js", "Express", "MongoDB", "Cloudinary", "Render", "JSON" },
-            Images = new List<string> { "images/i1.jfif", "images/i2.jfif", "images/i3.jfif", "images/react.svg" },
-            LienGithub = "",
-            LienDemo = "https://cicjimmo.com"
         },
     };
 }

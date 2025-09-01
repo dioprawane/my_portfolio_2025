@@ -1,5 +1,6 @@
 ﻿@using Radzen
 @using Radzen.Blazor
+@using System.Reflection
 @inject NavigationManager NavigationManager
 
 <RadzenStack AlignItems="Radzen.AlignItems.Center" class="rz-py-4" Style="padding: var(--rz-panel-menu-item-padding); border-bottom: var(--rz-panel-menu-item-border);">
@@ -33,17 +34,19 @@
         <RadzenPanelMenuItem Text="Formations" Path="formations" Icon="menu_book" />
         <RadzenPanelMenuItem Text="Compétences" Path="competences" Icon="engineering" />
     </RadzenPanelMenuItem>
-    <RadzenPanelMenuItem Text="Expériences" Path="exp" Icon="work" />
+    <RadzenPanelMenuItem Text="Expériences" Path="experiences" Icon="work" />
     <RadzenPanelMenuItem Text="Projets" Path="projets" Icon="code" />
     <RadzenPanelMenuItem Text="Contact" Path="contact" Icon="email" />
 </RadzenPanelMenu>
 
 <RadzenStack AlignItems="Radzen.AlignItems.Center" class="rz-py-4">
-    <RadzenText Text="Mon site v2.0.0" TextStyle="TextStyle.Caption" TagName="TagName.P" TextAlign="TextAlign.Center" />
-    <RadzenText Text="Copyright Ⓒ 2024" TextStyle="TextStyle.Caption" class="rz-mb-0" TagName="TagName.P" TextAlign="TextAlign.Center" />
+    <RadzenText Text="srdiop 2.0.0" TextStyle="TextStyle.Caption" TagName="TagName.P" TextAlign="TextAlign.Center" />
+    <RadzenText Text=@($"Copyright Ⓒ {DateTime.Now.Year}") TextStyle="TextStyle.Caption" class="rz-mb-0" TagName="TagName.P" TextAlign="TextAlign.Center" />
 </RadzenStack>
 
 @code {
+    private string copyrightText = $"Copyright Ⓒ {DateTime.Now.Year}";
+
     private void GoHome()
     {
         NavigationManager.NavigateTo("/");

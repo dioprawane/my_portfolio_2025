@@ -1,0 +1,71 @@
+﻿@using System.Reflection
+@using Radzen
+
+<!--<RadzenPanel Style="background-color:  #1E2A38; color: #1c1f23; padding: 1rem 2rem;">-->
+<RadzenPanel Style="background-color:  #512BD4; color: #1c1f23; padding: 1rem 2rem;">
+    <div class="row align-items-center justify-content-between text-center text-md-start">
+        <!-- Logo -->
+        <!--<div class="col-12 col-md-4 mb-2 mb-md-0 text-md-start text-center">
+           <img src="logoU.svg" alt="Logo" style="height: 36px; background-color: white; border-radius: 6px; padding: 4px;" />
+        </div>-->
+        <!-- Copyright & version -->
+        <div class="col-12 col-md-4 mb-2 mb-md-0 text-md-start text-center text-white">
+            <small style="font-size: 0.8rem;">
+                © @DateTime.Now.Year DIOP Serigne Rawane - Portfolio - srdiop.<br />
+            </small>
+        </div>
+
+        <!-- Liens -->
+        <div class="text-white col-12 col-md-4 mb-2 mb-md-0 d-flex justify-content-center flex-wrap gap-3">
+            <RadzenLink Path="/" Text="Accueil" class="footer-link-dark" />
+            <RadzenLink Path="contact" Text="Contact" class="footer-link-dark" />
+            <RadzenLink Path="cv" Text="CV" class="footer-link-dark" />
+        </div>
+
+        <!-- Copyright & version -->
+        <!--<div class="col-12 col-md-4 text-md-end text-center text-white">
+            <small style="font-size: 0.8rem;">
+                © @DateTime.Now.Year Urssaf Caisse Nationale - DAPM - PerfEco.<br />
+                Version : @_fileVersion
+            </small>
+        </div>-->
+        <!-- Copyright & version -->
+        <div class="col-12 col-md-4 text-md-end text-center text-white">
+            <small style="font-size: 0.8rem;">
+                Version : 2.0.0
+            </small>
+        </div>
+    </div>
+</RadzenPanel>
+
+<style>
+    .footer-link-dark {
+        color: darkgray !important;
+        text-decoration: none;
+    }
+
+        .footer-link-dark:hover {
+            color: #f0f0f0 !important;
+            text-decoration: underline;
+        }
+</style>
+
+@code {
+    //private string? _informationalVersion;
+    // Ce champ stockera la version du fichier de l'assemblage.
+    private string? _fileVersion;
+
+    protected override void OnInitialized()
+    {
+        // Récupère l'assemblage en cours d'exécution (votre application).
+        _fileVersion = Assembly
+            .GetExecutingAssembly()
+            // Récupère l'attribut AssemblyFileVersionAttribute qui contient la version du fichier de l'assemblage.
+            .GetCustomAttribute<AssemblyFileVersionAttribute>()?
+            // Accède à la propriété Version de l'attribut.
+            .Version;
+        // Pour afficher les infos complètes de la version, décommenter la ligne ci-dessous
+        //.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?
+        //.InformationalVersion;
+    }
+}
