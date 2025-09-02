@@ -13,7 +13,8 @@ using static System.Net.WebRequestMethods;
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
 // Lecture de la configuration
-builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+//builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
