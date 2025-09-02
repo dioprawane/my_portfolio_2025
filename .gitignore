@@ -32,3 +32,9 @@ appsettings.Development.json
 # Static web assets pour Blazor WASM
 **/wwwroot/service-worker-assets.js
 **/wwwroot/_framework/
+
+# Exclure les fichiers de paramètres locaux
+appsettings.json
+# Exclure les fichiers de paramètres locaux
+**/wwwroot/appsettings.json
+wwwroot/appsettings.json
