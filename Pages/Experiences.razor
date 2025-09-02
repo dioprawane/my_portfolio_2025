@@ -4,7 +4,10 @@
 @using Radzen.Blazor
 @inject IJSRuntime JSRuntime
 
-<PageTitle>Expériences</PageTitle>
+@if (ShowPageTitle)
+{
+    <PageTitle>Expériences</PageTitle>
+}
 
 @if (IsMobile)
 {
@@ -396,6 +399,7 @@ else
 </style>
 
 @code {
+    [Parameter] public bool ShowPageTitle { get; set; } = true;
     private List<Experience> ExperiencesList = new()
     {
         new Experience

@@ -6,7 +6,10 @@
 @inject Radzen.DialogService DialogService
 @inject IJSRuntime JSRuntime
 
-<PageTitle>Compétences</PageTitle>
+@if (ShowPageTitle)
+{
+    <PageTitle>Compétences</PageTitle>
+}
                        
 @if (isMobile == null)                  
 {
@@ -566,6 +569,7 @@ else
 </style>
 
 @code {
+    [Parameter] public bool ShowPageTitle { get; set; } = true;
     RadzenCarousel? carousel;
 
     bool auto = true;

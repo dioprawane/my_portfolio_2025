@@ -62,6 +62,64 @@
         };
     </script>
 
+    <script>
+        window.PortfolioNav = (function () {
+            let observer, links = [];
+
+            function setActive(id) {
+                links.forEach(a => a.classList.toggle('active', a.dataset.target === id));
+            }
+
+            // Accepte soit un tableau, soit des arguments multiples
+            function initScrollSpy(/* ...ids */) {
+                const args = Array.from(arguments);
+                const ids = Array.isArray(args[0]) ? args[0] : args;
+
+                links = Array.from(document.querySelectorAll('.top-nav .nav-pill'));
+
+                const options = { root: null, rootMargin: "0px 0px -60% 0px", threshold: 0.1 };
+                observer = new IntersectionObserver((entries) => {
+                    entries.forEach(e => { if (e.isIntersecting) setActive(e.target.id); });
+                }, options);
+
+                ids.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) observer.observe(el);
+                });
+
+                links.forEach(a => {
+                    a.addEventListener('click', () => setActive(a.dataset.target));
+                });
+            }
+
+            return { initScrollSpy };
+        })();
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+    <script>
+        // La fonction accepte maintenant les paramètres d'EmailJS en entrée
+        window.sendEmail = function (data, publicKey, serviceId, templateId) {
+            emailjs.init(publicKey);
+
+            return new Promise((resolve, reject) => {
+                emailjs.send("service_t4s7obc", "template_4t7mlqb", {
+                    title: data.subject,  // <-- Le sujet de votre formulaire Blazor devient la variable {{title}}
+                    name: data.name,    // <-- Le nom de votre formulaire Blazor devient la variable {{name}}
+                    email: data.email,    // <-- L'email de votre formulaire Blazor devient la variable {{email}}
+                    message: data.message // <-- Le message de votre formulaire Blazor devient la variable {{message}}
+                }).then(function (response) {
+                    console.log('SUCCESS!', response.status, response.text);
+                    resolve(true); // Indique le succès
+                }, function (error) {
+                    console.log('FAILED...', error);
+                    reject(error); // Indique l'échec
+                });
+            });
+        };
+    </script>
+
 </body>
 
 </html>

@@ -6,6 +6,11 @@
 @inject BlazorPortfolio.Services.LocalCache Cache
 @using System.Text.Json;
 
+@if (ShowPageTitle)
+{
+    <PageTitle>Github</PageTitle>
+}
+
 
 <RadzenStack Gap="1rem" Style="position: relative">
 
@@ -249,6 +254,7 @@
 
 
 @code {
+    [Parameter] public bool ShowPageTitle { get; set; } = true;
     string owner = "dioprawane";
 
     // KPI

@@ -4,7 +4,10 @@
 @using BlazorPortfolio.Models
 @inject IJSRuntime JSRuntime
 
-<PageTitle>Mes Formations</PageTitle>
+@if (ShowPageTitle)
+{
+    <PageTitle>Formations</PageTitle>
+}
 
 @if (isMobile == null)
 {
@@ -301,6 +304,7 @@ else
 </style>
 
 @code {
+    [Parameter] public bool ShowPageTitle { get; set; } = true;
     [Inject]
     public DialogService? DialogService { get; set; }
 

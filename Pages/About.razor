@@ -1,141 +1,263 @@
 ﻿@page "/apropos"
 @using Radzen
 @using Radzen.Blazor
-
 @using Microsoft.AspNetCore.Components
 
-<PageTitle>A Propos</PageTitle>
+@if (ShowPageTitle)
+{
+    <PageTitle>A Propos</PageTitle>
+}
 
-<RadzenCard Style="max-width: 900px; margin: auto; padding: 2rem;">
-    <RadzenStack AlignItems="AlignItems.Center" Gap="1.25rem">
+@if (isMobile == null)                  
+{
+    <p>Chargement en cours ...</p>
+}
+else if (isMobile == true)
+{
+    <RadzenCard Style="max-width: 900px; margin: auto; padding: 2rem;">
+        <RadzenStack AlignItems="AlignItems.Center" Gap="1.25rem">
+            <div class="profile-frame">
+                <img src="/ap.png"
+                     alt="Portrait de DIOP Serigne Rawane"
+                     loading="lazy"
+                     class="profile-photo" />
+            </div>
+            <h2 class="about-name">DIOP Serigne Rawane</h2>
+            <div class="about-headline">
+                <span class="role-main">Concepteur Développeur .NET</span>
+                <span class="role-dot">•</span>
+                <span class="role-sub">Data&nbsp;Analyst</span>
+                <span class="role-dot">•</span>
+                <span class="role-sub">IA</span>
+            </div>
+        </RadzenStack>
 
-        <!-- Cadre photo design -->
-        <div class="profile-frame">
-            <img src="/ap.png"
-                 alt="Portrait de DIOP Serigne Rawane"
-                 loading="lazy"
-                 class="profile-photo" />
-        </div>
+        <RadzenDivider class="rz-my-4" />
 
-        <!-- Titres -->
-        <h2 class="about-name">DIOP Serigne Rawane</h2>
-        <div class="about-headline">
-            <span class="role-main">Concepteur Développeur .NET</span>
-            <span class="role-dot">•</span>
-            <span class="role-sub">Data&nbsp;Analyst</span>
-            <span class="role-dot">•</span>
-            <span class="role-sub">IA</span>
-        </div>
+        <RadzenStack Orientation="Orientation.Vertical" Gap="0.75rem" JustifyContent="JustifyContent.Center" Class="rz-mt-2 rz-flex-wrap">
+            <RadzenButton Text="Mon CV"
+                          Click="@DownloadCV"
+                          Icon="download"
+                          Size="ButtonSize.Large"
+                          class="cv-btn-mobile" />
 
-    </RadzenStack>
+            <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" Gap="0.75rem">
+                <RadzenLink Path="https://www.linkedin.com/in/serigne-rawane-diop-7aa3931bb" Target="_blank" class="social-chip-mobile">
+                    <img src="linkedin-svgrepo-com.svg" alt="LinkedIn" class="social-icon" />
+                    <span>LinkedIn</span>
+                </RadzenLink>
 
-    <RadzenDivider class="rz-my-4" />
+                <RadzenLink Path="https://github.com/dioprawane" Target="_blank" class="social-chip-mobile">
+                    <img src="/images/github.svg" alt="GitHub" class="social-icon" />
+                    <span>GitHub</span>
+                </RadzenLink>
+            </RadzenStack>
+        </RadzenStack>
 
-    <!-- === CTA & Réseaux === -->
-    <RadzenStack Orientation="Orientation.Horizontal" Gap="0.75rem" JustifyContent="JustifyContent.Center" Class="rz-mt-2 rz-flex-wrap">
-        <!-- Bouton CV -->
-        <RadzenButton Text="Télécharger mon CV"
-                      Click="@DownloadCV"
-                      Icon="download"
-                      Size="ButtonSize.Medium"
-                      class="cv-btn" />
+        <RadzenRow class="rz-mt-4">
+            <RadzenColumn Size="12">
+                <RadzenText TextStyle="TextStyle.Body1">
+                    Passionné par le développement logiciel, l'intelligence artificielle et la data, concepteur développeur en C# et analyste de données.
+                    <br /><br />
+                    Parcours académique en MIAGE (Méthodes Informatiques Appliquées à la Gestion des Entreprises), spécialisé en Intelligence Artificielle Appliquée.
+                </RadzenText>
+            </RadzenColumn>
+        </RadzenRow>
 
-        <!-- Réseaux -->
-        <RadzenLink Path="https://www.linkedin.com/in/serigne-rawane-diop-7aa3931bb" Target="_blank" class="social-chip">
-            <img src="linkedin-svgrepo-com.svg" alt="LinkedIn" class="social-icon" />
-            <span>LinkedIn</span>
-        </RadzenLink>
+        <RadzenRow class="rz-mt-4 rz-gap-2">
+            <RadzenColumn Size="12" SizeMD="6">
+                <RadzenCard Class="info-card" @onclick="GoToFormations">
+                    <div class="info-accent"></div>
+                    <RadzenStack Gap="0.35rem">
+                        <RadzenIcon Icon="school" Class="info-icon" />
+                        <div class="info-title">Formation</div>
+                        <div class="info-subtitle">Master MIAGE IA2 - Université Côte d’Azur</div>
+                    </RadzenStack>
+                </RadzenCard>
+            </RadzenColumn>
+            <RadzenColumn Size="12" SizeMD="6">
+                <RadzenCard Class="info-card" @onclick="GoToExperiences">
+                    <div class="info-accent"></div>
+                    <RadzenStack Gap="0.35rem">
+                        <RadzenIcon Icon="work" Class="info-icon" />
+                        <div class="info-title">Expérience</div>
+                        <div class="info-subtitle">Développeur .NET & Statisticien - Acoss</div>
+                    </RadzenStack>
+                </RadzenCard>
+            </RadzenColumn>
+        </RadzenRow>
+        <RadzenRow class="rz-mt-4">
+            <RadzenColumn Size="12" Class="d-flex justify-content-center">
+                <RadzenText Text="Mes Valeurs" TextStyle="TextStyle.H5" TagName="TagName.H2" Class="rz-mb-3" />
+            </RadzenColumn>
+        </RadzenRow>
+        <RadzenRow class="rz-mt-4">
+            <div class="values-grid">
+                <RadzenCard Class="value-box" Variant="Variant.Flat">
+                    <div class="value-icon">
+                        <RadzenIcon Icon="lightbulb" />
+                    </div>
+                    <div class="v-title">Innovation</div>
+                    <div class="v-desc">Curiosité, Veille technologique & Solutions créatives.</div>
+                </RadzenCard>
+                <RadzenCard Class="value-box" Variant="Variant.Flat">
+                    <div class="value-icon">
+                        <RadzenIcon Icon="handshake" />
+                    </div>
+                    <div class="v-title">Collaboration</div>
+                    <div class="v-desc">Esprit d’équipe, Sens du service & Synergie collective.</div>
+                </RadzenCard>
+                <RadzenCard Class="value-box" Variant="Variant.Flat">
+                    <div class="value-icon">
+                        <RadzenIcon Icon="stacked_line_chart" />
+                    </div>
+                    <div class="v-title">Qualité</div>
+                    <div class="v-desc">Autonomie, Rigueur & Sens de l’amélioration continue.</div>
+                </RadzenCard>
+            </div>
+        </RadzenRow>
+        <RadzenRow class="rz-mt-4">
+            <RadzenColumn Size="12">
+                <RadzenAlert Severity="Info">
+                    Ce site a été conçu avec Blazor et les composants Radzen pour illustrer mes compétences en développement web moderne.
+                </RadzenAlert>
+            </RadzenColumn>
+        </RadzenRow>
+    </RadzenCard>    
+}
+else
+{
+    <RadzenCard Style="max-width: 900px; margin: auto; padding: 2rem;">
+        <RadzenStack AlignItems="AlignItems.Center" Gap="1.25rem">
 
-        <RadzenLink Path="https://github.com/dioprawane" Target="_blank" class="social-chip">
-            <img src="/images/github.svg" alt="GitHub" class="social-icon" />
-            <span>GitHub</span>
-        </RadzenLink>
-    </RadzenStack>
+            <!-- Cadre photo design -->
+            <div class="profile-frame">
+                <img src="/ap.png"
+                     alt="Portrait de DIOP Serigne Rawane"
+                     loading="lazy"
+                     class="profile-photo" />
+            </div>
 
-    <RadzenRow class="rz-mt-4">
-        <RadzenColumn Size="12">
-            <RadzenText TextStyle="TextStyle.Body1">
-                Passionné par le développement logiciel, l'intelligence artificielle et la data, concepteur développeur en C# et analyste de données.
-                <br /><br />
-                Parcours académique en MIAGE (Méthodes Informatiques Appliquées à la Gestion des Entreprises), spécialisé en Intelligence Artificielle Appliquée.
-            </RadzenText>
-        </RadzenColumn>
-    </RadzenRow>
+            <!-- Titres -->
+            <h2 class="about-name">DIOP Serigne Rawane</h2>
+            <div class="about-headline">
+                <span class="role-main">Concepteur Développeur .NET</span>
+                <span class="role-dot">•</span>
+                <span class="role-sub">Data&nbsp;Analyst</span>
+                <span class="role-dot">•</span>
+                <span class="role-sub">IA</span>
+            </div>
 
-    <RadzenRow class="rz-mt-4 rz-gap-2">
+        </RadzenStack>
 
-        <RadzenColumn Size="12" SizeMD="6">
-            <RadzenCard Class="info-card" @onclick="GoToFormations">
-                <div class="info-accent"></div>
-                <RadzenStack Gap="0.35rem">
-                    <RadzenIcon Icon="school" Class="info-icon" />
-                    <div class="info-title">Formation</div>
-                    <div class="info-subtitle">Master MIAGE IA2 - Université Côte d’Azur</div>
-                </RadzenStack>
-            </RadzenCard>
-        </RadzenColumn>
+        <RadzenDivider class="rz-my-4" />
 
-        <RadzenColumn Size="12" SizeMD="6">
-            <RadzenCard Class="info-card" @onclick="GoToExperiences">
-                <div class="info-accent"></div>
-                <RadzenStack Gap="0.35rem">
-                    <RadzenIcon Icon="work" Class="info-icon" />
-                    <div class="info-title">Expérience</div>
-                    <div class="info-subtitle">Développeur .NET & Statisticien - Acoss</div>
-                </RadzenStack>
-            </RadzenCard>
-        </RadzenColumn>
+        <!-- === CTA & Réseaux === -->
+        <RadzenStack Orientation="Orientation.Horizontal" Gap="0.75rem" JustifyContent="JustifyContent.Center" Class="rz-mt-2 rz-flex-wrap">
+            <!-- Bouton CV -->
+            <RadzenButton Text="Télécharger mon CV"
+                          Click="@DownloadCV"
+                          Icon="download"
+                          Size="ButtonSize.Medium"
+                          class="cv-btn" />
 
-    </RadzenRow>
+            <!-- Réseaux -->
+            <RadzenLink Path="https://www.linkedin.com/in/serigne-rawane-diop-7aa3931bb" Target="_blank" class="social-chip">
+                <img src="linkedin-svgrepo-com.svg" alt="LinkedIn" class="social-icon" />
+                <span>LinkedIn</span>
+            </RadzenLink>
 
-    <RadzenRow class="rz-mt-4">
-        <RadzenColumn Size="12" Class="d-flex justify-content-center">
-            <RadzenText Text="Mes Valeurs" TextStyle="TextStyle.H5" TagName="TagName.H2" Class="rz-mb-3" />
-        </RadzenColumn>
-    </RadzenRow>
+            <RadzenLink Path="https://github.com/dioprawane" Target="_blank" class="social-chip">
+                <img src="/images/github.svg" alt="GitHub" class="social-icon" />
+                <span>GitHub</span>
+            </RadzenLink>
+        </RadzenStack>
 
-    <RadzenRow class="rz-mt-4">
+        <RadzenRow class="rz-mt-4">
+            <RadzenColumn Size="12">
+                <RadzenText TextStyle="TextStyle.Body1">
+                    Passionné par le développement logiciel, l'intelligence artificielle et la data, concepteur développeur en C# et analyste de données.
+                    <br /><br />
+                    Parcours académique en MIAGE (Méthodes Informatiques Appliquées à la Gestion des Entreprises), spécialisé en Intelligence Artificielle Appliquée.
+                </RadzenText>
+            </RadzenColumn>
+        </RadzenRow>
 
-        <div class="values-grid">
-            <!-- Innovation -->
-            <RadzenCard Class="value-box" Variant="Variant.Flat">
-                <div class="value-icon">
-                    <RadzenIcon Icon="lightbulb" />
-                </div>
-                <div class="v-title">Innovation</div>
-                <div class="v-desc">Curiosité, Veille technologique & Solutions créatives.</div>
-            </RadzenCard>
+        <RadzenRow class="rz-mt-4 rz-gap-2">
 
-            <!-- Collaboration -->
-            <RadzenCard Class="value-box" Variant="Variant.Flat">
-                <div class="value-icon">
-                    <RadzenIcon Icon="handshake" />
-                </div>
-                <div class="v-title">Collaboration</div>
-                <div class="v-desc">Esprit d’équipe, Sens du service & Synergie collective.</div>
-            </RadzenCard>
+            <RadzenColumn Size="12" SizeMD="6">
+                <RadzenCard Class="info-card" @onclick="GoToFormations">
+                    <div class="info-accent"></div>
+                    <RadzenStack Gap="0.35rem">
+                        <RadzenIcon Icon="school" Class="info-icon" />
+                        <div class="info-title">Formation</div>
+                        <div class="info-subtitle">Master MIAGE IA2 - Université Côte d’Azur</div>
+                    </RadzenStack>
+                </RadzenCard>
+            </RadzenColumn>
 
-            <!-- Qualité & Mesure -->
-            <RadzenCard Class="value-box" Variant="Variant.Flat">
-                <div class="value-icon">
-                    <RadzenIcon Icon="stacked_line_chart" />
-                </div>
-                <div class="v-title">Qualité</div>
-                <div class="v-desc">Autonomie, Rigueur & Sens de l’amélioration continue.</div>
-            </RadzenCard>
-        </div>
-    </RadzenRow>
+            <RadzenColumn Size="12" SizeMD="6">
+                <RadzenCard Class="info-card" @onclick="GoToExperiences">
+                    <div class="info-accent"></div>
+                    <RadzenStack Gap="0.35rem">
+                        <RadzenIcon Icon="work" Class="info-icon" />
+                        <div class="info-title">Expérience</div>
+                        <div class="info-subtitle">Développeur .NET & Statisticien - Acoss</div>
+                    </RadzenStack>
+                </RadzenCard>
+            </RadzenColumn>
+
+        </RadzenRow>
+
+        <RadzenRow class="rz-mt-4">
+            <RadzenColumn Size="12" Class="d-flex justify-content-center">
+                <RadzenText Text="Mes Valeurs" TextStyle="TextStyle.H5" TagName="TagName.H2" Class="rz-mb-3" />
+            </RadzenColumn>
+        </RadzenRow>
+
+        <RadzenRow class="rz-mt-4">
+
+            <div class="values-grid">
+                <!-- Innovation -->
+                <RadzenCard Class="value-box" Variant="Variant.Flat">
+                    <div class="value-icon">
+                        <RadzenIcon Icon="lightbulb" />
+                    </div>
+                    <div class="v-title">Innovation</div>
+                    <div class="v-desc">Curiosité, Veille technologique & Solutions créatives.</div>
+                </RadzenCard>
+
+                <!-- Collaboration -->
+                <RadzenCard Class="value-box" Variant="Variant.Flat">
+                    <div class="value-icon">
+                        <RadzenIcon Icon="handshake" />
+                    </div>
+                    <div class="v-title">Collaboration</div>
+                    <div class="v-desc">Esprit d’équipe, Sens du service & Synergie collective.</div>
+                </RadzenCard>
+
+                <!-- Qualité & Mesure -->
+                <RadzenCard Class="value-box" Variant="Variant.Flat">
+                    <div class="value-icon">
+                        <RadzenIcon Icon="stacked_line_chart" />
+                    </div>
+                    <div class="v-title">Qualité</div>
+                    <div class="v-desc">Autonomie, Rigueur & Sens de l’amélioration continue.</div>
+                </RadzenCard>
+            </div>
+        </RadzenRow>
 
 
-    <RadzenRow class="rz-mt-4">
-        <RadzenColumn Size="12">
-            <RadzenAlert Severity="Info">
-                Ce site a été conçu avec Blazor et les composants Radzen pour illustrer mes compétences en développement web moderne.
-            </RadzenAlert>
-        </RadzenColumn>
-    </RadzenRow>
+        <RadzenRow class="rz-mt-4">
+            <RadzenColumn Size="12">
+                <RadzenAlert Severity="Info">
+                    Ce site a été conçu avec Blazor et les composants Radzen pour illustrer mes compétences en développement web moderne.
+                </RadzenAlert>
+            </RadzenColumn>
+        </RadzenRow>
 
-</RadzenCard>
+    </RadzenCard>
+}
 
 
 <style>
@@ -488,14 +610,39 @@
         font-size: 1.5rem; /* taille équivalente à H5/H2 RadzenText */
     }
 
+    /* Styles spécifiques à la version MOBILE */
+    .cv-btn-mobile {
+        width: 100%;
+        font-size: 1.1rem;
+    }
+
+    .social-chip-mobile {
+        width: 50%;
+        justify-content: center;
+    }
+
 
 </style>
 
 @code {
+    [Parameter] public bool ShowPageTitle { get; set; } = true;
     [Inject] NavigationManager Nav { get; set; } = default!;
     [Inject] IJSRuntime JS { get; set; } = default!;
     void GoToFormations() => Nav.NavigateTo("/formations");
     void GoToExperiences() => Nav.NavigateTo("/experiences");
+    private bool? isMobile = null;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // JavaScript interop to get window width
+            var width = await JS.InvokeAsync<int>("getWindowWidth");
+            Console.WriteLine($"💡 Largeur détectée : {width}px");
+            isMobile = width <= 768; // Detect if width is less than or equal to 768px (typical mobile breakpoint)
+            StateHasChanged(); // Notify Blazor that the component state has changed
+        }
+    }
 
     // Appelle une fonction JS que tu placeras dans wwwroot (voir plus bas)
     async Task DownloadCV()

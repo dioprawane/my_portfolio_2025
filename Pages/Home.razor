@@ -1,51 +1,220 @@
 ﻿@page "/"
 
-<div style="height: 100vh; overflow-y: auto;">
-    <RadzenTabs TabPosition="TabPosition.Top" class="rz-mb-4" Change="@OnTabChange">
-        <Tabs>
-            <RadzenTabsItem Text="A propos">
-                <ChildContent>
-                    <About />
-                </ChildContent>
-            </RadzenTabsItem>
-            <RadzenTabsItem Text="Formations">
-                <ChildContent>
-                    <Formation />
-                </ChildContent>
-            </RadzenTabsItem>
-            <RadzenTabsItem Text="Compétences">
-                <ChildContent>
-                    <Competences />
-                </ChildContent>
-            </RadzenTabsItem>
-            <RadzenTabsItem Text="Expériences">
-                <ChildContent>
-                    <Experiences />
-                </ChildContent>
-            </RadzenTabsItem>
-            <RadzenTabsItem Text="Projets">
-                <ChildContent>
-                    <Projets />
-                </ChildContent>
-            </RadzenTabsItem>
-            <RadzenTabsItem Text="Git">
-                <ChildContent>
-                    <Git />
-                </ChildContent>
-            </RadzenTabsItem>
-            <RadzenTabsItem Text="Contact">
-                <ChildContent>
-                    <Contact />
-                </ChildContent>
-            </RadzenTabsItem>
-        </Tabs>
-    </RadzenTabs>
-</div>
+@using Radzen
+@using Radzen.Blazor
+@inject IJSRuntime JS
+@using Radzen.Blazor.Rendering @* NEW: Add this using directive for TemplateFormInvalidSubmitEventArgs *@
+
+<PageTitle>Accueil</PageTitle>
+
+<style>
+    /* Défilement fluide */
+    html {
+        scroll-behavior: smooth;
+    }
+
+    /* Barre fixe en haut (glassmorphism) */
+    .top-nav {
+        /* Remplacer 'sticky' par 'fixed' */
+        position: fixed;
+        /* Le reste du code CSS pour le top-nav reste inchangé */
+        top: 12px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+        display: flex;
+        gap: 8px;
+        padding: 8px;
+        background: color-mix(in oklab, var(--rz-base-background-color) 70%, transparent);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border: 1px solid var(--rz-base-200);
+        border-radius: 999px;
+        box-shadow: 0 6px 24px rgba(0,0,0,.12);
+        max-width: min(92vw, 1100px);
+        overflow-x: auto;
+    }
+
+    /* Boutons de nav “pills” */
+    .nav-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: .45rem;
+        white-space: nowrap;
+        font-weight: 600;
+        padding: .55rem .9rem;
+        border-radius: 999px;
+        text-decoration: none;
+        color: var(--rz-text-color);
+        transition: transform .15s ease, background-color .2s ease, color .2s ease, box-shadow .2s ease;
+        border: 1px solid transparent;
+    }
+
+        .nav-pill:hover {
+            background: var(--rz-secondary-lighter);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(0,0,0,.12);
+        }
+
+        /* État actif mis à jour automatiquement par JS (scroll-spy) */
+        .nav-pill.active {
+            background: var(--rz-primary-lighter);
+            color: var(--rz-primary);
+            border-color: color-mix(in oklab, var(--rz-primary) 40%, transparent);
+            box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--rz-primary) 35%, transparent), 0 6px 18px color-mix(in oklab, var(--rz-primary) 20%, transparent);
+        }
+
+        /* Icône Radzen un peu plus douce */
+        .nav-pill .rz-icon {
+            font-size: 1rem;
+            opacity: .9;
+        }
+
+    /* Corrige l’ancrage derrière la barre */
+    section[id] {
+        scroll-margin-top: 88px;
+    }
+
+    /* Styles spécifiques pour la version mobile */
+    .mobile-nav {
+        position: fixed;
+        bottom: 12px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+        display: flex;
+        justify-content: space-between; /* Distribue les icônes de manière égale */
+        gap: 8px;
+        padding: 8px;
+        background: color-mix(in oklab, var(--rz-base-background-color) 70%, transparent);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border: 1px solid var(--rz-base-200);
+        border-radius: 18px;
+        box-shadow: 0 6px 24px rgba(0,0,0,.12);
+        max-width: 92vw;
+    }
+
+        .mobile-nav .nav-pill {
+            padding: .55rem .8rem;
+        }
+
+            /* Cache le texte sur mobile */
+            .mobile-nav .nav-pill .nav-text {
+                display: none;
+            }
+
+</style>
+
+@if (isMobile == null)
+{
+    <p>Chargement en cours ...</p>
+}
+else 
+{
+    @if (isMobile == false)
+    {
+        <nav class="top-nav" id="topNav">
+            <a class="nav-pill" href="#apropos" data-target="apropos"><RadzenIcon Icon="account_circle" />A&nbsp;propos</a>
+            <a class="nav-pill" href="#formations" data-target="formations"><RadzenIcon Icon="school" />Formations</a>
+            <a class="nav-pill" href="#competences" data-target="competences"><RadzenIcon Icon="psychology" />Compétences</a>
+            <a class="nav-pill" href="#experiences" data-target="experiences"><RadzenIcon Icon="work" />Expériences</a>
+            <a class="nav-pill" href="#projets" data-target="projets"><RadzenIcon Icon="apps" />Projets</a>
+            <a class="nav-pill" href="#git" data-target="git"><RadzenIcon Icon="code" />Git</a>
+            <a class="nav-pill" href="#contact" data-target="contact"><RadzenIcon Icon="mail" />Contact</a>
+        </nav>
+    }
+
+    @if (isMobile == true)
+    {
+        <nav class="mobile-nav" id="topNav">
+            <a class="nav-pill" href="#apropos" data-target="apropos"><RadzenIcon Icon="account_circle" /></a>
+            <a class="nav-pill" href="#formations" data-target="formations"><RadzenIcon Icon="school" /></a>
+            <a class="nav-pill" href="#competences" data-target="competences"><RadzenIcon Icon="psychology" /></a>
+            <a class="nav-pill" href="#experiences" data-target="experiences"><RadzenIcon Icon="work" /></a>
+            <a class="nav-pill" href="#projets" data-target="projets"><RadzenIcon Icon="apps" /></a>
+            <a class="nav-pill" href="#git" data-target="git"><RadzenIcon Icon="code" /></a>
+        </nav>
+    }
+
+    <!--  
+    <nav class="top-nav" id="topNav">
+        <a class="nav-pill" href="#apropos" data-target="apropos"><RadzenIcon Icon="account_circle" />A&nbsp;propos</a>
+        <a class="nav-pill" href="#formations" data-target="formations"><RadzenIcon Icon="school" />Formations</a>
+        <a class="nav-pill" href="#competences" data-target="competences"><RadzenIcon Icon="psychology" />Compétences</a>
+        <a class="nav-pill" href="#experiences" data-target="experiences"><RadzenIcon Icon="work" />Expériences</a>
+        <a class="nav-pill" href="#projets" data-target="projets"><RadzenIcon Icon="apps" />Projets</a>
+        <a class="nav-pill" href="#git" data-target="git"><RadzenIcon Icon="code" />Git</a>
+        <a class="nav-pill" href="#contact" data-target="contact"><RadzenIcon Icon="mail" />Contact</a>
+    </nav>-->
+
+    <!-- CONTENU -->
+    <div style="height: 100vh; overflow-y: auto;" class="page-wrapper">
+
+        <section id="apropos">
+            <RadzenText Text="" TextStyle="TextStyle.H2" TagName="TagName.H1" class="rz-text-center rz-my-4" />
+            <About ShowPageTitle="false" />
+        </section>
+
+        <section id="formations">
+            <RadzenText Text="" TextStyle="TextStyle.H2" TagName="TagName.H1" class="rz-text-center rz-my-4" />
+            <Formation ShowPageTitle="false" />
+        </section>
+
+        <section id="competences">
+            <RadzenText Text="" TextStyle="TextStyle.H2" TagName="TagName.H1" class="rz-text-center rz-my-4" />
+            <Competences ShowPageTitle="false" />
+        </section>
+
+        <section id="experiences">
+            <RadzenText Text="" TextStyle="TextStyle.H2" TagName="TagName.H1" class="rz-text-center rz-my-4" />
+            <Experiences ShowPageTitle="false" />
+        </section>
+
+        <section id="projets">
+            <RadzenText Text="" TextStyle="TextStyle.H2" TagName="TagName.H1" class="rz-text-center rz-my-4" />
+            <Projets ShowPageTitle="false" />
+        </section>
+
+        <section id="git">
+            <RadzenText Text="" TextStyle="TextStyle.H2" TagName="TagName.H1" class="rz-text-center rz-my-4" />
+            <Git ShowPageTitle="false" />
+        </section>
+
+        <section id="contact">
+            <RadzenText Text="" TextStyle="TextStyle.H2" TagName="TagName.H1" class="rz-text-center rz-my-4" />
+            <Contact ShowPageTitle="false" />
+        </section>
+
+    </div>
+}
 
 @code {
-    private void OnTabChange(int index)
+    private bool? isMobile = null;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        // Optionnel : Gérer les événements de changement d'onglet
-        Console.WriteLine($"Changement d'onglet, nouvel index : {index}");
+        if (firstRender)
+        {
+            var width = await JS.InvokeAsync<int>("getWindowWidth");
+            Console.WriteLine($"💡 Largeur détectée : {width}px");
+            isMobile = width <= 768;
+            StateHasChanged();
+        }
+
+        // Initialise ScrollSpy après le rendu conditionnel
+        if (isMobile.HasValue)
+        {
+            await JS.InvokeVoidAsync("PortfolioNav.initScrollSpy", new[]
+            {
+                "apropos",
+                "formations",
+                "competences",
+                "experiences",
+                "projets",
+                "git",
+                "contact"
+            });
+        }
     }
 }

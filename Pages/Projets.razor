@@ -4,7 +4,10 @@
 @using BlazorPortfolio.Models
 @inject IJSRuntime JSRuntime
 
-<PageTitle>Projets</PageTitle>
+@if (ShowPageTitle)
+{
+    <PageTitle>Projets</PageTitle>
+}
 
 <RadzenStack Orientation="Orientation.Vertical" Gap="2rem" Class="rz-p-4">
     <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Class="rz-mb-2">
@@ -395,6 +398,7 @@
 </style>
 
 @code {
+    [Parameter] public bool ShowPageTitle { get; set; } = true;
 
     List<Projet> projets = new()
     {

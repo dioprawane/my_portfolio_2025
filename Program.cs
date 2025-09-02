@@ -1,7 +1,9 @@
 using BlazorPortfolio;
+using BlazorPortfolio.Models;
 using BlazorPortfolio.Services;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.Extensions.Configuration; // <-- Ajoutez cette ligne
 using Microsoft.Extensions.DependencyInjection; // <--- obligatoire pour AddHttpClient
 // Pour Radzen components
 using Radzen;
@@ -9,6 +11,10 @@ using System.Net.Http;
 using static System.Net.WebRequestMethods;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
+
+// Lecture de la configuration
+builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
@@ -32,6 +38,9 @@ builder.Services.AddRadzenComponents();
 builder.Services.AddScoped<NotificationService>();
 builder.Services.AddScoped<GitHubService>();
 builder.Services.AddScoped<LocalCache>();
+// ...
+builder.Services.Configure<EmailJSSettings>(builder.Configuration.GetSection("EmailJSSettings"));
+// ...
 
 
 await builder.Build().RunAsync();
