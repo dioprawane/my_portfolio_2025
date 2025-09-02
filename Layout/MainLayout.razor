@@ -22,8 +22,9 @@
         </RadzenRow>
     </RadzenBody>
 
-    <RadzenSidebar Expanded="@sidebarExpanded" Style="z-index: 2">
-        <NavMenu />
+    <!--<RadzenSidebar Expanded="@sidebarExpanded" Style="z-index: 2">-->
+    <RadzenSidebar @bind-Expanded="sidebarExpanded" Style="z-index: 2">
+        <NavMenu @bind-Expanded="sidebarExpanded" />
     </RadzenSidebar>
 </RadzenLayout>
 

@@ -51,6 +51,16 @@
         };
     </script>
 
+    <script>
+        window.downloadFile = (url, filename) => {
+            const a = document.createElement('a');
+            a.href = url;
+            a.setAttribute('download', filename || '');
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        };
+    </script>
 
 </body>
 

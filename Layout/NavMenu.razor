@@ -29,14 +29,23 @@
 </RadzenStack>
 
 <RadzenPanelMenu>
-    <RadzenPanelMenuItem Text="À propos" Path="apropos" Icon="person" />
+    <RadzenPanelMenuItem Text="À propos" Path="apropos" Icon="person" Click="CloseMenuOnMobile" />
     <RadzenPanelMenuItem Text="Parcours" Icon="school">
-        <RadzenPanelMenuItem Text="Formations" Path="formations" Icon="menu_book" />
-        <RadzenPanelMenuItem Text="Compétences" Path="competences" Icon="engineering" />
+        <RadzenPanelMenuItem Text="Formations" Path="formations" Icon="menu_book" Click="CloseMenuOnMobile" />
+        <RadzenPanelMenuItem Text="Compétences" Path="competences" Icon="engineering" Click="CloseMenuOnMobile" />
     </RadzenPanelMenuItem>
-    <RadzenPanelMenuItem Text="Expériences" Path="experiences" Icon="work" />
-    <RadzenPanelMenuItem Text="Projets" Path="projets" Icon="code" />
-    <RadzenPanelMenuItem Text="Contact" Path="contact" Icon="email" />
+    <RadzenPanelMenuItem Text="Expériences" Path="experiences" Icon="work" Click="CloseMenuOnMobile" />
+    <RadzenPanelMenuItem Text="Projets" Path="projets" Icon="code" Click="CloseMenuOnMobile" />
+    <RadzenPanelMenuItem Text="Profil GitHub" Path="github" Icon="explore" Click="CloseMenuOnMobile" />
+    <!--<RadzenPanelMenuItem Text="Profil GitHub" Path="github" Click="CloseMenuOnMobile">
+        <Template>
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.5rem" class="rz-px-3 rz-py-2 rz-text-base rz-panel-menu-item-text">
+                <img src="/images/github.svg" style="width: 24px; height: 24px; filter: grayscale(1) opacity(0.7); " />
+                <span>Profil GitHub</span>
+            </RadzenStack>
+        </Template>
+    </RadzenPanelMenuItem>-->
+    <RadzenPanelMenuItem Text="Contact" Path="contact" Icon="email" Click="CloseMenuOnMobile" />
 </RadzenPanelMenu>
 
 <RadzenStack AlignItems="Radzen.AlignItems.Center" class="rz-py-4">
@@ -45,10 +54,29 @@
 </RadzenStack>
 
 @code {
+    [Parameter]
+    public bool Expanded { get; set; } = true;
+
+    [Parameter]
+    public EventCallback<bool> ExpandedChanged { get; set; }
+
+    [Inject] IJSRuntime? JSRuntime { get; set; }
+
     private string copyrightText = $"Copyright Ⓒ {DateTime.Now.Year}";
 
     private void GoHome()
     {
         NavigationManager.NavigateTo("/");
+        CloseMenuOnMobile();
+    }
+
+    async Task CloseMenuOnMobile()
+    {
+        // Vérifiez la largeur de la fenêtre pour confirmer si c'est une version mobile
+        var windowWidth = await JSRuntime!.InvokeAsync<int>("getWindowWidth");
+        if (windowWidth < 768) // 768px est une largeur commune pour les mobiles
+        {
+            await ExpandedChanged.InvokeAsync(false);
+        }
     }
 }

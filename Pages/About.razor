@@ -7,21 +7,6 @@
 <PageTitle>A Propos</PageTitle>
 
 <RadzenCard Style="max-width: 900px; margin: auto; padding: 2rem;">
-    <!--<RadzenRow>
-        <RadzenColumn Size="12" Style="text-align: center;">
-            <RadzenAvatar Style="width: 100px; height: 100px;" Path="6.png" />
-            <RadzenStack AlignItems="AlignItems.Center" class="rz-mx-auto rz-my-12">
-
-                <RadzenImage Path="/3.jfif" Style="width: 15rem;" AlternateText="community" />
-
-            </RadzenStack>
-            <h2 class="rz-my-2">DIOP Serigne Rawane</h2>
-            <RadzenText Text="Concepteur Développeur Fullstack, Data Analyst & IA" TextStyle="TextStyle.Subtitle1" />
-        </RadzenColumn>
-    </RadzenRow>
-
-    <RadzenDivider />-->
-
     <RadzenStack AlignItems="AlignItems.Center" Gap="1.25rem">
 
         <!-- Cadre photo design -->
@@ -41,16 +26,31 @@
             <span class="role-dot">•</span>
             <span class="role-sub">IA</span>
         </div>
-        <!--<div class="role-tags">
-            <span class="tag">C# / Blazor</span>
-            <span class="tag">Power&nbsp;BI</span>
-            <span class="tag">ML</span>
-        </div>-->
 
-        <!--<div class="about-role">Concepteur Développeur Fullstack, Data Analyst & IA</div>-->
     </RadzenStack>
 
     <RadzenDivider class="rz-my-4" />
+
+    <!-- === CTA & Réseaux === -->
+    <RadzenStack Orientation="Orientation.Horizontal" Gap="0.75rem" JustifyContent="JustifyContent.Center" Class="rz-mt-2 rz-flex-wrap">
+        <!-- Bouton CV -->
+        <RadzenButton Text="Télécharger mon CV"
+                      Click="@DownloadCV"
+                      Icon="download"
+                      Size="ButtonSize.Medium"
+                      class="cv-btn" />
+
+        <!-- Réseaux -->
+        <RadzenLink Path="https://www.linkedin.com/in/serigne-rawane-diop-7aa3931bb" Target="_blank" class="social-chip">
+            <img src="linkedin-svgrepo-com.svg" alt="LinkedIn" class="social-icon" />
+            <span>LinkedIn</span>
+        </RadzenLink>
+
+        <RadzenLink Path="https://github.com/dioprawane" Target="_blank" class="social-chip">
+            <img src="/images/github.svg" alt="GitHub" class="social-icon" />
+            <span>GitHub</span>
+        </RadzenLink>
+    </RadzenStack>
 
     <RadzenRow class="rz-mt-4">
         <RadzenColumn Size="12">
@@ -62,30 +62,6 @@
         </RadzenColumn>
     </RadzenRow>
 
-    <!--<RadzenRow class="rz-mt-4 rz-gap-2">
-        <RadzenColumn Size="6">
-            <RadzenCard Style="height: 100%;">
-                <RadzenIcon Icon="school" Style="font-size: 24px; color: #1976d2;" />
-                <RadzenText Text="Formation" TextStyle="TextStyle.H6" />
-                <p>Master MIAGE IA2 - Université Côte d’Azur</p>
-            </RadzenCard>
-        </RadzenColumn>
-        <RadzenColumn Size="6">
-            <RadzenCard Style="height: 100%;">
-                <RadzenIcon Icon="work" Style="font-size: 24px; color: #1976d2;" />
-                <RadzenText Text="Expérience" TextStyle="TextStyle.H6" />
-                <p>Développeur .NET & Statisticien - Acoss</p>
-            </RadzenCard>
-        </RadzenColumn>
-    </RadzenRow>
-
-    <RadzenRow class="rz-mt-4">
-        <RadzenColumn Size="12">
-            <RadzenAlert Severity="Info">
-                Ce site a été conçu avec Blazor et les composants Radzen pour illustrer mes compétences en développement web moderne.
-            </RadzenAlert>
-        </RadzenColumn>
-    </RadzenRow>-->
     <RadzenRow class="rz-mt-4 rz-gap-2">
 
         <RadzenColumn Size="12" SizeMD="6">
@@ -111,6 +87,45 @@
         </RadzenColumn>
 
     </RadzenRow>
+
+    <RadzenRow class="rz-mt-4">
+        <RadzenColumn Size="12" Class="d-flex justify-content-center">
+            <RadzenText Text="Mes Valeurs" TextStyle="TextStyle.H5" TagName="TagName.H2" Class="rz-mb-3" />
+        </RadzenColumn>
+    </RadzenRow>
+
+    <RadzenRow class="rz-mt-4">
+
+        <div class="values-grid">
+            <!-- Innovation -->
+            <RadzenCard Class="value-box" Variant="Variant.Flat">
+                <div class="value-icon">
+                    <RadzenIcon Icon="lightbulb" />
+                </div>
+                <div class="v-title">Innovation</div>
+                <div class="v-desc">Curiosité, Veille technologique & Solutions créatives.</div>
+            </RadzenCard>
+
+            <!-- Collaboration -->
+            <RadzenCard Class="value-box" Variant="Variant.Flat">
+                <div class="value-icon">
+                    <RadzenIcon Icon="handshake" />
+                </div>
+                <div class="v-title">Collaboration</div>
+                <div class="v-desc">Esprit d’équipe, Sens du service & Synergie collective.</div>
+            </RadzenCard>
+
+            <!-- Qualité & Mesure -->
+            <RadzenCard Class="value-box" Variant="Variant.Flat">
+                <div class="value-icon">
+                    <RadzenIcon Icon="stacked_line_chart" />
+                </div>
+                <div class="v-title">Qualité</div>
+                <div class="v-desc">Autonomie, Rigueur & Sens de l’amélioration continue.</div>
+            </RadzenCard>
+        </div>
+    </RadzenRow>
+
 
     <RadzenRow class="rz-mt-4">
         <RadzenColumn Size="12">
@@ -297,10 +312,197 @@
     }
 
     }
+
+    /* --- Bouton CV premium --- */
+    .cv-btn {
+        --cv-bg: linear-gradient(90deg,#1976d2,#7c3aed);
+        --cv-bg-hover: linear-gradient(90deg,#1e88e5,#8b5cf6);
+        background: var(--cv-bg) !important;
+        color: #fff !important;
+        border: none !important;
+        border-radius: 999px !important;
+        padding: .65rem 1.1rem !important;
+        font-weight: 800 !important;
+        box-shadow: 0 8px 20px rgba(25,118,210,.25);
+        transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+
+        .cv-btn .rz-icon {
+            font-size: 1.1rem;
+            margin-right: .35rem;
+        }
+
+        .cv-btn:hover {
+            transform: translateY(-2px);
+            background: var(--cv-bg-hover) !important;
+            box-shadow: 0 14px 28px rgba(25,118,210,.28);
+        }
+
+    /* --- Social chips --- */
+    .social-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: .45rem;
+        padding: .5rem .85rem;
+        border-radius: 999px;
+        text-decoration: none;
+        border: 1px solid rgba(0,0,0,.06);
+        background: #fff;
+        color: #1f2937 !important;
+        box-shadow: 0 1px 2px rgba(0,0,0,.05);
+        transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+    }
+
+        .social-chip:hover {
+            transform: translateY(-2px);
+            border-color: rgba(25,118,210,.28);
+            box-shadow: 0 8px 18px rgba(0,0,0,.10);
+        }
+
+    .social-icon {
+        width: 18px;
+        height: 18px;
+        display: inline-block;
+    }
+
+    /* --- Cartes Valeurs --- */
+    .value-card {
+        border-radius: 14px;
+        border: 1px solid rgba(0,0,0,.06);
+        padding: 1rem 1.25rem;
+        transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+
+        .value-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(25,118,210,.25);
+            box-shadow: 0 12px 22px rgba(0,0,0,.10);
+        }
+
+    /* Dark mode doux */
+    @@media (prefers-color-scheme: dark) {
+        .social-chip
+
+    {
+        background: #0f1317;
+        color: #e5e7eb !important;
+        border-color: rgba(255,255,255,.06);
+    }
+
+    .value-card {
+        background: #0f1317;
+        border-color: rgba(255,255,255,.06);
+    }
+
+    }
+
+    /* ====== Valeurs compact ====== */
+    /* Grille compacte */
+    .values-grid {
+        display: grid;
+        grid-template-columns: repeat(3,minmax(0,1fr));
+        gap: 1rem;
+    }
+    @@media (max-width:768px) {
+        .values-grid
+
+    {
+        grid-template-columns: 1fr;
+    }
+
+    }
+
+    /* Carte encadrée + filet dégradé en haut (même style que Formation/Expérience) */
+    .value-box {
+        position: relative;
+        border: 1px solid rgba(0,0,0,.08);
+        border-radius: 12px;
+        padding: 1rem 1rem 1.15rem;
+        box-shadow: 0 1px 2px rgba(0,0,0,.05);
+        transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+
+        .value-box::before {
+            content: "";
+            position: absolute;
+            inset: 0 0 auto 0;
+            height: 4px;
+            background: linear-gradient(90deg,#1976d2,#42a5f5,#90caf9);
+        }
+
+        .value-box:hover {
+            transform: translateY(-2px);
+            border-color: rgba(25,118,210,.22);
+            box-shadow: 0 8px 16px rgba(0,0,0,.10);
+        }
+
+    /* Icône bleue cerclée */
+    .value-icon {
+        display: inline-grid;
+        place-items: center;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: 2px solid #1976d2;
+        margin: 0 auto .5rem;
+    }
+
+        .value-icon .rz-icon { /* cible l’icône Radzen */
+            color: #1976d2;
+            font-size: 22px;
+        }
+
+    /* Titres & textes */
+    .v-title {
+        text-align: center;
+        font-weight: 700;
+        margin-bottom: .15rem;
+    }
+
+    .v-desc {
+        text-align: center;
+        color: var(--rz-text-secondary-color,#6b7280);
+        font-size: .95rem;
+        line-height: 1.35;
+    }
+
+    /* Dark mode doux */
+    @@media (prefers-color-scheme:dark) {
+        .value-box
+
+    {
+        background: #0f1317;
+        border-color: rgba(255,255,255,.06);
+    }
+
+    .v-desc {
+        color: #9aa4b2;
+    }
+
+    }
+
+    .center-title {
+        text-align: center;
+        font-weight: 700;
+        margin: 1rem 0;
+        font-size: 1.5rem; /* taille équivalente à H5/H2 RadzenText */
+    }
+
+
 </style>
 
 @code {
     [Inject] NavigationManager Nav { get; set; } = default!;
+    [Inject] IJSRuntime JS { get; set; } = default!;
     void GoToFormations() => Nav.NavigateTo("/formations");
-    void GoToExperiences() => Nav.NavigateTo("/exp");
+    void GoToExperiences() => Nav.NavigateTo("/experiences");
+
+    // Appelle une fonction JS que tu placeras dans wwwroot (voir plus bas)
+    async Task DownloadCV()
+    {
+        // Mets le vrai chemin vers ton CV côté wwwroot
+        var url = "/files/CV_DIOP_Serigne_Rawane.pdf";
+        var filename = "CV_DIOP_Serigne_Rawane.pdf";
+        await JS.InvokeVoidAsync("downloadFile", url, filename);
+    }
 }
