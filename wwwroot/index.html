@@ -109,7 +109,7 @@
             if (!serviceId) throw new Error("serviceId is empty");
             if (!templateId) throw new Error("templateId is empty");
 
-            // IMPORTANT : EmailJS v4 -> init avec objet { publicKey: ... }
+            // IMPORTANT : EmailJS v4 -> init avec objet { publicKey: ... } okay c'est fait
             emailjs.init({ publicKey: publicKey });
 
             return new Promise((resolve, reject) => {
