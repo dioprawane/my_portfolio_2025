@@ -101,7 +101,7 @@
     <script>
         // La fonction accepte maintenant les paramètres d'EmailJS en entrée
         // Doit être global et chargé AVANT l’appel depuis Blazor
-        window.sendEmail = async function (model, publicKey, serviceId, templateId) {
+        window.sendEmail = async function (data, publicKey, serviceId, templateId) {
             if (!publicKey) throw new Error("publicKey is empty");
             if (!serviceId) throw new Error("serviceId is empty");
             if (!templateId) throw new Error("templateId is empty");
