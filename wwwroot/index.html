@@ -102,6 +102,9 @@
         // La fonction accepte maintenant les paramètres d'EmailJS en entrée
         // Doit être global et chargé AVANT l’appel depuis Blazor
         window.sendEmail = async function (data, publicKey, serviceId, templateId) {
+            // LOGS utiles en dev (supprime-les ensuite)
+            console.log("EmailJS params:", { publicKey, serviceId, templateId, data });
+
             if (!publicKey) throw new Error("publicKey is empty");
             if (!serviceId) throw new Error("serviceId is empty");
             if (!templateId) throw new Error("templateId is empty");
@@ -110,7 +113,7 @@
             emailjs.init({ publicKey: publicKey });
 
             return new Promise((resolve, reject) => {
-                emailjs.send("service_t4s7obc", "template_4t7mlqb", {
+                emailjs.send(serviceId, templateId, {
                     title: data.subject,  // <-- Le sujet de votre formulaire Blazor devient la variable {{title}}
                     name: data.name,    // <-- Le nom de votre formulaire Blazor devient la variable {{name}}
                     email: data.email,    // <-- L'email de votre formulaire Blazor devient la variable {{email}}
