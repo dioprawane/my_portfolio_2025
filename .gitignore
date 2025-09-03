@@ -34,7 +34,7 @@ appsettings.Development.json
 **/wwwroot/_framework/
 
 # Exclure les fichiers de paramètres locaux
-appsettings.json
+#.json
 # Exclure les fichiers de paramètres locaux
-**/wwwroot/appsettings.json
-wwwroot/appsettings.json
+# wwwroot/appsettings.json
+# wwwroot/appsettings.json
