@@ -163,6 +163,19 @@
         StateHasChanged(); // Pour rafraîchir l'UI après la réinitialisation du modèle*/
         try
         {
+            if (string.IsNullOrWhiteSpace(publicKey) ||
+                string.IsNullOrWhiteSpace(serviceId) ||
+                string.IsNullOrWhiteSpace(templateId))
+            {
+                NotificationService.Notify(new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Error,
+                    Summary = "Config EmailJS manquante",
+                    Detail = $"PK:{publicKey ?? "null"} | SID:{serviceId ?? "null"} | TID:{templateId ?? "null"}"
+                });
+                return;
+            }
+
             //await JSRuntime.InvokeVoidAsync("sendEmail", model);
             // Appelez la fonction JS en lui passant les paramètres
             await JSRuntime.InvokeVoidAsync("sendEmail", model, publicKey, serviceId, templateId);
