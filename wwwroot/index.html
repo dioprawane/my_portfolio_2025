@@ -64,22 +64,52 @@
 
     <script>
         window.PortfolioNav = (function () {
-            let observer, links = [];
+            let observer, links = [], ids = [], rootEl = null, visible = new Map();
 
             function setActive(id) {
                 links.forEach(a => a.classList.toggle('active', a.dataset.target === id));
             }
 
-            // Accepte soit un tableau, soit des arguments multiples
+            // Choisit la section visible la + proche du centre du conteneur
+            function pickCurrent() {
+                const center = rootEl
+                    ? rootEl.getBoundingClientRect().top + rootEl.clientHeight / 2
+                    : window.innerHeight / 2;
+
+                let bestId = null, bestDist = Infinity;
+                ids.forEach(id => {
+                    if (!visible.get(id)) return;
+                    const el = document.getElementById(id);
+                    if (!el) return;
+                    const r = el.getBoundingClientRect();
+                    const mid = r.top + r.height / 2;
+                    const dist = Math.abs(mid - center);
+                    if (dist < bestDist) { bestDist = dist; bestId = id; }
+                });
+
+                if (bestId) setActive(bestId);
+            }
+
             function initScrollSpy(/* ...ids */) {
                 const args = Array.from(arguments);
-                const ids = Array.isArray(args[0]) ? args[0] : args;
+                ids = Array.isArray(args[0]) ? args[0] : args;
 
-                links = Array.from(document.querySelectorAll('.top-nav .nav-pill'));
+                links = Array.from(document.querySelectorAll('#topNav .nav-pill'));
+                rootEl = document.querySelector('.page-wrapper') || null;
 
-                const options = { root: null, rootMargin: "0px 0px -60% 0px", threshold: 0.1 };
+                // Bande d’observation centrée (évite les doubles activations)
+                const options = {
+                    root: rootEl,
+                    rootMargin: '-35% 0px -55% 0px',
+                    threshold: [0, 0.01, 0.1, 0.25]
+                };
+
+                visible = new Map(ids.map(id => [id, false]));
+                if (observer) observer.disconnect();
+
                 observer = new IntersectionObserver((entries) => {
-                    entries.forEach(e => { if (e.isIntersecting) setActive(e.target.id); });
+                    entries.forEach(e => visible.set(e.target.id, e.isIntersecting));
+                    pickCurrent();
                 }, options);
 
                 ids.forEach(id => {
@@ -87,14 +117,20 @@
                     if (el) observer.observe(el);
                 });
 
-                links.forEach(a => {
-                    a.addEventListener('click', () => setActive(a.dataset.target));
-                });
+                // Mise à jour aussi pendant le scroll (quand plusieurs sections sont visibles)
+                (rootEl || window).addEventListener('scroll', pickCurrent, { passive: true });
+
+                // Activation immédiate au clic
+                links.forEach(a => a.addEventListener('click', () => setActive(a.dataset.target), { passive: true }));
+
+                // Sélection initiale
+                pickCurrent();
             }
 
             return { initScrollSpy };
         })();
     </script>
+
 
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 

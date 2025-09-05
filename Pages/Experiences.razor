@@ -12,10 +12,10 @@
 @if (IsMobile)
 {
     <RadzenStack Orientation="Orientation.Vertical" Gap="1rem" Class="rz-p-2 rz-w-100 rz-flex-justify-content-center">
-        <RadzenIcon Icon="work" Style="font-size: 2em;" />
-        <RadzenText TextStyle="TextStyle.H5" Class="rz-text-uppercase rz-text-bold rz-text-center rz-mb-2" TextAlignment="TextAlignment.Center">
-            Expériences
-        </RadzenText>
+        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Class="rz-mb-2">
+            <RadzenIcon Icon="work" Style="font-size: 2em;" />
+            <RadzenText TextStyle="TextStyle.H5" Class="rz-text-uppercase rz-text-bold rz-text-center rz-mb-2" TextAlignment="TextAlignment.Center">Expériences</RadzenText>
+        </RadzenStack>
 
         @foreach (var exp in ExperiencesList)
         {

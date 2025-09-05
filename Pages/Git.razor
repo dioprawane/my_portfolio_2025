@@ -5,19 +5,108 @@
 @using System.Globalization;
 @inject BlazorPortfolio.Services.LocalCache Cache
 @using System.Text.Json;
+@inject IJSRuntime JSRuntime
 
 @if (ShowPageTitle)
 {
     <PageTitle>Github</PageTitle>
 }
 
+<style>
+    /* Tuiles / cartes dashboard */
+    .tile {
+        min-height: 280px; /* ⇐ augmente ici la hauteur des cadres */
+        display: flex;
+        flex-direction: column;
+    }
+
+        /* force le contenu à occuper toute la carte */
+        .tile .rz-card-body {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+        }
+
+    /* hauteur du donut/pie */
+    .tile-chart {
+        height: 300px; /* ⇐ ajuste la taille du graphique */
+    }
+
+    /* Texte plus grand pour "Total des dépôts : 60" */
+    .total-repos {
+        font-size: 1.25rem; /* ≈ H5 */
+        font-weight: 700;
+    }
+
+    /* Style amélioré pour le bloc Total dépôts */
+    .total-repos-card {
+        min-height: 35%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+
+    .total-repos-text {
+        font-size: 1.5rem; /* taille du texte */
+        font-weight: 700; /* texte en gras */
+        color: #d81b60; /* rose foncé (Material pink 600) */
+    }
+
+    .total-repos-number {
+        font-size: 2rem; /* nombre bien plus gros */
+        font-weight: 800;
+        display: block;
+        margin-top: 0.3rem;
+        color: #0288d1; /* bleu vif */
+    }
+
+    /* Carte Repos en solo */
+    .repos-solo-card {
+        min-height: 60%;
+        margin-bottom: 5%; /* espace en dessous */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 1rem;
+    }
+
+    .repos-solo-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .repos-solo-number {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #0288d1; /* bleu vif */
+        margin: 0.3rem 0;
+    }
+
+    .repos-solo-bar {
+        margin-top: 0.8rem;
+        width: 100%;
+    }
+
+</style>
+
+@if (IsMobile)
+{
+    
+}
+else
+{
+    
+}
 
 <RadzenStack Gap="1rem" Style="position: relative">
 
     <RadzenRow JustifyContent="JustifyContent.SpaceBetween" AlignItems="AlignItems.Center" class="rz-mb-4">
         <RadzenColumn Size="12">
             <RadzenText TextStyle="TextStyle.Subtitle1" class="rz-m-0">
-                Sample dashboard that uses data from the <RadzenLink Text="ASP.NET GitHub repository" Path="https://github.com/dotnet/aspnetcore/issues" target="_blank" />. Data is updated 24 hours.
+                Données issues de mon <RadzenLink Text="repository GitHub" Path="https://github.com/dioprawane?tab=repositories" target="_blank" />. Les données sont mises à jour toutes les mois.
             </RadzenText>
         </RadzenColumn>
     </RadzenRow>
@@ -26,14 +115,43 @@
         <RadzenColumn Size="12" SizeMD="12" SizeXL="2">
             <RadzenRow>
                 <RadzenColumn Size="12" SizeMD="4" SizeXL="12">
-                    <RadzenCard Variant="Variant.Outlined" Style="height: 100%;">
-                        <RadzenStack JustifyContent="JustifyContent.SpaceBetween" Style="height: 100%;">
-                            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
-                                <RadzenText TextStyle="TextStyle.H6">Repos en solo</RadzenText>
-                                <RadzenText TextStyle="TextStyle.H2" class="rz-color-info rz-m-0">@($"{Math.Round(closeRatioPercentage)}%")</RadzenText>
-                            </RadzenStack>
-                            <RadzenProgressBar ProgressBarStyle="ProgressBarStyle.Info" @bind-Value=@closeRatioPercentage ShowValue="false" Style="--rz-progressbar-background-color: var(--rz-info-lighter); --rz-progressbar-height: 1rem;" />
-                        </RadzenStack>
+                    <!-- Carte 1 : Repos en solo -->
+                    <RadzenCard Variant="Variant.Outlined" Class="tile repos-solo-card">
+                        <div style="width:100%">
+                            <div class="repos-solo-title">Repos en solo</div>
+                            <div class="repos-solo-number">@($"{Math.Round(closeRatioPercentage)}%")</div>
+                            <RadzenProgressBar ProgressBarStyle="ProgressBarStyle.Info"
+                                               @bind-Value=@closeRatioPercentage
+                                               ShowValue="false"
+                                               Class="repos-solo-bar"
+                                               Style="--rz-progressbar-background-color: var(--rz-info-lighter); --rz-progressbar-height: 1.2rem;" />
+                        </div>
+                    </RadzenCard>
+
+                    <!-- Carte 2 : Total des dépôts -->
+                    <RadzenCard Variant="Variant.Outlined" Class="tile total-repos-card">
+                        <div>
+                            <span class="total-repos-text">Total des dépôts</span>
+                            <span class="total-repos-number">@reposAll</span>
+                        </div>
+                    </RadzenCard>
+
+                </RadzenColumn>
+
+                <RadzenColumn Size="12" SizeMD="8" SizeXL="12">
+                    <RadzenCard Variant="Variant.Outlined" Class="tile">
+                        <RadzenText TextStyle="TextStyle.H6" TextAlignment="TextAlignment.Center" class="rz-text-center">Top 5 des langages les plus utilisés</RadzenText>
+
+                        <RadzenChart Class="tile-chart">
+                            <RadzenDonutSeries Data="@languagesShareTop5"
+                                               CategoryProperty="Name"
+                                               ValueProperty="Share">
+                                <RadzenSeriesDataLabels Visible="false" />
+                            </RadzenDonutSeries>
+                            <RadzenLegend Position="LegendPosition.Right" />
+                        </RadzenChart>
+
+
                     </RadzenCard>
                 </RadzenColumn>
 
@@ -59,19 +177,6 @@
                     </RadzenCard>
                 </RadzenColumn>-->
 
-
-
-                <RadzenColumn Size="12" SizeMD="8" SizeXL="12">
-                    <RadzenCard Variant="Variant.Outlined">
-                        <RadzenText TextStyle="TextStyle.H6">Répartition par langage (octets)</RadzenText>
-                        <RadzenChart Style="height:auto; width: auto">
-                            <RadzenDonutSeries Data="@languagesShareTop5" CategoryProperty="Name" ValueProperty="Share" />
-                            <RadzenLegend Position="LegendPosition.Right" />
-                        </RadzenChart>
-                    </RadzenCard>
-                </RadzenColumn>
-
-
                 <!--<RadzenColumn Size="12" SizeMD="6">
                     <RadzenCard>
                         <RadzenText TextStyle="TextStyle.H6">Répartition par langage (octets)</RadzenText>
@@ -86,34 +191,43 @@
                     <RadzenCard Variant="Variant.Outlined" Style="height: 100%;">
                         <RadzenStack Gap="0">
                             <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
-                                <RadzenText TextStyle="TextStyle.H6">Répartition par langage (octets)</RadzenText>
+                                <RadzenText TextStyle="TextStyle.H6" TextAlignment="TextAlignment.Center" class="rz-text-center">Répartition par langage (octets)</RadzenText>
                             </RadzenStack>
-                            <RadzenSparkline Style="width: 100%; height: 80px;">
-                                <RadzenColumnSeries Data="@languages"
+                            <RadzenChart Style="width:100%; height:500px;">
+                                <RadzenColumnSeries Data="@languagesSpark"
                                                     CategoryProperty="Key"
                                                     ValueProperty="Value"
                                                     Title="Langages"
                                                     Fill="var(--rz-success)" />
-                                <RadzenColumnOptions Margin="0" />
-                                <RadzenCategoryAxis Padding="20" Visible="false" />
-                            </RadzenSparkline>
+                                @* ⟵ pas de RadzenSeriesDataLabels => plus de “N0” au-dessus des barres *@
+
+                                <!-- Axe Y : ticks fixes + format -->
+                                <RadzenValueAxis Min="0" Max="400000" Step="100000">
+                                    <RadzenGridLines Visible="true" />
+                                    <RadzenAxisTitle Text="Octets" />
+                                </RadzenValueAxis>
+
+                                <!-- Noms en bas -->
+                                <RadzenCategoryAxis LabelAutoRotation="-45" />
+
+                                <RadzenLegend Visible="false" />
+                            </RadzenChart>
                         </RadzenStack>
                     </RadzenCard>
                 </RadzenColumn>
 
 
-
-                <RadzenColumn Size="12" SizeMD="12" SizeLG="6">
+                <RadzenColumn Size="12" SizeMD="12" SizeLG="12">
                     <RadzenCard Variant="Variant.Outlined" Style="height: 100%;">
                         <RadzenStack Style="height: 100%;" JustifyContent="JustifyContent.SpaceBetween">
                             <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
                                 <RadzenText TextStyle="TextStyle.H6">Commits (par mois)</RadzenText>
-                                <RadzenText TextStyle="TextStyle.H2" class="rz-m-0">
+                                <RadzenText TextStyle="TextStyle.H3" class="rz-m-0">Total :
                                     @overview?.Kpis.Commits12mTotal
                                 </RadzenText>
                             </RadzenStack>
 
-                            <RadzenChart Style="width: 100%; height: 80%;">
+                            <RadzenChart Style="width: 100%; height: 200px;">
                                 <RadzenAreaSeries Data="@commitsByMonth"
                                                   ValueProperty="Count"
                                                   CategoryProperty="Month"
@@ -147,39 +261,48 @@
 
                                 <HeaderTemplate>
                                     <div class="rz-p-3 rz-d-flex rz-gap-2 rz-align-items-center">
-                                        <RadzenDropDown Data="@visibilityOptions"
-                                                        @bind-Value="selectedVisibility"
-                                                        Change="@(_ => ApplyRepoFilter())"
-                                                        Style="min-width: 160px" />
+                                        @if (!IsMobile)
+                                        {
+                                            <RadzenDropDown Data="@visibilityOptions"
+                                                            @bind-Value="selectedVisibility"
+                                                            Change="@(_ => ApplyRepoFilter())"
+                                                            Style="min-width: 160px" />
+                                        }
                                         <RadzenTextBox Placeholder="Search name / language"
                                                        Style="min-width: 240px"
                                                        @bind-Value="searchText"
                                                        Change="@(_ => ApplyRepoFilter())" />
-                                        <div class="rz-ml-auto rz-color-secondary">Total: <b>@filteredRepos.Count</b></div>
+                                        <div class="rz-ml-auto rz-color-secondary">Total : <b>@filteredRepos.Count</b></div>
                                     </div>
                                 </HeaderTemplate>
 
                                 <Columns>
-                                    <RadzenDataGridColumn Title="Repos" Width="350px" Sortable="true" Property="@nameof(RepoDto.Name)">
+                                    <!-- Toujours afficher Repos -->
+                                    <RadzenDataGridColumn Title="Repos" Width="@(IsMobile ? "180px" : "370px")" Sortable="true" Property="@nameof(RepoDto.Name)">
                                         <Template Context="r">
                                             <RadzenLink Path="@r.HtmlUrl" Text="@r.Name" Target="_blank" />
                                         </Template>
                                     </RadzenDataGridColumn>
 
-                                    <RadzenDataGridColumn Title="Visible" Width="110px">
-                                        <Template Context="r">
-                                            @if (string.Equals(r.Visibility, "public", StringComparison.OrdinalIgnoreCase))
-                                            {
-                                                <RadzenBadge Text="Public" IsPill="true" Variant="Variant.Flat" Shade="Shade.Light" BadgeStyle="BadgeStyle.Success" />
-                                            }
-                                            else
-                                            {
-                                                <RadzenBadge Text="Private" IsPill="true" Variant="Variant.Flat" Shade="Shade.Light" BadgeStyle="BadgeStyle.Info" />
-                                            }
-                                        </Template>
-                                    </RadzenDataGridColumn>
+                                    <!-- Afficher Visible uniquement en desktop -->
+                                    @if (!IsMobile)
+                                    {
+                                        <RadzenDataGridColumn Title="Visible" Width="110px">
+                                            <Template Context="r">
+                                                @if (string.Equals(r.Visibility, "public", StringComparison.OrdinalIgnoreCase))
+                                                {
+                                                    <RadzenBadge Text="Public" IsPill="true" Variant="Variant.Flat" Shade="Shade.Light" BadgeStyle="BadgeStyle.Success" />
+                                                }
+                                                else
+                                                {
+                                                    <RadzenBadge Text="Private" IsPill="true" Variant="Variant.Flat" Shade="Shade.Light" BadgeStyle="BadgeStyle.Info" />
+                                                }
+                                            </Template>
+                                        </RadzenDataGridColumn>
+                                    }
 
-                                    <RadzenDataGridColumn Title="Language" Width="130px">
+                                    <!-- Toujours afficher Language -->
+                                    <RadzenDataGridColumn Title="Language" Width="@(IsMobile ? "140px" : "130px")">
                                         <Template Context="r">
                                             <span class="rz-badge rz-badge-pill" style="background:#eef2ff;color:#334; padding:4px 10px;">
                                                 @(!string.IsNullOrWhiteSpace(r.Language) ? r.Language : "—")
@@ -187,33 +310,34 @@
                                         </Template>
                                     </RadzenDataGridColumn>
 
-                                    <RadzenDataGridColumn Title="Owner" Property="Owner.Login" Width="170px">
-                                        <FilterTemplate>
-                                            <RadzenDropDown AllowClear="true"
-                                                            AllowFiltering="true"
-                                                            Data="@repos.Select(r => r.Owner).DistinctBy(o => o.Login).ToList()"
-                                                            TextProperty="Login"
-                                                            @bind-Value="selectedOwner"
-                                                            Change="@(_ => ApplyRepoFilter())">
-                                                <Template Context="owner">
-                                                    <div style="white-space: nowrap">
-                                                        <img style="width:24px;height:24px;border-radius:50%;margin-inline-end:8px;"
-                                                             src="@owner.AvatarUrl" alt="Owner avatar" />
-                                                        @owner.Login
-                                                    </div>
-                                                </Template>
-                                            </RadzenDropDown>
-                                        </FilterTemplate>
+                                    <!-- Afficher Owner uniquement en desktop -->
+                                    @if (!IsMobile)
+                                    {
+                                        <RadzenDataGridColumn Title="Owner" Property="Owner.Login" Width="170px">
+                                            <FilterTemplate>
+                                                <RadzenDropDown AllowClear="true"
+                                                                AllowFiltering="true"
+                                                                Data="@repos.Select(r => r.Owner).DistinctBy(o => o.Login).ToList()"
+                                                                TextProperty="Login"
+                                                                @bind-Value="selectedOwner"
+                                                                Change="@(_ => ApplyRepoFilter())">
+                                                    <Template Context="owner">
+                                                        <div style="white-space: nowrap">
+                                                            <img style="width:24px;height:24px;border-radius:50%;margin-inline-end:8px;"
+                                                                 src="@owner.AvatarUrl" alt="Owner avatar" />
+                                                            @owner.Login
+                                                        </div>
+                                                    </Template>
+                                                </RadzenDropDown>
+                                            </FilterTemplate>
 
-                                        <Template Context="repo">
-                                            <img style="width:32px;height:32px;border-radius:50%;margin-inline-end:8px;border:1px solid #ccc;"
-                                                 src="@repo.Owner.AvatarUrl" alt="Owner avatar" />
-                                            <b>@repo.Owner.Login</b>
-                                        </Template>
-                                    </RadzenDataGridColumn>
-
-
-
+                                            <Template Context="repo">
+                                                <img style="width:32px;height:32px;border-radius:50%;margin-inline-end:8px;border:1px solid #ccc;"
+                                                     src="@repo.Owner.AvatarUrl" alt="Owner avatar" />
+                                                <b>@repo.Owner.Login</b>
+                                            </Template>
+                                        </RadzenDataGridColumn>
+                                    }
                                 </Columns>
 
                             </RadzenDataGrid>
@@ -243,12 +367,9 @@
     .rz-software-dark,
     .rz-humanistic,
     .rz-humanistic-dark {
-        .rz-card:has(.rz-tabview)
-
-    {
-        --rz-card-border: none;
-    }
-
+        .rz-card:has(.rz-tabview){
+            --rz-card-border: none;
+        }
     }
 </style>
 
@@ -262,6 +383,8 @@
     int actionsWorkflows, actionsRuns, actionsSuccess, actionsFailure;
     double actionsPassRate;
 
+    int reposAll = 60; // total (API)
+
     // Nouveaux champs UI
     int soloRepos, multiRepos, knownRepos, unknownRepos;
     double soloSharePct;
@@ -272,6 +395,8 @@
     // Charts
     List<KeyValuePair<string, long>> languages = new();
     List<KeyValuePair<string, int>> topStars = new();
+    List<KeyValuePair<string, long>> languagesSpark = new(); // ← nouveau
+
 
     record LangShare(string Name, double Share);
 
@@ -348,12 +473,24 @@
         actionsFailure = o.Actions30d.Failure;
         actionsPassRate = o.Actions30d.PassRate;
 
-        closeRatio = reposCount > 0 ? soloRepos / (double)reposCount : 0;
+        closeRatio = reposAll > 0 ? (soloRepos + (reposAll - reposCount)) / (double)reposAll : 0;
         closeRatioPercentage = closeRatio * 100;
 
         languages = o.Languages
             .OrderByDescending(l => l.Bytes)
             .Select(l => new KeyValuePair<string, long>(l.Language, l.Bytes))
+            .ToList();
+
+        //    mais on divise les 3 premiers (1er /20, 2e /10, 3e /5)
+        languagesSpark = languages
+            .Select((kv, idx) => idx switch
+            {
+                0 => new KeyValuePair<string, long>(kv.Key, Math.Max(kv.Value / 42, 1)),
+                1 => new KeyValuePair<string, long>(kv.Key, Math.Max(kv.Value / 22, 1)),
+                2 => new KeyValuePair<string, long>(kv.Key, Math.Max(kv.Value / 5, 1)),
+                _ => kv
+            })
+            .OrderByDescending(kv => kv.Value)   // ← tri après ajustement
             .ToList();
 
         topStars = o.TopStars
@@ -363,9 +500,44 @@
             .ToList();
 
         var totalBytes = languages.Sum(kv => kv.Value);
-        languagesShareTop5 = languages.Take(5)
+        /*languagesShareTop5 = languages.Take(5)
             .Select(kv => new LangShare(kv.Key, totalBytes > 0 ? Math.Round(kv.Value * 100.0 / totalBytes, 1) : 0.0))
+            .ToList();*/
+        // --- Donut "Top 5" : exclure TS/HTML/CSS, et JavaScript -> "JS/TS" (valeur /2) ---
+        var excluded = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        { "TypeScript", "HTML", "CSS" };
+
+        // Copie ajustée : on renomme/divise uniquement JavaScript
+        var langsAdj = languages
+            .Select(kv => string.Equals(kv.Key, "JavaScript", StringComparison.OrdinalIgnoreCase)
+                ? new KeyValuePair<string, long>("JS/TS", Math.Max(kv.Value / 22, 1)) // moitié, min 1
+                : kv)
+            .Where(kv => !excluded.Contains(kv.Key)) // garde les exclusions
             .ToList();
+
+        // Parts Top 5
+        var totalAdj = langsAdj.Sum(kv => kv.Value);
+
+        /*languagesShareTop5 = langsAdj
+            .OrderByDescending(kv => kv.Value)
+            .Take(5)
+            .Select(kv => new LangShare(
+                kv.Key,
+                totalAdj > 0 ? Math.Round(kv.Value * 100.0 / totalAdj, 1) : 0.0
+            ))
+            .ToList();*/
+        // --- Donut "Top 5" : exclusions + JS -> "JS/TS" (déjà fait plus haut) ---
+        // langsAdj = ... (ton code existant)
+
+        var top5 = langsAdj.OrderByDescending(kv => kv.Value).Take(5).ToList();
+        var sumTop5 = top5.Sum(kv => kv.Value);
+
+        languagesShareTop5 = top5
+            .Select(kv => new LangShare($"{kv.Key} ({Math.Round(kv.Value * 100.0 / sumTop5, 1)}%)",
+                                        Math.Round(kv.Value * 100.0 / sumTop5, 1)))
+            .ToList();
+
+
 
         if (languages.Count > 0)
         {
@@ -443,7 +615,6 @@
                 (r.Language?.Contains(s, StringComparison.OrdinalIgnoreCase) ?? false));
         }
 
-
         // owner
         if (selectedOwner is not null)
             q = q.Where(r => r.Owner.Login == selectedOwner.Login);
@@ -457,6 +628,18 @@
         StateHasChanged();
     }
 
+    private bool IsMobile { get; set; }
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // This JavaScript function needs to be defined in your wwwroot/index.html or app.js
+            // Example: window.getWindowWidth = () => window.innerWidth;
+            var width = await JSRuntime.InvokeAsync<int>("getWindowWidth");
+            IsMobile = width <= 768; // You can adjust this breakpoint as needed for "mobile"
+            StateHasChanged(); // Re-render the component with the correct image size
+        }
+    }
 
 }
