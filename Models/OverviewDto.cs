@@ -115,6 +115,7 @@ namespace BlazorPortfolio.Models
         [JsonPropertyName("default_branch")] public string DefaultBranch { get; set; } = "main";
         [JsonPropertyName("license")] public LicenseDto? License { get; set; }
         [JsonPropertyName("updated_at")] public DateTimeOffset UpdatedAt { get; set; }
+        [JsonPropertyName("pushed_at")] public DateTimeOffset PushedAt { get; set; }
         [JsonPropertyName("topics")] public List<string> Topics { get; set; } = new();
         [JsonPropertyName("owner")] public OwnerDto Owner { get; set; } = new();
 

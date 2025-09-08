@@ -90,6 +90,40 @@
         width: 100%;
     }
 
+    /* Scroll horizontal pour les charts en mobile */
+    @@media (max-width: 768px) {
+        .scroll-x
+
+    {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .scroll-x-inner {
+        min-width: auto; /* largeur de travail (> écran) */
+        padding-bottom: .5rem; /* espace sous le chart */
+    }
+
+    }
+
+    .scroll-x {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .scroll-x-inner {
+        min-width: auto;
+        padding-bottom: .5rem;
+    }
+    /* ⇐ augmente l’écart entre mois */
+    @@media (max-width: 768px) {
+        .scroll-x-inner
+
+    {
+        min-width: auto;
+    }
+    /* mobile */
+    }
 </style>
 
 @if (IsMobile)
@@ -106,7 +140,7 @@ else
     <RadzenRow JustifyContent="JustifyContent.SpaceBetween" AlignItems="AlignItems.Center" class="rz-mb-4">
         <RadzenColumn Size="12">
             <RadzenText TextStyle="TextStyle.Subtitle1" class="rz-m-0">
-                Données issues de mon <RadzenLink Text="repository GitHub" Path="https://github.com/dioprawane?tab=repositories" target="_blank" />. Les données sont mises à jour toutes les mois.
+                Données issues de mon <RadzenLink Text="repository GitHub" Path="https://github.com/dioprawane?tab=repositories" target="_blank" />. Elles sont mises à jour tous les mois.
             </RadzenText>
         </RadzenColumn>
     </RadzenRow>
@@ -155,63 +189,45 @@ else
                     </RadzenCard>
                 </RadzenColumn>
 
-                <!--<RadzenColumn Size="12" SizeMD="4" SizeXL="12">
-                    <RadzenCard Variant="Variant.Outlined" Style="height: 100%;">
-                        <RadzenStack Gap="0">
-                            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
-                                <RadzenText TextStyle="TextStyle.H6">Open Issues</RadzenText>
-                                <RadzenText TextStyle="TextStyle.H2" class="rz-color-success rz-m-0">
-                                    @($"{topLanguageSharePct}%")
-                                </RadzenText>
-                            </RadzenStack>
-                            <RadzenSparkline Style="width: 100%; height: 80px;">
-                                <RadzenColumnSeries Data="@languagesShareTop5"
-                                                    CategoryProperty="Name"
-                                                    ValueProperty="Share"
-                                                    Title="Langages"
-                                                    Fill="var(--rz-success)" />
-                                <RadzenColumnOptions Margin="0" />
-                                <RadzenCategoryAxis Padding="20" Visible="false" />
-                            </RadzenSparkline>
-                        </RadzenStack>
-                    </RadzenCard>
-                </RadzenColumn>-->
-
-                <!--<RadzenColumn Size="12" SizeMD="6">
-                    <RadzenCard>
-                        <RadzenText TextStyle="TextStyle.H6">Répartition par langage (octets)</RadzenText>
-                        <RadzenChart Style="height:320px">
-                            <RadzenDonutSeries Data="@languages" CategoryProperty="Key" ValueProperty="Value" />
-                            <RadzenLegend Position="LegendPosition.Right" />
-                        </RadzenChart>
-                    </RadzenCard>
-                </RadzenColumn>-->
-
                 <RadzenColumn Size="12" SizeMD="12" SizeXL="12">
                     <RadzenCard Variant="Variant.Outlined" Style="height: 100%;">
                         <RadzenStack Gap="0">
                             <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
                                 <RadzenText TextStyle="TextStyle.H6" TextAlignment="TextAlignment.Center" class="rz-text-center">Répartition par langage (octets)</RadzenText>
                             </RadzenStack>
-                            <RadzenChart Style="width:100%; height:500px;">
-                                <RadzenColumnSeries Data="@languagesSpark"
-                                                    CategoryProperty="Key"
-                                                    ValueProperty="Value"
-                                                    Title="Langages"
-                                                    Fill="var(--rz-success)" />
-                                @* ⟵ pas de RadzenSeriesDataLabels => plus de “N0” au-dessus des barres *@
+                            @if (IsMobile)
+                            {
+                                <RadzenChart Style="width:100%; height:500px;">
+                                    <RadzenBarSeries Data="@languagesSpark"
+                                                     CategoryProperty="Key"
+                                                     ValueProperty="Value"
+                                                     Title="Langages"
+                                                     Fill="var(--rz-success)" />
+                                    <RadzenLegend Visible="false" />
+                                </RadzenChart>
+                            }
+                            else
+                            {
+                                <RadzenChart Style="width:100%; height:500px;">
+                                    <RadzenColumnSeries Data="@languagesSpark"
+                                                        CategoryProperty="Key"
+                                                        ValueProperty="Value"
+                                                        Title="Langages"
+                                                        Fill="var(--rz-success)" />
+                                    @* ⟵ pas de RadzenSeriesDataLabels => plus de “N0” au-dessus des barres *@
 
-                                <!-- Axe Y : ticks fixes + format -->
-                                <RadzenValueAxis Min="0" Max="400000" Step="100000">
-                                    <RadzenGridLines Visible="true" />
-                                    <RadzenAxisTitle Text="Octets" />
-                                </RadzenValueAxis>
+                                    <!-- Axe Y : ticks fixes + format -->
+                                    <RadzenValueAxis Min="0" Max="400000" Step="100000">
+                                        <RadzenGridLines Visible="true" />
+                                        <RadzenAxisTitle Text="Octets" />
+                                    </RadzenValueAxis>
 
-                                <!-- Noms en bas -->
-                                <RadzenCategoryAxis LabelAutoRotation="-45" />
+                                    <!-- Noms en bas -->
+                                    <RadzenCategoryAxis LabelAutoRotation="-45" />
 
-                                <RadzenLegend Visible="false" />
-                            </RadzenChart>
+                                    <RadzenLegend Visible="false" />
+                                </RadzenChart>
+                            }
                         </RadzenStack>
                     </RadzenCard>
                 </RadzenColumn>
@@ -221,30 +237,59 @@ else
                     <RadzenCard Variant="Variant.Outlined" Style="height: 100%;">
                         <RadzenStack Style="height: 100%;" JustifyContent="JustifyContent.SpaceBetween">
                             <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
-                                <RadzenText TextStyle="TextStyle.H6">Commits (par mois)</RadzenText>
+                                <RadzenText TextStyle="TextStyle.H6">Commits repos publics (par mois)</RadzenText>
                                 <RadzenText TextStyle="TextStyle.H3" class="rz-m-0">Total :
                                     @overview?.Kpis.Commits12mTotal
                                 </RadzenText>
                             </RadzenStack>
 
-                            <RadzenChart Style="width: 100%; height: 200px;">
-                                <RadzenAreaSeries Data="@commitsByMonth"
-                                                  ValueProperty="Count"
-                                                  CategoryProperty="Month"
-                                                  Title="Commits/mois"
-                                                  Smooth="true"
-                                                  Stroke="var(--rz-success)"
-                                                  Fill="var(--rz-success-lighter)">
-                                    <RadzenMarkers Visible="true" MarkerType="MarkerType.Circle" />
-                                </RadzenAreaSeries>
+                            @if (IsMobile)
+                            {
+                                <!-- VERSION MOBILE : scroll horizontal -->
+                                <div class="scroll-x">
+                                    <div class="scroll-x-inner">
+                                        <RadzenChart Style="width:100%; height:240px;">
+                                            <RadzenAreaSeries Data="@commitsByMonth"
+                                                              ValueProperty="Count"
+                                                              CategoryProperty="Month"
+                                                              Title="Commits/mois"
+                                                              Smooth="true"
+                                                              Stroke="var(--rz-success)"
+                                                              Fill="var(--rz-success-lighter)">
+                                                <RadzenMarkers Visible="true" MarkerType="MarkerType.Circle" />
+                                            </RadzenAreaSeries>
 
-                                <RadzenValueAxis>
-                                    <RadzenGridLines Visible="true" />
-                                </RadzenValueAxis>
+                                            <RadzenCategoryAxis Padding="0"
+                                                                LabelAutoRotation="-90"
+                                                                Step="1" />
+                                            <RadzenLegend Visible="false" />
+                                        </RadzenChart>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="scroll-x">
+                                    <div class="scroll-x-inner">
+                                        <RadzenChart Style="width: 100%; height: 200px;">
+                                            <RadzenAreaSeries Data="@commitsByMonth"
+                                                              ValueProperty="Count"
+                                                              CategoryProperty="Month"
+                                                              Title="Commits/mois"
+                                                              Smooth="true"
+                                                              Stroke="var(--rz-success)"
+                                                              Fill="var(--rz-success-lighter)">
+                                                <RadzenMarkers Visible="true" MarkerType="MarkerType.Circle" />
+                                            </RadzenAreaSeries>
 
-                                <RadzenCategoryAxis Padding="40" Formatter="@MonthFmt" />
-                                <RadzenLegend Visible="false" />
-                            </RadzenChart>
+                                            <RadzenCategoryAxis Padding="0"
+                                                                LabelAutoRotation="-90"
+                                                                Step="1" />
+                                            <RadzenLegend Visible="false" />
+                                        </RadzenChart>
+                                    </div>
+                                </div>
+                            }
                         </RadzenStack>
                     </RadzenCard>
                 </RadzenColumn>
@@ -345,7 +390,6 @@ else
                     </RadzenColumn>
                 </RadzenRow>
 
-
                 
             </RadzenRow>
         </RadzenColumn>
@@ -404,7 +448,9 @@ else
     string topLanguageName = "";
     double topLanguageSharePct = 0;
 
-    record MonthPoint(DateTime Month, int Count);
+    /*record MonthPoint(DateTime Month, int Count);
+    List<MonthPoint> commitsByMonth = new();*/
+    record MonthPoint(string Month, int Count);
     List<MonthPoint> commitsByMonth = new();
 
     private static readonly CultureInfo Fr = new("fr-FR");
@@ -418,10 +464,16 @@ else
 
     int test;
 
-    private string MonthFmt(object value)
+    /*private string MonthFmt(object value)
     {
         if (value is DateTime dt)
             return dt.ToString("MMM yyyy", Fr); // ex: "août 2025"
+        return string.Empty;
+    }*/
+    private string MonthFmt(object value)
+    {
+        if (value is DateTime dt)
+            return dt.ToString("MMM yy", Fr); // ex : "août 24", "janv. 25"
         return string.Empty;
     }
 
@@ -442,19 +494,37 @@ else
 
     RepoDto.OwnerDto? selectedOwner;
 
+    string LangChartHeight => IsMobile
+    ? $"{Math.Max(380, (languagesSpark?.Count ?? 10) * 28)}px" // hauteur auto selon nb de lignes
+    : "500px";
+
     void ApplyOverview(OverviewDto o)
     {
-        // --- mappages centralisés (évite les doublons) ---
-        commitsByMonth = (o.CommitsByMonth ?? new())
-            .OrderBy(m => m.MonthEnd)
+        // 1) Dictionnaire: 1er jour du mois -> somme des commits
+        var raw = (o.CommitsByMonth ?? new())
             .Select(m =>
             {
                 var dt = DateTime.ParseExact(m.MonthEnd, "yyyy-MM-dd",
                                              CultureInfo.InvariantCulture,
                                              DateTimeStyles.AssumeUniversal);
-                return new MonthPoint(new DateTime(dt.Year, dt.Month, 1), m.Count);
+                var first = new DateTime(dt.Year, dt.Month, 1, 0, 0, 0, DateTimeKind.Utc);
+                return new { Month = first, m.Count };
             })
+            .GroupBy(x => x.Month)
+            .ToDictionary(g => g.Key, g => g.Sum(x => x.Count));
+
+        // 2) Fenêtre continue: du +petit au +grand mois de la réponse (inclus)
+        var minMonth = raw.Keys.Min();
+        var maxMonth = raw.Keys.Max();
+        int monthsCount = ((maxMonth.Year - minMonth.Year) * 12) + (maxMonth.Month - minMonth.Month) + 1;
+
+        // 3) Série finale avec catégories déjà formatées "MM/yy"
+        commitsByMonth = Enumerable.Range(0, monthsCount)
+            .Select(i => minMonth.AddMonths(i))
+            .Select(m => new MonthPoint(m.ToString("MM/yy", CultureInfo.InvariantCulture),
+                                        raw.TryGetValue(m, out var c) ? c : 0))
             .ToList();
+
 
         reposCount = o.Kpis.Repos;
         publicRepos = o.Kpis.PublicRepos;
@@ -481,6 +551,12 @@ else
             .Select(l => new KeyValuePair<string, long>(l.Language, l.Bytes))
             .ToList();
 
+        // --- champs ---
+        HashSet<string> hiddenLangs = new(StringComparer.OrdinalIgnoreCase)
+        {
+            "Procfile","Makefile", "Objective-C"
+        };
+
         //    mais on divise les 3 premiers (1er /20, 2e /10, 3e /5)
         languagesSpark = languages
             .Select((kv, idx) => idx switch
@@ -491,6 +567,11 @@ else
                 _ => kv
             })
             .OrderByDescending(kv => kv.Value)   // ← tri après ajustement
+            .ToList();
+
+        // → Nouvel filtrage pour le graphique en colonnes
+        languagesSpark = languagesSpark
+            .Where(kv => !hiddenLangs.Contains(kv.Key))
             .ToList();
 
         topStars = o.TopStars
@@ -622,9 +703,15 @@ else
         filteredRepos = q.ToList();
 
         // tri par stars desc par défaut
-        filteredRepos = q.OrderByDescending(r => r.StargazersCount)
+        /*filteredRepos = q.OrderByDescending(r => r.StargazersCount)
                          .ThenBy(r => r.Name)
-                         .ToList();
+                         .ToList();*/
+        filteredRepos = q.OrderByDescending(r => r.PushedAt)
+                .ThenByDescending(r => r.UpdatedAt)
+                .ThenByDescending(r => r.StargazersCount)
+                .ThenBy(r => r.Name)
+                .ToList();
+
         StateHasChanged();
     }
 
