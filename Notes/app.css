@@ -1,4 +1,10 @@
-﻿html, body {
+﻿/* Make the background fill the whole app */
+html, body, #app {
+    height: 100%;
+    min-height: 100%;
+}
+
+html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
@@ -103,7 +109,32 @@ code {
 }
 
 body {
-    background-color: #f3f4f6;
+    /* full-page background image ok : IMG_5245 1.jpg et IMG_5248.jpg et IMG_5255.JPG et IMG_5258.JPG*/
+    background: url('/images/me/IMG_4622.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+/* If Radzen (or your theme) paints an opaque background, make it transparent */
+.rz-application,
+.rz-content,
+.rz-page,
+.rz-layout {
+    background: transparent !important;
+}
+
+/* Optional: soft overlay for readability */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.25); /* or a gradient */
+    z-index: -1; /* stays behind everything */
+}
+
+/* Optional: make cards readable on top of the image */
+.rz-card {
+    background: rgba(255,255,255,.85);
+    backdrop-filter: blur(2px);
 }
 
 .rz-panelmenu {
