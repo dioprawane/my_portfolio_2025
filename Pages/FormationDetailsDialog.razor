@@ -1,5 +1,6 @@
 ﻿@using BlazorPortfolio.Models
 @inject DialogService DialogService
+@inject NavigationManager Nav
 
 <RadzenStack Orientation="Orientation.Vertical" Gap="1.5rem" Class="rz-p-4">
 
@@ -56,7 +57,11 @@
 
     @if (!string.IsNullOrEmpty(CurrentFormation.CertificatUrl) && CurrentFormation.CertificatUrl != "#")
     {
-        <RadzenButton Icon="link" Text="Voir le certificat" Link="@CurrentFormation.CertificatUrl" Target="_blank" ButtonStyle="ButtonStyle.Secondary" Class="rz-mt-3" />
+        <RadzenButton Icon="link"
+                  Text="Voir la fiche"
+                  ButtonStyle="ButtonStyle.Secondary"
+                  Class="rz-mt-3"
+                  Click="() => Nav.NavigateTo(CurrentFormation.CertificatUrl, forceLoad: true)" />
     }
 
     <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End">
