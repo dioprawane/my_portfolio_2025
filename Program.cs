@@ -26,7 +26,8 @@ builder.Services.AddScoped(sp => new AnalyticsApiClient(
     new HttpClient
     {
         //BaseAddress = new Uri("http://127.0.0.1:8000/") // ou depuis config
-        BaseAddress = new Uri("https://back-portefolio.onrender.com/") // ou depuis config
+        //BaseAddress = new Uri("https://back-portefolio.onrender.com/") // ou depuis config
+        BaseAddress = new Uri("https://api.srdiop.com/") // ou depuis config
     }
 ));
 
